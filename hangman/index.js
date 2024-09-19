@@ -168,7 +168,7 @@ function saveKangaroo() {
   localStorage.setItem("game_level", newLevel);
 
   document.querySelector("#hero img").src =
-    "./pngtree-mother-and-baby-kangaroo-happy-mascot-animal-vector-picture-image_9353134.png";
+    "./assets/pngtree-mother-and-baby-kangaroo-happy-mascot-animal-vector-picture-image_9353134.png";
     
   if (newLevel % RANK_LEVEL_COUNT === 0) {
     updateLife(1);
