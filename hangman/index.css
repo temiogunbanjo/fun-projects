@@ -1,0 +1,434 @@
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+body.l-1 {
+  --background: greenyellow;
+  --background-img: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.2)
+  );
+  --contrast-text-color: brown;
+  --button-accent: gold;
+  --input-accent: gold;
+  --input-background: white;
+  --filled-input-accent: white;
+  --filled-input-text-color: rgb(255, 245, 218);
+  --filled-input-background: chocolate;
+  --health-board-background: transparent;
+  --health-board-border: transparent;
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  background: var(--background-img);
+  background-color: var(--background);
+  font-family: "Play", Arial, Helvetica, sans-serif;
+}
+
+body.l-2 {
+  --background: rgb(204, 233, 245);
+  --background-img: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0),
+      rgba(11, 51, 36, 0.695)
+    ),
+    url("https://pngimg.com/d/beach_PNG19.png") no-repeat bottom center/100%
+      110%;
+  --contrast-text-color: white;
+  --button-accent: lightsteelblue;
+  --input-accent: lightsteelblue;
+  --input-background: white;
+  --filled-input-accent: navajowhite;
+  --filled-input-text-color: white;
+  --filled-input-background: darkkhaki;
+  --health-board-background: #505030;
+  /* --health-board-border: #514f2f; */
+  --health-board-border: transparent;
+}
+
+body.l-3 {
+  --background: rgb(155, 0, 0);
+  --background-img: linear-gradient(
+      to bottom,
+      rgba(17, 2, 0, 0.695),
+      rgba(0, 0, 0, 0) 40%
+    ),
+    url("https://www.freeiconspng.com/uploads/fire-png-transparent-image-clipart-31.png")
+      repeat-x left bottom/25% 15%,
+    url("https://img.freepik.com/free-vector/infernal-dark-cave-with-lava-scene_1308-53082.jpg")
+      no-repeat center/cover;
+  --contrast-text-color: white;
+  --button-accent: coral;
+  --input-accent: coral;
+  --input-background: white;
+  --filled-input-accent: white;
+  --filled-input-text-color: white;
+  --filled-input-background: chocolate;
+  --health-board-background: #722c10;
+  --health-board-border: #d4a341;
+}
+
+body.l-4 {
+  --contrast-text-color: white;
+  --button-accent: green;
+  --input-accent: green;
+  --input-background: white;
+  --filled-input-accent: chocolate;
+  --filled-input-text-color: white;
+  --filled-input-background: forestgreen;
+  --health-board-background: #133d09;
+  --health-board-border: #295108;
+  --background: rgb(0, 59, 32);
+  --background-img: linear-gradient(
+      to bottom,
+      rgba(17, 2, 0, 0.695),
+      rgba(0, 0, 0, 0) 40%
+    ),
+    url("https://png.pngtree.com/background/20230612/original/pngtree-forest-with-trees-glowing-on-their-top-picture-image_3177550.jpg")
+      no-repeat bottom/cover;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  gap: 20px;
+  padding: 20px 40px;
+  overflow: hidden;
+  /* border: 1px solid forestgreen */
+}
+
+main > *:last-child {
+  margin-bottom: 5px;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+}
+
+nav > *:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#level-indicator {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  color: white;
+  width: 80px;
+  height: 80px;
+  font-size: 20px;
+  border: 2px ridge var(--health-board-border);
+  border-radius: 50%;
+  background-color: black;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 10%,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+audio {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: center;
+}
+
+#health-bar,
+#settings-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px;
+  transition: margin 0.3s ease-out;
+}
+
+#health-bar {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 184px;
+  min-height: 50px;
+  gap: 15px;
+  background-color: var(--health-board-background);
+  border-radius: 15px;
+  border: 4px ridge var(--health-board-border);
+  box-shadow: inset 1px 3px 3px rgba(255, 255, 255, 0.2),
+    inset -2px -3px 3px rgba(0, 0, 0, 0.1), 1px 6px 9px rgba(0, 0, 0, 0.2);
+  padding: 10px 25px;
+  /* border: 1px solid red; */
+}
+
+main.not-started #health-bar {
+  margin-right: -20vw;
+}
+
+#health-bar .life {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("https://www.freeiconspng.com/thumbs/heart-png/heart-png-15.png");
+}
+
+#settings-bar {
+  left: 30px;
+}
+
+main.not-started #settings-bar {
+  margin-left: -20vw;
+}
+
+#settings-bar button {
+  text-align: center;
+  padding: 10px;
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0) 30%,
+    rgba(123, 134, 81, 0.15)
+  );
+  background-color: white;
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  color: black;
+  border-bottom: 4px solid var(--button-accent);
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2);
+}
+
+#settings-bar button:active {
+  background-color: rgba(255, 255, 255, 0.562);
+  border-bottom: 2px solid var(--button-accent);
+  box-shadow: 0 6px 2px rgba(0, 0, 0, 0.2);
+}
+
+#hero,
+#input-container {
+  transition-property: transform;
+  transition-timing-function: ease-out;
+  transition-duration: 500ms;
+}
+
+#input-container {
+  transition-delay: 300ms;
+}
+
+main.not-started #hero,
+main.not-started #input-container {
+  transform: scale(0);
+}
+
+#hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 200px/65px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+#hero::after {
+  display: block;
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  bottom: 0;
+  left: 50%;
+  transform-origin: center;
+  transform: translatex(-50%);
+  background-color: black;
+  border-radius: 50%;
+}
+
+#hero.dead::after {
+  width: calc(100% - 12px);
+  height: 100px;
+  transition: all 0.5s ease-in;
+  border: 6px ridge chocolate;
+}
+
+#hero img {
+  display: block;
+  position: relative;
+  transform-origin: center;
+  transition: all 0.4s ease-in 0.7s;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: +220;
+}
+
+#hero.dead img {
+  /* border: 1px solid; */
+  transform: translate(15%, 100%) rotateZ(90deg) scaleY(1.1);
+}
+
+#input-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+#input-container input {
+  text-align: center;
+  padding: 10px;
+  background-color: var(--input-background);
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  text-transform: uppercase;
+  color: rgb(190, 140, 13);
+  border-bottom: 4px solid var(--input-accent);
+  max-width: 60px;
+  height: auto;
+  font-size: 40px;
+  pointer-events: none;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2);
+}
+
+#input-container input:not(:placeholder-shown) {
+  background-color: var(--filled-input-background);
+  color: var(--filled-input-text-color);
+  border-bottom: 4px solid var(--filled-input-accent);
+  /* box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2); */
+}
+
+#message h3 {
+  text-transform: capitalize;
+  text-align: center;
+  color: var(--contrast-text-color);
+  font-weight: 900;
+  font-size: 25px;
+  letter-spacing: 2px;
+  text-shadow: inset 0px 3px 6px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  /* animation: flash 1000ms ease 0s 2 alternate forwards; */
+}
+
+#message h3.act {
+  animation: flash 1000ms ease 0s 2 alternate forwards;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  main {
+    gap: 25px;
+    padding: 20px;
+    /* border: 1px solid red; */
+  }
+
+  
+  nav > *:nth-child(2) {
+    position: static;
+    top: initial;
+    left: initial;
+    transform: unset;
+  }
+  
+  #health-bar {
+    gap: 10px;
+    min-width: 154px;
+    min-height: 50px;
+    border-radius: 15px;
+    /* border: 1px solid red; */
+  }
+
+  #health-bar, #settings-bar {
+    gap: 10px;
+  }
+
+  main.not-started #health-bar {
+    margin-right: -200px;
+  }
+
+  #health-bar .life {
+    width: 18px;
+    height: 18px;
+  }
+
+  #level-indicator {
+    padding: 10px;
+    color: white;
+    width: 60px;
+    height: 60px;
+    font-size: 15px;
+  }
+
+  main.not-started #settings-bar {
+    margin-left: -200px;
+  }
+
+  #settings-bar button {
+    padding: 10px;
+    border-radius: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+  }
+
+  #input-container input {
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 45px;
+    height: auto;
+    font-size: 25px;
+  }
+
+  #message h3 {
+    color: var(--contrast-text-color);
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: 0;
+  }
+}

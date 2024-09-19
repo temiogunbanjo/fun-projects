@@ -1,0 +1,65 @@
+* {
+  box-sizing: border-box;
+}
+
+#splash-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  color: white;
+  height: 100%;
+  width: 100%;
+  padding: 20px 40px;
+  position: fixed;
+  z-index: +999;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2)),
+    linear-gradient(to bottom, rgba(17, 2, 0, 0.695), rgba(0, 0, 0, 0) 40%),
+    url("https://png.pngtree.com/background/20230612/original/pngtree-forest-with-trees-glowing-on-their-top-picture-image_3177550.jpg")
+      no-repeat bottom/cover;
+  background-color: var(--background);
+  animation: flash 1000ms ease-in 8.5s 1 reverse forwards;
+}
+
+#splash-screen * {
+  font-family: "Gowun Batang", sans-serif;
+}
+
+#splash-screen img {
+  height: 200px;
+}
+
+#splash-screen h1 {
+  margin: 0 0 -140px;
+  font-size: 80px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+}
+
+#splash-screen p {
+  animation: flash 1000ms ease 0s infinite alternate forwards;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #splash-screen h1 {
+    margin: 0 0 -120px;
+  }
+}
