@@ -1,6 +1,6 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("story-form");
+function setupListeners() {
   const storyBoard = document.querySelector("#story-form > p");
+  const form = document.getElementById("story-form");
 
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
@@ -24,4 +24,21 @@ document.addEventListener("DOMContentLoaded", function () {
     starve. We had the entire summer to prepare for the winter but you chose to play instead.”
   </span>`;
   });
-});
+}
+
+function showSplashScreen() {
+  const splashScreen = document.getElementById("splash");
+  splashScreen.style.display = "flex";
+
+  window.setTimeout(() => {
+    document.querySelector("main").classList.toggle("not-started");
+    splashScreen.style.display = "none";
+    setupListeners();
+  }, 8000);
+}
+
+function startGame(ev) {
+  showSplashScreen();
+}
+
+document.addEventListener("DOMContentLoaded", startGame);

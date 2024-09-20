@@ -15,7 +15,7 @@ body {
   --story-text-color: rgb(255, 255, 255);
 }
 
-body h1 {
+main h1 {
   letter-spacing: 2px;
 }
 
@@ -36,7 +36,7 @@ body h1 {
     typing var(--typing-animation-time) steps(var(--n)) forwards;
 }
 
-h1 {
+main h1 {
   text-align: center;
 }
 
@@ -49,7 +49,7 @@ form {
 }
 
 form > p {
-  background-color: rgb(92, 0, 92);
+  background-color: #5c005c;
   color: var(--story-text-color);
   padding: 25px;
   min-height: 200px;
@@ -244,8 +244,8 @@ form button {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* @media (prefers-reduced-motion: reduce) {
   body {
-    cursor: auto; /*reverts to the default cursor */
+    cursor: auto;
   }
-}
+} */

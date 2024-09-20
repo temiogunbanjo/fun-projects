@@ -6,35 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MadLib | Create compeling stories</title>
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="splash.css" />
     <script src="index.js"></script>
   </head>
   <body>
-    <h1>MADLIB</h1>
-    <form id="story-form">
-      <p></p>
+    <main>
+      <h1>MADLIB</h1>
+      <form id="story-form">
+        <p></p>
 
-      <label for="title">Title</label>
-      <select id="title" placeholder=" ">
-        <option value="mr">Mr.</option>
-        <option value="mrs">Mrs.</option>
-      </select>
+        <label for="title">Title</label>
+        <select id="title" placeholder=" ">
+          <option value="mr">Mr.</option>
+          <option value="mrs">Mrs.</option>
+        </select>
 
-      <label for="name">Full Name</label>
-      <input id="name" type="text" placeholder="e.g. John Kennedy" />
+        <label for="name">Full Name</label>
+        <input id="name" type="text" placeholder="e.g. John Kennedy" />
 
-      <label for="animal-friend">Animal Friend Name</label>
-      <input id="animal-friend" type="text" placeholder="e.g. the dog" />
+        <label for="animal-friend">Animal Friend Name</label>
+        <input id="animal-friend" type="text" placeholder="e.g. the dog" />
 
-      <label for="phone-telcode">Telcode</label>
-      <input id="phone-telcode" type="text" placeholder=" " maxlength="4" />
+        <label for="phone-telcode">Telcode</label>
+        <input id="phone-telcode" type="text" placeholder=" " maxlength="4" />
 
-      <label for="phone">Phone</label>
-      <input id="phone" type="tel" placeholder=" " />
+        <label for="phone">Phone</label>
+        <input id="phone" type="tel" placeholder=" " />
 
-      <label>Other Info</label>
-      <input type="text" placeholder=" " />
+        <label>Other Info</label>
+        <input type="text" placeholder=" " />
 
-      <button type="submit">Write Story</button>
-    </form>
+        <button type="submit">Write Story</button>
+      </form>
+    </main>
+
+    <section id="splash">
+      <h1>
+        <span>MaD</span>
+        <img
+          class=""
+          src="https://studio.code.org/v3/assets/S_o3osNVrredr-YE_cradNUtdNO6K-N57DLYDgbA-4o/boy2.png"
+          alt="Head"
+        />
+        <span>LiBS</span>
+      </h1>
+
+      <p>Loading...</p>
+    </section>
   </body>
 </html>

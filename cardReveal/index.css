@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  --story-text-color: rgb(255, 255, 255);
+  --card-bgcolor: crimson;
+  color: white;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+  background-color: chocolate;
+  font-weight: 300;
+  padding: 0 20px 0;
+  /* cursor: url("path-to-image.png"), auto; */
+}
+
+main {
+  padding: 24px;
+  margin: auto;
+  max-width: 750px;
+}
+
+main h1 {
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+#card-box {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+#card-box .card {
+  --image: url("https://studio.code.org/v3/assets/S_o3osNVrredr-YE_cradNUtdNO6K-N57DLYDgbA-4o/boy2.png");
+
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    var(--image);
+  background-position: center;
+  background-size: cover, 70px;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, screen;
+  background-color: var(--card-bgcolor);
+
+  color: var(--story-text-color);
+  padding: 25px;
+  min-width: 125px;
+  min-height: 200px;
+  max-height: 420px;
+  overflow: auto;
+  border-radius: 15px;
+  border: none;
+  line-height: 1.8;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 500;
+  text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.158);
+  box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.35),
+    inset -1px -4px 6px rgba(0, 0, 0, 0.25);
+  transition-property: background-image, background-blend-mode;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* #card-box .card:active, */
+#card-box .card.reveal {
+  animation: rotateCard 900ms ease 0s 1 normal forwards,
+    revealCard 600ms linear 0s 1 normal forwards;
+}
+
+main > button {
+  background-color: purple;
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+  border: none;
+  margin-top: 15px;
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.295);
+}
+
+@keyframes rotateCard {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes revealCard {
+  0% {
+    background-image: var(--image);
+    background-position: center;
+    background-size: 70px;
+    background-blend-mode: screen;
+    background-color: var(--card-bgcolor);
+  }
+
+  31% {
+    background-image: var(--image);
+    background-position: center;
+    background-size: 70px;
+    background-color: var(--card-bgcolor);
+  }
+
+  100% {
+    background-image: var(--image);
+    background-position: center;
+    background-size: 70px;
+    background-blend-mode: normal;
+    background-color: rgb(255, 255, 255);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  main > button {
+    min-width: 200px;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    border-radius: 8px;
+  }
+
+  #card-box {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
