@@ -90,7 +90,7 @@ header .level-indicator *:last-child {
   display: grid;
   gap: 15px;
   grid-template-columns: repeat(4, 1fr);
-  border: 1px solid red;
+  /* border: 1px solid red; */
   width: 100%;
   height: calc(100% - 70px - 80px);
   /* grid-template-rows: repeat(5, 1fr); */
