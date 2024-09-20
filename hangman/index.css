@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -32,6 +32,7 @@ body.l-1 {
   font-family: "Play", Arial, Helvetica, sans-serif;
 }
 
+/* BEACH */
 body.l-2 {
   --background: rgb(204, 233, 245);
   --background-img: radial-gradient(
@@ -53,7 +54,51 @@ body.l-2 {
   --health-board-border: transparent;
 }
 
+/* ICE */
 body.l-3 {
+  --background: rgb(204, 233, 245);
+  --background-img: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0),
+      rgba(11, 51, 36, 0.695)
+    ),
+    url("https://static.vecteezy.com/system/resources/thumbnails/041/713/997/small_2x/ai-generated-majestic-iceberg-floating-in-calm-water-with-reflection-on-transparent-background-stock-png.png")
+      no-repeat bottom center/100% 110%;
+  --contrast-text-color: white;
+  --button-accent: lightsteelblue;
+  --input-accent: lightsteelblue;
+  --input-background: white;
+  --filled-input-accent: navajowhite;
+  --filled-input-text-color: white;
+  --filled-input-background: darkkhaki;
+  --health-board-background: #505030;
+  /* --health-board-border: #514f2f; */
+  --health-board-border: transparent;
+}
+
+/* FOREST */
+body.l-4 {
+  --contrast-text-color: white;
+  --button-accent: green;
+  --input-accent: green;
+  --input-background: white;
+  --filled-input-accent: chocolate;
+  --filled-input-text-color: white;
+  --filled-input-background: forestgreen;
+  --health-board-background: #133d09;
+  --health-board-border: #295108;
+  --background: rgb(0, 59, 32);
+  --background-img: linear-gradient(
+      to bottom,
+      rgba(17, 2, 0, 0.695),
+      rgba(0, 0, 0, 0) 40%
+    ),
+    url("https://png.pngtree.com/background/20230612/original/pngtree-forest-with-trees-glowing-on-their-top-picture-image_3177550.jpg")
+      no-repeat bottom/cover;
+}
+
+/* FIRE */
+body.l-5 {
   --background: rgb(155, 0, 0);
   --background-img: linear-gradient(
       to bottom,
@@ -73,26 +118,6 @@ body.l-3 {
   --filled-input-background: chocolate;
   --health-board-background: #722c10;
   --health-board-border: #d4a341;
-}
-
-body.l-4 {
-  --contrast-text-color: white;
-  --button-accent: green;
-  --input-accent: green;
-  --input-background: white;
-  --filled-input-accent: chocolate;
-  --filled-input-text-color: white;
-  --filled-input-background: forestgreen;
-  --health-board-background: #133d09;
-  --health-board-border: #295108;
-  --background: rgb(0, 59, 32);
-  --background-img: linear-gradient(
-      to bottom,
-      rgba(17, 2, 0, 0.695),
-      rgba(0, 0, 0, 0) 40%
-    ),
-    url("https://png.pngtree.com/background/20230612/original/pngtree-forest-with-trees-glowing-on-their-top-picture-image_3177550.jpg")
-      no-repeat bottom/cover;
 }
 
 main {
@@ -322,12 +347,14 @@ main.not-started #input-container {
   font-size: 40px;
   pointer-events: none;
   box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2);
+  animation: emphasize 1000ms linear 18s 4 alternate backwards;
 }
 
 #input-container input:not(:placeholder-shown) {
   background-color: var(--filled-input-background);
   color: var(--filled-input-text-color);
   border-bottom: 4px solid var(--filled-input-accent);
+  animation: none;
   /* box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2); */
 }
 
@@ -347,20 +374,6 @@ main.not-started #input-container {
   animation: flash 1000ms ease 0s 2 alternate forwards;
 }
 
-@keyframes flash {
-  0% {
-    opacity: 0;
-  }
-
-  75% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
 @media only screen and (max-width: 768px) {
   main {
     gap: 25px;
@@ -368,14 +381,13 @@ main.not-started #input-container {
     /* border: 1px solid red; */
   }
 
-  
   nav > *:nth-child(2) {
     position: static;
     top: initial;
     left: initial;
     transform: unset;
   }
-  
+
   #health-bar {
     gap: 10px;
     min-width: 154px;
@@ -384,7 +396,8 @@ main.not-started #input-container {
     /* border: 1px solid red; */
   }
 
-  #health-bar, #settings-bar {
+  #health-bar,
+  #settings-bar {
     gap: 10px;
   }
 
@@ -430,5 +443,34 @@ main.not-started #input-container {
     font-weight: 900;
     font-size: 18px;
     letter-spacing: 0;
+  }
+}
+
+/* ANIMATIONS */
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes emphasize {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.1);
   }
 }

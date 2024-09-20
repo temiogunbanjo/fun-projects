@@ -1,11 +1,12 @@
 const DEFAULT_PITCH = 0.8;
-const RANK_LEVEL_COUNT = 10; 
+const RANK_LEVEL_COUNT = 10;
 const synth = speechSynthesis;
 const voices = synth.getVoices();
 
 let pitch = DEFAULT_PITCH;
-let level = parseInt(window.localStorage.getItem("game_level") ?? 1);
-let healthCount = parseInt(window.localStorage.getItem("game_health") ?? 4);
+let isMusicOn = false;
+let level = 1;
+let healthCount = 4;
 let userInputs = [];
 let alive = true;
 let word;
@@ -169,7 +170,7 @@ function saveKangaroo() {
 
   document.querySelector("#hero img").src =
     "./assets/pngtree-mother-and-baby-kangaroo-happy-mascot-animal-vector-picture-image_9353134.png";
-    
+
   if (newLevel % RANK_LEVEL_COUNT === 0) {
     updateLife(1);
   }
@@ -200,7 +201,7 @@ function updateLife(decrement) {
 
   healthCount = healthCount + decrement;
   alive = healthCount > 0;
-  
+
   if (decrement < 0 && healthCount >= 0) {
     healthContainer.removeChild(healthContainer.children[0]);
     localStorage.setItem("game_health", healthCount);
@@ -238,6 +239,41 @@ function handleKeyInput(ev) {
   }
 }
 
+function handleMusicToggle(ev) {
+  const audio = document.getElementById("bg-audio");
+  const shouldPause = audio.muted === true ? false : true;
+  console.log(shouldPause);
+  // audio.setAttribute("muted", audio.muted === true ? true : false);
+  audio.muted = shouldPause;
+  audio.paused = shouldPause;
+
+  localStorage.setItem("bg_music_is_on", shouldPause);
+}
+
+function loadSettings() {
+  const audio = document.getElementById("bg-audio");
+  level = parseInt(window.localStorage.getItem("game_level") ?? 1);
+  healthCount = parseInt(window.localStorage.getItem("game_health") ?? 4);
+  isMusicOn = JSON.parse(
+    window.localStorage.getItem("bg_music_is_on") ?? "false"
+  );
+
+  audio.muted = isMusicOn;
+  audio.paused = isMusicOn;
+
+  setGameLevel();
+}
+
+function setupListeners() {
+  // Add handler for keyboard
+  const musicButton = document.querySelector(
+    "#settings-bar button:nth-child(2)"
+  );
+
+  document.addEventListener("keyup", handleKeyInput);
+  musicButton.addEventListener("click", handleMusicToggle);
+}
+
 function showSplashScreen() {
   const splashScreen = document.getElementById("splash-screen");
   splashScreen.style.display = "flex";
@@ -245,8 +281,8 @@ function showSplashScreen() {
   window.setTimeout(() => {
     document.querySelector("main").classList.toggle("not-started");
     splashScreen.style.display = "none";
-    document.addEventListener("keyup", handleKeyInput);
-  }, 10000);
+    setupListeners();
+  }, 8000);
 }
 
 function resetGame() {
@@ -254,13 +290,12 @@ function resetGame() {
 }
 
 function startGame(ev) {
-  // Add handler for keyboard
   word = chooseRandomItem(words);
   displayGoodMessage(" ");
+  loadSettings();
   generateLivesElements();
   generateInputElements();
   showSplashScreen();
-  setGameLevel();
 }
 
 document.addEventListener("DOMContentLoaded", startGame);
