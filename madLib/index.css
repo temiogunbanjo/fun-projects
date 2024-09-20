@@ -1,10 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 * {
+  font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
 
 body {
+  color: white;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+  background-color: chocolate;
+  font-weight: 300;
   padding: 0 20px 0;
-  --story-text-color: rgb(204, 250, 77);
+  --story-text-color: rgb(255, 255, 255);
+}
+
+body h1 {
+  letter-spacing: 2px;
 }
 
 .type {
@@ -37,23 +48,25 @@ form {
 }
 
 form > p {
-  background-color: rgb(5, 4, 17);
+  background-color: rgb(92, 0, 92);
   color: var(--story-text-color);
   padding: 25px;
   min-height: 200px;
   min-width: 250px;
-  max-height: 430px;
+  max-height: 470px;
   overflow: auto;
   border-radius: 15px;
   line-height: 1.8;
-  font-size: 16px;
-  /* letter-spacing: 1px; */
+  font-size: 14px;
+  letter-spacing: 1px;
   grid-column-start: 3;
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 12;
   margin-left: 30px;
   font-weight: 500;
+  text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.158);
+  box-shadow: inset 1px 3px 8px rgba(0, 0, 0, 0.295), inset -1px -4px 10px rgba(0, 0, 0, 0.25);
 }
 
 form > p::first-letter {
@@ -154,12 +167,13 @@ form select {
 }
 
 form button {
-  background-color: crimson;
+  background-color: purple;
   padding: 20px;
   border-radius: 12px;
   color: white;
   border: none;
   margin-top: 15px;
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.295);
 }
 
 @keyframes typing {
