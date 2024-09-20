@@ -12,7 +12,7 @@ body {
   --typing-animation-time: calc(var(--n) * 40ms);
   display: inline;
   color: transparent;
-  font-weight: 500;
+  font-weight: inherit;
   background: linear-gradient(-90deg, var(--story-text-color) 5px, #0000 0) 10px
       0,
     linear-gradient(var(--story-text-color) 0 0) 0 0;
@@ -45,14 +45,19 @@ form > p {
   max-height: 430px;
   overflow: auto;
   border-radius: 15px;
-  line-height: 1.5;
+  line-height: 1.8;
   font-size: 16px;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
   grid-column-start: 3;
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 12;
   margin-left: 30px;
+  font-weight: 500;
+}
+
+form > p::first-letter {
+  text-transform: capitalize;
 }
 
 form input:not(:first-of-type),
