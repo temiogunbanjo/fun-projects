@@ -14,6 +14,7 @@ body.l-1 {
     rgba(0, 0, 0, 0.2)
   );
   --contrast-text-color: brown;
+  --level-contrast-text-color: brown;
   --button-accent: gold;
   --input-accent: gold;
   --input-background: white;
@@ -43,6 +44,7 @@ body.l-2 {
     url("https://pngimg.com/d/beach_PNG19.png") no-repeat bottom center/100%
       110%;
   --contrast-text-color: white;
+  --level-contrast-text-color: #1a5334;
   --button-accent: lightsteelblue;
   --input-accent: lightsteelblue;
   --input-background: white;
@@ -65,6 +67,7 @@ body.l-3 {
     url("https://static.vecteezy.com/system/resources/thumbnails/041/713/997/small_2x/ai-generated-majestic-iceberg-floating-in-calm-water-with-reflection-on-transparent-background-stock-png.png")
       no-repeat bottom center/100% 110%;
   --contrast-text-color: white;
+  --level-contrast-text-color: white;
   --button-accent: lightsteelblue;
   --input-accent: lightsteelblue;
   --input-background: white;
@@ -79,6 +82,7 @@ body.l-3 {
 /* FOREST */
 body.l-4 {
   --contrast-text-color: white;
+  --level-contrast-text-color: white;
   --button-accent: green;
   --input-accent: green;
   --input-background: white;
@@ -110,6 +114,7 @@ body.l-5 {
     url("https://img.freepik.com/free-vector/infernal-dark-cave-with-lava-scene_1308-53082.jpg")
       no-repeat center/cover;
   --contrast-text-color: white;
+  --level-contrast-text-color: white;
   --button-accent: coral;
   --input-accent: coral;
   --input-background: white;
@@ -154,7 +159,7 @@ nav > *:nth-child(2) {
   transform: translateX(-50%);
 }
 
-#level-indicator {
+/* #level-indicator {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -173,6 +178,53 @@ nav > *:nth-child(2) {
     rgba(255, 255, 255, 0.2) 10%,
     rgba(255, 255, 255, 0)
   );
+} */
+
+#level-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#level-indicator *:first-child {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  /* z-index: +99; */
+  white-space: nowrap;
+  padding: 0 22px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--button-accent);
+  border: 4px solid white;
+  border-bottom-width: 16px;
+  margin-bottom: -14px;
+  border-radius: 12px;
+  border-bottom-right-radius: 18px;
+  border-bottom-left-radius: 18px;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15), 3px 4px 1px var(--button-accent);
+  /* width: 200px; */
+}
+
+#level-indicator *:last-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--level-contrast-text-color);
+  background-color: white;
+  border-radius: 12px;
+  /* border-top-right-radius: 10px; */
+  /* border-top-left-radius: 10px; */
+  width: 200px;
+  box-shadow: inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+    1px 4px 1px var(--button-accent);
 }
 
 audio {

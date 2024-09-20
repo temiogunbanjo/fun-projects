@@ -52,7 +52,8 @@ function setGameLevel() {
   const oldStyleClass = `l-${bgLevel - 1}`;
   const body = document.body;
 
-  document.getElementById("level-indicator").textContent = `Lv ${level}`;
+  document.getElementById("level-indicator").children[0].textContent = `Lv ${level}`;
+  document.getElementById("level-indicator").children[1].textContent = `Novice`;
   body.classList.toggle(newStyleClass, true);
   body.classList.toggle(oldStyleClass, false);
 
