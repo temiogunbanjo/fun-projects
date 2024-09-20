@@ -10,8 +10,15 @@
     <script src="index.js"></script>
   </head>
   <body>
-    <main>
+    <main id="main-game">
       <!-- <h1>JING JUNG</h1> -->
+      <header>
+        <div class="level-indicator">
+          <span class="level-count">Lv 2</span>
+          <span class="level-name">CITY</span>
+        </div>
+      </header>
+
       <div id="card-box">
         <button class="card reveal" data-opened="true"></button>
         <button class="card"></button>
@@ -20,8 +27,11 @@
         <button class="card"></button>
         <button class="card"></button>
       </div>
+
       <button>Reveal Cards</button>
     </main>
+
+    <section id="main-menu"></section>
 
     <section id="splash">
       <h1>

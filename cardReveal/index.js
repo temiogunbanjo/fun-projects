@@ -1,5 +1,5 @@
 let numberOfMatches = 0;
-let cardCount = 8;
+let cardCount = 12;
 let currentMatches = [];
 
 function generateCards() {
@@ -20,35 +20,45 @@ function generateCards() {
 }
 
 function handleCardClick(ev) {
-  ev.target.setAttribute("data-opened", true);
-  ev.target.classList.toggle("reveal", true);
-  currentMatches.push({
-    id: ev.target.getAttribute("id"),
-    category: ev.target.getAttribute("data-id"),
-  });
+  const delayForAnimation = 1200;
 
-  if (currentMatches.length >= 2) {
-    const [firstCardInfo, secondCardInfo] = currentMatches;
-    const secondCard = ev.target;
-    const firstCard = document.getElementById(firstCardInfo.id);
+  if (ev.target.getAttribute("data-opened") === "false") {
+    ev.target.setAttribute("data-opened", true);
+    ev.target.classList.toggle("reveal", true);
 
-    if (firstCardInfo.category !== secondCardInfo.category) {
-      // Cover second and first card
-      window.setTimeout(() => {
-        firstCard.classList.toggle("reveal", false);
-        secondCard.classList.toggle("reveal", false);
+    currentMatches.push({
+      id: ev.target.getAttribute("id"),
+      category: ev.target.getAttribute("data-id"),
+    });
 
-        firstCard.setAttribute("data-opened", false);
-        secondCard.setAttribute("data-opened", false);
-      }, 1200);
-    } else {
-      numberOfMatches += 1;
+    if (currentMatches.length >= 2) {
+      const [firstCardInfo, secondCardInfo] = currentMatches;
+      const secondCard = ev.target;
+      const firstCard = document.getElementById(firstCardInfo.id);
+
+      if (firstCardInfo.category !== secondCardInfo.category) {
+        // Cover second and first card
+        window.setTimeout(() => {
+          firstCard.classList.toggle("reveal", false);
+          secondCard.classList.toggle("reveal", false);
+
+          firstCard.setAttribute("data-opened", false);
+          secondCard.setAttribute("data-opened", false);
+        }, delayForAnimation);
+      } else {
+        window.setTimeout(() => {
+          firstCard.classList.toggle("matched", true);
+          secondCard.classList.toggle("matched", true);
+        }, delayForAnimation - 500);
+
+        numberOfMatches += 1;
+      }
+
+      currentMatches = [];
     }
 
-    currentMatches = [];
+    console.log(currentMatches, numberOfMatches);
   }
-
-  console.log(currentMatches, numberOfMatches);
 }
 
 function peekAllCards(duration) {
