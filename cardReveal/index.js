@@ -13,7 +13,7 @@ let cardTypes = {
     image: "https://png.pngtree.com/png-vector/20231230/ourmid/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
   },
   vehicles: {
-    image: "https://png.pngtree.com/png-vector/20231230/ourmid/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
+    image: "./assets/land-rover-range-rover-car-png-25.png",
   },
   places: {
     image: "../hangman/assets/Kangaroo-Cartoon-Free-PNG-Image.png",
