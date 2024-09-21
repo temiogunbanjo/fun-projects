@@ -1,19 +1,64 @@
+let cardCount = 6;
 let numberOfMatches = 0;
-let cardCount = 12;
 let currentMatches = [];
+let cardTypes = {
+  bread: {
+    image: "./assets/bread-i8k.png",
+  },
+  fruit: {
+    image:
+      "./assets/strawberry_PNG2587.png",
+  },
+  shoes: {
+    image: "https://png.pngtree.com/png-vector/20231230/ourmid/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
+  },
+  vehicles: {
+    image: "https://png.pngtree.com/png-vector/20231230/ourmid/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
+  },
+  places: {
+    image: "../hangman/assets/Kangaroo-Cartoon-Free-PNG-Image.png",
+  },
+};
+
+function chooseRandomItem(array) {
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return { index: randomIndex, item: array[randomIndex] };
+}
+
+/**
+ *
+ * @param {*[]} array
+ * @returns
+ */
+function randomizeArray(array) {
+  return array;
+}
 
 function generateCards() {
   const cardBox = document.getElementById("card-box");
   cardBox.innerHTML = "";
 
+  const pairCount = Math.floor(cardCount / 2);
+  let t = randomizeArray(Object.keys(cardTypes));
+
+  t = t.slice(0, pairCount).concat(t.slice(0, pairCount));
+  t = randomizeArray(t);
+
+  console.log(t, pairCount);
+
   for (let i = 0; i < cardCount; i += 1) {
+    const type = t[i];
+    const typeOption = cardTypes[type];
     // <button class="card reveal" data-opened="true"></button>
-    // userInputs.push("");
     const cardElement = document.createElement("button");
     cardElement.setAttribute("class", "card");
     cardElement.setAttribute("id", `card-${i}`);
-    cardElement.setAttribute("data-id", `card-${i % 2 === 0 ? "even" : "odd"}`);
+    cardElement.setAttribute("data-id", `card-${type}`);
     cardElement.setAttribute("data-opened", false);
+    cardElement.setAttribute(
+      "style",
+      `--reveal-image: url('${typeOption.image}')`
+    );
 
     cardBox.appendChild(cardElement);
   }
