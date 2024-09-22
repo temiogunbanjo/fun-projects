@@ -269,6 +269,8 @@ function setupListeners() {
     "#main_menu button:first-child"
   );
 
+  const aboutButton = document.querySelector("#main_menu button:nth-child(3)");
+
   window.addEventListener("resize", function () {
     console.log("resizing");
     autoResizeCardBox();
@@ -283,6 +285,10 @@ function setupListeners() {
     window.location.hash = "play";
     peekAllCards(3);
     autoResizeCardBox();
+  });
+
+  aboutButton.addEventListener("click", (ev) => {
+    window.location.hash = "about";
   });
 
   for (const card of cardBox.children) {

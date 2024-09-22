@@ -103,7 +103,7 @@ section#main_menu {
 }
 
 section#main_menu > * {
-  width: 200px;
+  min-width: 200px;
 }
 
 body > *:not(:target) {

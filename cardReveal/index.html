@@ -25,20 +25,25 @@
     <section id="main_menu">
       <button class="game-style">Start</button>
       <button class="game-style">Settings</button>
+      <button class="game-style">About Game</button>
       <button class="game-style">Quit</button>
     </section>
 
     <main id="play">
       <!-- <h1>JING JUNG</h1> -->
       <header class="fa-3x">
-        <button id="return-home" class="game-style fa-solid fa-reply" onclick="window.location.hash='main_menu';"></button>
+        <button
+          id="return-home"
+          class="game-style fa-solid fa-reply"
+          onclick="window.location.hash='main_menu';"
+        ></button>
 
         <div id="level-indicator">
           <span class="level-count">Lv 1</span>
           <span class="level-name">CITY</span>
         </div>
 
-        <div class="center" style="gap: 10px;">
+        <div class="center" style="gap: 10px">
           <button id="peek-a-boo" class="game-style">
             <i
               class="fa-solid fa-eye fa-beat"
@@ -64,5 +69,15 @@
         <h3>You won!</h3>
       </dialog>
     </main>
+
+    <section id="about" class="center">
+      <h1 style="margin: 0.2rem 0;">About Game</h1>
+      <p style="text-align: center; max-width: 950px">
+        <b>CardVeal&trade;</b> is a 2D game curated by
+        <a href="https://temiogunbanjo-dev.netlify.app"
+          ><b>Temiloluwa Ogunbanjo</b></a
+        >.
+      </p>
+    </section>
   </body>
 </html>
