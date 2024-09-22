@@ -23,7 +23,7 @@
 }
 
 #splash * {
-  font-family: "Rubik", sans-serif;
+  font-family: "Fredoka", sans-serif;
   text-align: center;
 }
 
@@ -43,7 +43,7 @@
   padding: 20px;
   margin: 0 0 0px;
   font-size: 70px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: initial;
   text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
@@ -62,8 +62,7 @@
   top: 50%;
   left: 50%;
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-    url("https://studio.code.org/v3/assets/S_o3osNVrredr-YE_cradNUtdNO6K-N57DLYDgbA-4o/boy2.png")
-      no-repeat center/120px;
+    url("./assets/boy2.png") no-repeat center/120px;
   background-blend-mode: normal, normal;
   background-color: var(--card-bgcolor);
   border-radius: 15px;
@@ -87,11 +86,11 @@
   right: 50%;
   transform: translate(-35%, -10%) rotateZ(35deg) scale(0.8);
   box-shadow: inset 1px 3px 8px 2px rgba(255, 255, 255, 0.3),
-    inset -2px -3px 8px rgba(0, 0, 0, 0.3),
-    1px 3px 35px rgba(50, 38, 63, 0.3);
+    inset -2px -3px 8px rgba(0, 0, 0, 0.3), 1px 3px 35px rgba(50, 38, 63, 0.3);
 }
 
 #splash p {
+  /* font-family: "Varela Round", sans-serif; */
   font-size: 20px;
   margin-top: 2vh;
   animation: flash 1000ms ease 0s infinite alternate forwards;

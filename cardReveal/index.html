@@ -7,15 +7,52 @@
     <title>Card Reveal | Create compeling stories</title>
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="splash.css" />
+    <script
+      src="https://kit.fontawesome.com/f388f70b2b.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="index.js"></script>
   </head>
   <body>
-    <main id="main-game">
+    <section id="splash">
+      <h1>
+        <span>CardVeal</span>
+      </h1>
+
+      <p>Loading...</p>
+    </section>
+
+    <section id="main_menu">
+      <button class="game-style">Start</button>
+      <button class="game-style">Settings</button>
+      <button class="game-style">Quit</button>
+    </section>
+
+    <main id="play">
       <!-- <h1>JING JUNG</h1> -->
-      <header>
-        <div class="level-indicator">
+      <header class="fa-3x">
+        <button id="return-home" class="game-style fa-solid fa-reply" onclick="window.location.hash='main_menu';"></button>
+
+        <div id="level-indicator">
           <span class="level-count">Lv 1</span>
           <span class="level-name">CITY</span>
+        </div>
+
+        <div class="center" style="gap: 10px;">
+          <button id="peek-a-boo" class="game-style">
+            <i
+              class="fa-solid fa-eye fa-beat"
+              style="
+                --fa-animation-iteration-count: 3;
+                --fa-animation-delay: 15s;
+                --fa-beat-scale: 1.6;
+              "
+            ></i>
+          </button>
+
+          <button id="info" class="game-style">
+            <i class="fa-solid fa-info"></i>
+          </button>
         </div>
       </header>
 
@@ -23,18 +60,9 @@
         <button class="card"></button>
       </div>
 
-      <button>Reveal Cards</button>
+      <dialog id="win-badge-dialog" class="">
+        <h3>You won!</h3>
+      </dialog>
     </main>
-
-    <section id="main-menu"></section>
-
-    <section id="splash">
-      <h1>
-        <span>Card</span>
-        <span>Reveal</span>
-      </h1>
-
-      <p>Loading...</p>
-    </section>
   </body>
 </html>
