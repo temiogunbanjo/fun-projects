@@ -259,7 +259,8 @@ header #level-indicator *:last-child {
     transform: scale(0.5);
   }
 
-  75%, 100% {
+  75%,
+  100% {
     opacity: 1;
     letter-spacing: 5px;
     transform: scale(1);
@@ -273,7 +274,8 @@ header #level-indicator *:last-child {
     text-stroke: 1px rgba(255, 255, 255, 0.6);
   }
 
-  75%, 100% {
+  75%,
+  100% {
     transform: scale(2.5);
     -webkit-text-stroke: 4px rgba(255, 255, 255, 0);
     text-stroke: 4px rgba(255, 255, 255, 0);
@@ -291,7 +293,8 @@ header #level-indicator *:last-child {
 }
 
 @keyframes revealCard {
-  0%, 31% {
+  0%,
+  31% {
     --image: var(--image);
     background-image: var(--image);
     background-position: center;
@@ -314,6 +317,12 @@ header #level-indicator *:last-child {
 }
 
 @media only screen and (max-width: 768px) {
+  header #level-indicator *:last-child {
+    width: 40%;
+    min-width: 150px;
+    max-width: 200px;
+  }
+
   #card-box {
     display: grid;
     gap: 15px;
