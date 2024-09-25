@@ -24,8 +24,8 @@
 
     <section id="main_menu">
       <button class="game-style">Start</button>
-      <button class="game-style">Settings</button>
-      <button class="game-style">About Game</button>
+      <button class="game-style" onclick="window.location.hash='settings';">Settings</button>
+      <button class="game-style" onclick="window.location.hash='about';">About Game</button>
       <button class="game-style">Quit</button>
     </section>
 
@@ -78,6 +78,37 @@
           ><b>Temiloluwa Ogunbanjo</b></a
         >.
       </p>
+      <button
+        class="game-style center"
+        onclick="window.location.hash='main_menu';"
+        style="flex-direction: row; gap: 5px"
+      >
+        <i class="fa-solid fa-reply"></i>
+        <span>Return to Menu</span>
+      </button>
+    </section>
+
+    <section id="settings" class="center">
+      <h1 style="margin: 0.2rem 0">Game Settings</h1>
+
+      <button
+        class="game-style center"
+        onclick="window.location.hash='main_menu';"
+        style="flex-direction: row; gap: 5px"
+      >
+        <i class="fa-solid fa-mic"></i>
+        <span>Toggle Sound Effects</span>
+      </button>
+
+      <button
+        class="game-style center"
+        onclick="window.location.hash='main_menu';"
+        style="flex-direction: row; gap: 5px"
+      >
+        <i class="fa-solid fa-mic"></i>
+        <span>Toggle Background Music</span>
+      </button>
+
       <button
         class="game-style center"
         onclick="window.location.hash='main_menu';"

@@ -98,6 +98,10 @@ body > *:is(main, section) {
   /* border: 3px solid green; */
 }
 
+a {
+  color: bisque;
+}
+
 section#main_menu {
   justify-content: center;
 }
