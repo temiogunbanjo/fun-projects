@@ -4,19 +4,21 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Card Reveal | Train your mind</title>
+    <title>Snake | Create compeling stories</title>
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="splash.css" />
     <script
       src="https://kit.fontawesome.com/f388f70b2b.js"
       crossorigin="anonymous"
     ></script>
+    <script src="utils.js"></script>
+    <script src="animations.js"></script>
     <script src="index.js"></script>
   </head>
   <body>
     <section id="splash">
       <h1>
-        <span>CardVeal</span>
+        <span>Snake Ville</span>
       </h1>
 
       <p>Loading...</p>
@@ -24,18 +26,21 @@
 
     <section id="main_menu">
       <button class="game-style">Start</button>
-      <button class="game-style" onclick="window.location.hash='settings';">Settings</button>
-      <button class="game-style" onclick="window.location.hash='about';">About Game</button>
+      <button class="game-style" onclick="window.location.hash='settings';">
+        Settings
+      </button>
+      <button class="game-style" onclick="window.location.hash='about';">
+        About Game
+      </button>
       <button class="game-style">Quit</button>
     </section>
 
     <main id="play">
-      <!-- <h1>JING JUNG</h1> -->
       <header class="fa-3x">
         <button
           id="return-home"
           class="game-style fa-solid fa-reply"
-          onclick="window.location.hash='main_menu';"
+          onclick="goToMainmenu();"
         ></button>
 
         <div id="level-indicator">
@@ -61,13 +66,13 @@
         </div>
       </header>
 
-      <div id="card-box">
-        <button class="card"></button>
+      <div id="play-box">
+        <canvas id="game-canvas"></canvas>
       </div>
 
-      <dialog id="win-badge-dialog" class="">
+      <!-- <dialog id="win-badge-dialog" class="">
         <h3>You won!</h3>
-      </dialog>
+      </dialog> -->
     </main>
 
     <section id="about" class="center">
@@ -80,7 +85,7 @@
       </p>
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="goToMainmenu();"
         style="flex-direction: row; gap: 5px"
       >
         <i class="fa-solid fa-reply"></i>
@@ -93,7 +98,7 @@
 
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="goToMainmenu();"
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-volume-high"></i>
@@ -102,7 +107,7 @@
 
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="goToMainmenu();"
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-music"></i>
@@ -111,7 +116,7 @@
 
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="goToMainmenu();"
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-reply"></i>
