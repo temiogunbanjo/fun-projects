@@ -12,15 +12,25 @@ let cardTypes = {
   bread: {
     image: "./assets/bread-i8k.png",
   },
-  fruit: {
+  strawberry: {
     image: "./assets/strawberry_PNG2587.png",
+  },
+  furniture: {
+    image:
+      "./assets/ai-generated-armchair-furniture-isolated-on-transparent-background-free-png.webp",
   },
   sneakers: {
     image:
       "./assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
   },
+  guava: {
+    image: "./assets/pngimg.com - guava_PNG18.png",
+  },
   shoes: {
     image: "./assets/pngimg.com - men_shoes_PNG7492.png",
+  },
+  pineapple: {
+    image: "./assets/pngimg.com - pineapple_PNG2733.webp",
   },
   vehicles: {
     image: "./assets/land-rover-range-rover-car-png-25.png",
@@ -123,7 +133,9 @@ function showLevelInfo() {
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
 
-  const about = `Lorem`;
+  const about = `The goal of this level is to match each card type on the board in ${
+    pairCount > 2 ? `sets of ${pairCount}s` : "pairs"
+  }. You can click on a card to reveal what is behind it. Good luck!`;
 
   const wrapper = document.createElement("div");
   const heading = document.createElement("h2");
@@ -140,7 +152,7 @@ function showLevelInfo() {
   heading.style.margin = 0;
 
   button.addEventListener("click", () => {
-    dialog.removeAttribute('style');
+    dialog.removeAttribute("style");
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
   });
