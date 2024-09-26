@@ -343,6 +343,11 @@ function setupListeners() {
   const startGameButton = document.querySelector(
     "#main_menu button:first-child"
   );
+  const quitGameButton = document.querySelector("#main_menu button:last-child");
+
+  if (level > 1) {
+    startGameButton.textContent = "Continue Game";
+  }
 
   window.addEventListener("resize", function () {
     console.log("resizing");
@@ -364,6 +369,10 @@ function setupListeners() {
     autoResizeCardBox();
   });
 
+  quitGameButton.addEventListener("click", (ev) => {
+    resetGame();
+  });
+
   for (const card of cardBox.children) {
     card.addEventListener("click", handleCardClick);
   }
@@ -379,6 +388,17 @@ function showSplashScreen(redirectTo = `main_menu`) {
     setupListeners();
     splashScreen.style.display = "none";
   }, 9700);
+}
+
+function resetGame() {
+  const a = confirm(
+    "Quitting will reset your progress so far, whould you like to continue?"
+  );
+  console.log(a);
+  if (a === true) {
+    localStorage.clear();
+    window.location.reload();
+  }
 }
 
 function startGame(ev) {
