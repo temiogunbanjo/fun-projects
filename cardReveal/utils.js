@@ -45,3 +45,8 @@ function removeRepeatingItems(array) {
   console.log(uniqueArray);
   return uniqueArray;
 }
+
+// const s = [];
+// s["idle"] = { loc: [] };
+// s["jump"] = { loc: [] };
+// console.log(s["jump"]);
