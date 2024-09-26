@@ -142,6 +142,7 @@ function showLevelInfo() {
   button.addEventListener("click", () => {
     dialog.removeAttribute('style');
     dialog.removeAttribute("open", true);
+    dialog.innerHTML = "";
   });
 
   wrapper.appendChild(heading);
