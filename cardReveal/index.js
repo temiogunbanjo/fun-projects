@@ -128,7 +128,7 @@ function generateCards() {
   autoResizeCardBox();
 }
 
-function showLevelInfo() {
+function showLevelInfo(title) {
   const dialog = document.getElementById("win-badge-dialog");
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
@@ -144,7 +144,7 @@ function showLevelInfo() {
 
   button.classList.add("game-style");
 
-  heading.textContent = "About Level";
+  heading.textContent = title ?? "About Level";
   text.textContent = about;
   button.textContent = "Close";
 
@@ -167,12 +167,13 @@ function showLevelInfo() {
 
 function setGameLevel(_level = level) {
   localStorage.setItem("game_level", _level);
+  const rank = Math.trunc(_level / RANK_LEVEL_COUNT);
 
-  pairCount = level < RANK_LEVEL_COUNT ? 2 : 3;
+  pairCount = rank + 2 > 4 ? 4 : rank + 2;
   cardCount =
     level < RANK_LEVEL_COUNT ? (_level + 1) * pairCount : MAX_CARD_COUNT;
 
-  const bgLevel = Math.trunc(_level / RANK_LEVEL_COUNT) + 1;
+  const bgLevel = rank + 1;
   const newStyleClass = `l-${bgLevel}`;
   const oldStyleClass = `l-${bgLevel - 1}`;
   const body = document.body;
@@ -202,7 +203,11 @@ function proceedToNextLevel() {
   generateCards();
   autoResizeCardBox();
 
-  delay(9500, () => peekAllCards(3));
+  delay(9500, () => {
+    const isRankingLevel = level % RANK_LEVEL_COUNT === 0;
+    if (isRankingLevel) showLevelInfo("Difficulty Increased!");
+    peekAllCards(3);
+  });
 }
 
 function checkWinStatus() {
