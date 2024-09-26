@@ -14,7 +14,8 @@
   align-items: center;
 }
 
-body {
+body,
+body.l-1 {
   --story-text-color: rgb(255, 255, 255);
   --card-bgcolor: crimson;
   color: white;
@@ -25,6 +26,11 @@ body {
   margin: 0;
   /* min-height: 100vh; */
   /* cursor: url("path-to-image.png"), auto; */
+}
+
+body.l-2 {
+  --story-text-color: rgb(255, 255, 255);
+  --card-bgcolor: purple;
 }
 
 button.game-style {
@@ -40,6 +46,23 @@ button.game-style {
   border-radius: 12px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px purple;
+}
+
+#level-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 12px;
+  /* font-family: "Varela Round", sans-serif; */
+  font-weight: 400;
+  font-size: 20px;
+  color: purple;
+  background-color: wheat;
+  border-radius: 12px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px purple;
+  height: 200px;
+  width: 40%;
 }
 
 dialog {
@@ -67,8 +90,8 @@ dialog h3 {
   z-index: 199;
   transform-origin: center;
   letter-spacing: 3px;
-  -webkit-text-stroke: 2px rgb(255, 255, 255);
-  text-stroke: 2px rgb(255, 255, 255);
+  -webkit-text-stroke: 3px rgb(255, 255, 255);
+  text-stroke: 3px rgb(255, 255, 255);
   animation: winTextScale 790ms ease-in-out 0s 2 alternate forwards;
 }
 

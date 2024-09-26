@@ -1,8 +1,11 @@
-const RANK_LEVEL_COUNT = 10;
-let cardCount = 4;
+const RANK_LEVEL_COUNT = 11;
+const MAX_CARD_COUNT = 24;
 let level = 1;
+let pairCount = 2;
+let cardCount = pairCount * 2;
 let numberOfPairsMatched = 0;
 let currentMatches = [];
+let canPlayEffects = true;
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 let cardTypes = {
@@ -27,41 +30,16 @@ let cardTypes = {
   },
 };
 
-function chooseRandomItem(array) {
-  const randomIndex = Math.floor(Math.random() * array.length);
-  return { index: randomIndex, item: array[randomIndex] };
-}
-
-function delay(time, callback) {
-  return window.setTimeout(() => callback(), time);
-}
-
-/**
- *
- * @param {*[]} array
- * @returns
- */
-function randomizeArray(array) {
-  const retValue = [];
-  let breakLoopCount = 0;
-
-  while (retValue.length < array.length && breakLoopCount < 1000) {
-    const { item, index: itemIndex } = chooseRandomItem(array);
-    if (item !== null) {
-      retValue.push(item);
-      array[itemIndex] = null;
-      breakLoopCount = 0;
-    }
-
-    breakLoopCount += 1;
-  }
-
-  // console.log({ breakLoopCount, retValue, array });
-  return retValue;
-}
+const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
+const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
+const closeCardAudio = new Audio("./assets/audio/funny-swish-101878.mp3");
+const winGameAudio = new Audio(
+  "./assets/audio/level-up-bonus-sequence-3-186892.mp3"
+);
+const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 
 function getCardTypes() {
-  const numberOfPairsNeeded = Math.floor(cardCount / 2);
+  const numberOfPairsNeeded = Math.floor(cardCount / pairCount);
   let availableTypes = randomizeArray(Object.keys(cardTypes));
 
   let tSliced = availableTypes;
@@ -82,8 +60,7 @@ function getCardTypes() {
     }
   }
 
-  tSliced = tSliced.concat(tSliced);
-  tSliced = randomizeArray(tSliced);
+  tSliced = randomizeArray(repeatArray(tSliced, pairCount));
 
   console.log(tSliced, numberOfPairsNeeded);
 
@@ -141,7 +118,47 @@ function generateCards() {
   autoResizeCardBox();
 }
 
+function showLevelInfo() {
+  const dialog = document.getElementById("win-badge-dialog");
+  dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  dialog.innerHTML = "";
+
+  const about = `Lorem`;
+
+  const wrapper = document.createElement("div");
+  const heading = document.createElement("h2");
+  const text = document.createElement("p");
+  const button = document.createElement("button");
+
+  button.classList.add("game-style");
+
+  heading.textContent = "About Level";
+  text.textContent = about;
+  button.textContent = "Close";
+
+  wrapper.setAttribute("id", "level-info");
+  heading.style.margin = 0;
+
+  button.addEventListener("click", () => {
+    dialog.removeAttribute('style');
+    dialog.removeAttribute("open", true);
+  });
+
+  wrapper.appendChild(heading);
+  wrapper.appendChild(text);
+  wrapper.appendChild(button);
+
+  dialog.appendChild(wrapper);
+  dialog.setAttribute("open", true);
+}
+
 function setGameLevel(_level = level) {
+  localStorage.setItem("game_level", _level);
+
+  pairCount = level < RANK_LEVEL_COUNT ? 2 : 3;
+  cardCount =
+    level < RANK_LEVEL_COUNT ? (_level + 1) * pairCount : MAX_CARD_COUNT;
+
   const bgLevel = Math.trunc(_level / RANK_LEVEL_COUNT) + 1;
   const newStyleClass = `l-${bgLevel}`;
   const oldStyleClass = `l-${bgLevel - 1}`;
@@ -160,27 +177,33 @@ function setGameLevel(_level = level) {
 
 function proceedToNextLevel() {
   const dialog = document.getElementById("win-badge-dialog");
+  dialog.innerHTML = "";
   dialog.removeAttribute("open");
 
   level = level + 1;
   numberOfPairsMatched = 0;
   currentMatches = [];
-  cardCount += 2;
 
   showSplashScreen("play");
+  setGameLevel(level);
   generateCards();
   autoResizeCardBox();
-  setGameLevel(level);
 
   delay(9500, () => peekAllCards(3));
 }
 
 function checkWinStatus() {
-  const numberOfPairsAvailable = Math.floor(cardCount / 2);
+  const numberOfPairsAvailable = Math.floor(cardCount / pairCount);
   const hasWon = numberOfPairsMatched >= numberOfPairsAvailable;
   if (hasWon) {
     const dialog = document.getElementById("win-badge-dialog");
+    const text = document.createElement("h3");
+    text.textContent = "You Won!";
+    dialog.appendChild(text);
+
     delay(900, () => {
+      playSoundEffect(winGameAudio);
+      // winGameAudio.playbackRate = 0.5
       dialog.setAttribute("open", true);
 
       delay(1000, () => {
@@ -198,36 +221,54 @@ function handleCardClick(ev) {
     ev.target.setAttribute("data-opened", true);
     ev.target.classList.toggle("reveal", true);
 
+    playSoundEffect(clickCardAudio);
+
     currentMatches.push({
       id: ev.target.getAttribute("id"),
       category: ev.target.getAttribute("data-id"),
     });
 
-    if (currentMatches.length >= 2) {
-      const [firstCardInfo, secondCardInfo] = currentMatches;
-      const secondCard = ev.target;
-      const firstCard = document.getElementById(firstCardInfo.id);
+    if (currentMatches.length >= pairCount) {
+      const didCardsMatch =
+        removeRepeatingItems(
+          currentMatches
+            .slice(0, pairCount)
+            .map((cardInfo) => cardInfo.category)
+        ).length === 1;
+      // .reduce((prevCardInfo, currentCardInfo) => {
+      //   return prevCardInfo.category === currentCardInfo.category;
+      // });
 
-      if (firstCardInfo.category !== secondCardInfo.category) {
-        // Cover second and first card
+      const cardElements = currentMatches
+        .slice(0, pairCount)
+        .map((cardInfo) => document.getElementById(cardInfo.id));
+
+      if (!didCardsMatch) {
         window.setTimeout(() => {
-          firstCard.classList.toggle("reveal", false);
-          secondCard.classList.toggle("reveal", false);
+          // Cover matched cards
+          cardElements.forEach((card) => {
+            card.classList.toggle("reveal", false);
+            card.setAttribute("data-opened", false);
+          });
 
-          firstCard.setAttribute("data-opened", false);
-          secondCard.setAttribute("data-opened", false);
+          playSoundEffect(closeCardAudio);
         }, delayForAnimation);
       } else {
         window.setTimeout(() => {
-          firstCard.classList.toggle("matched", true);
-          secondCard.classList.toggle("matched", true);
+          playSoundEffect(matchCardAudio);
+          cardElements.forEach((card) => {
+            card.classList.toggle("matched", true);
+            card.classList.toggle("matched", true);
+          });
         }, delayForAnimation - 500);
 
         numberOfPairsMatched += 1;
         checkWinStatus();
       }
 
-      currentMatches = [];
+      cardElements.forEach(() => {
+        currentMatches.shift();
+      });
     }
 
     console.log(currentMatches, numberOfPairsMatched);
@@ -243,28 +284,44 @@ function peekAllCards(duration = 2) {
     card.classList.toggle("reveal", true);
   }
 
+  playSoundEffect(peekCardAudio);
+
   window.setTimeout(() => {
     for (const card of unopenedCards) {
       card.classList.toggle("reveal", false);
+      playSoundEffect(closeCardAudio);
     }
   }, duration * 1000);
 }
 
+function playSoundEffect(audio) {
+  if (canPlayEffects) {
+    audio.play();
+  }
+}
+
+function toggleSoundEffects() {
+  console.log(canPlayEffects);
+  localStorage.setItem("sound_effect_is_on", !canPlayEffects);
+  loadSettings();
+}
+
 function loadSettings() {
   level = parseInt(window.localStorage.getItem("game_level") ?? 1);
+  canPlayEffects = JSON.parse(
+    window.localStorage.getItem("sound_effect_is_on") ?? "true"
+  );
   // const audio = document.getElementById("bg-audio");
   // audio.muted = isMusicOn;
   // audio.paused = isMusicOn;
   // healthCount = parseInt(window.localStorage.getItem("game_health") ?? 4);
-  // const isMusicOn = JSON.parse(
-  //   window.localStorage.getItem("bg_music_is_on") ?? "false"
-  // );
   setGameLevel();
 }
 
 function setupListeners() {
   const cardBox = document.getElementById("card-box");
   const peekBtn = document.querySelector("main #peek-a-boo");
+  const infoBtn = document.querySelector("main #info");
   const startGameButton = document.querySelector(
     "#main_menu button:first-child"
   );
@@ -279,6 +336,10 @@ function setupListeners() {
   });
 
   peekBtn.addEventListener("click", (ev) => peekAllCards(2));
+  infoBtn.addEventListener("click", (ev) => {
+    showLevelInfo();
+  });
+
   startGameButton.addEventListener("click", (ev) => {
     window.location.hash = "play";
     peekAllCards(3);
@@ -303,8 +364,8 @@ function showSplashScreen(redirectTo = `main_menu`) {
 }
 
 function startGame(ev) {
-  generateCards();
   loadSettings();
+  generateCards();
   showSplashScreen();
 }
 

@@ -11,9 +11,10 @@
       src="https://kit.fontawesome.com/f388f70b2b.js"
       crossorigin="anonymous"
     ></script>
+    <script src="utils.js"></script>
     <script src="index.js"></script>
   </head>
-  <body>
+  <body class="l-1">
     <section id="splash">
       <h1>
         <span>CardVeal</span>
@@ -24,8 +25,12 @@
 
     <section id="main_menu">
       <button class="game-style">Start</button>
-      <button class="game-style" onclick="window.location.hash='settings';">Settings</button>
-      <button class="game-style" onclick="window.location.hash='about';">About Game</button>
+      <button class="game-style" onclick="window.location.hash='settings';">
+        Settings
+      </button>
+      <button class="game-style" onclick="window.location.hash='about';">
+        About Game
+      </button>
       <button class="game-style">Quit</button>
     </section>
 
@@ -66,7 +71,7 @@
       </div>
 
       <dialog id="win-badge-dialog" class="">
-        <h3>You won!</h3>
+        <!-- Put modal displays here -->
       </dialog>
     </main>
 
@@ -93,7 +98,7 @@
 
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="toggleSoundEffects()"
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-volume-high"></i>
