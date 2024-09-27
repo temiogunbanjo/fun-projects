@@ -30,6 +30,42 @@
   display: initial !important;
 }
 
+body,
+body.l-1 {
+  --primary-color: crimson;
+  --secondary-color: purple;
+  --card-bgcolor: #dc143c;
+  --story-text-color: rgb(255, 255, 255);
+  --light-glow-shadow: rgba(243, 38, 79, 0.27);
+
+  color: white;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: chocolate;
+  font-weight: 300;
+  padding: 0;
+  margin: 0;
+}
+
+body.l-2 {
+  --card-bgcolor: purple;
+  --story-text-color: rgb(255, 255, 255);
+  --light-glow-shadow: rgba(151, 38, 243, 0.17);
+}
+
+body.l-3 {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.26)),
+    url("https://img.freepik.com/premium-vector/cartoon-animation-scene-outdoor-scenery-game-wallpaper-background-illustration-design-banner_953932-7907.jpg");
+
+  --card-bgcolor: chocolate;
+  --story-text-color: rgb(255, 255, 255);
+  --light-glow-shadow: rgba(151, 38, 243, 0.17);
+  --secondary-color: #9e4c12;
+}
+
 #power-meter {
   background-color: rgba(196, 179, 145, 0.847);
   border-radius: 5px;
@@ -68,27 +104,6 @@
   animation: powerUpFlash 600ms linear 0s infinite alternate both;
 }
 
-body,
-body.l-1 {
-  --story-text-color: rgb(255, 255, 255);
-  --card-bgcolor: rgb(220, 20, 60);
-  --light-glow-shadow: rgba(243, 38, 79, 0.27);
-  color: white;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
-  background-color: chocolate;
-  font-weight: 300;
-  padding: 0;
-  margin: 0;
-  /* min-height: 100vh; */
-  /* cursor: url("path-to-image.png"), auto; */
-}
-
-body.l-2 {
-  --story-text-color: rgb(255, 255, 255);
-  --card-bgcolor: purple;
-  --light-glow-shadow: rgba(151, 38, 243, 0.17);
-}
-
 button.game-style {
   display: flex;
   flex-direction: column;
@@ -96,12 +111,12 @@ button.game-style {
   padding: 10px 12px;
   font-weight: 800;
   font-size: 20px;
-  color: purple;
+  color: var(--secondary-color);
   border-radius: 12px;
   background-color: wheat;
   transition: all 0.2s ease;
   box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px purple;
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
 }
 
 button.game-style.variant-1 {
@@ -114,13 +129,13 @@ button.game-style.variant-1 {
 button.game-style:active {
   transform: scale(0.96);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 2px 1px purple;
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 2px 1px var(--secondary-color);
 }
 
 button.game-style:disabled {
   opacity: 0.6;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 2px 1px purple;
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 2px 1px var(--secondary-color);
 }
 
 #level-info {
@@ -136,7 +151,7 @@ button.game-style:disabled {
   background-color: wheat;
   border-radius: 12px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px purple;
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
   min-height: 200px;
   width: 40%;
 }
@@ -255,14 +270,15 @@ header #level-indicator > *:first-child {
   text-align: center;
   font-size: 12px;
   font-weight: 500;
-  background-color: crimson;
+  background-color: var(--primary-color);
   border: 4px solid wheat;
   border-bottom-width: 16px;
   margin-bottom: -15px;
   border-radius: 12px;
   border-bottom-right-radius: 18px;
   border-bottom-left-radius: 18px;
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15), 2px 4px 1px purple;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15),
+    2px 4px 1px var(--secondary-color);
 }
 
 header #level-indicator > *:last-child {
@@ -272,12 +288,12 @@ header #level-indicator > *:last-child {
   padding: 4px 12px;
   font-weight: 800;
   font-size: 20px;
-  color: purple;
+  color: var(--secondary-color);
   background-color: wheat;
   border-radius: 12px;
   min-width: 200px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px purple;
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
 }
 
 #card-box {
@@ -391,7 +407,8 @@ header #level-indicator > *:last-child {
     background-color: wheat;
     border-radius: 12px;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
-      inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px purple;
+      inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+      1px 4px 1px var(--secondary-color);
     min-height: 200px;
     width: 85%;
   }

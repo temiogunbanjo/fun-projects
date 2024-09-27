@@ -492,7 +492,7 @@ function setupListeners() {
   });
 
   peekBtn.addEventListener("click", (ev) => {
-    const duration = 3 + rank;
+    const duration = 3 + rank * 1.5;
     peekAllCards(duration);
   });
   infoBtn.addEventListener("click", (ev) => {
@@ -501,7 +501,7 @@ function setupListeners() {
 
   startGameButton.addEventListener("click", (ev) => {
     window.location.hash = "play";
-    const duration = 3 + rank;
+    const duration = 3 + rank * 1.5;
     peekAllCards(duration);
     autoResizeCardBox();
   });
