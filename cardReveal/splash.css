@@ -98,20 +98,6 @@
   animation: flash 1000ms ease 0s infinite alternate forwards;
 }
 
-@keyframes flash {
-  0% {
-    opacity: 0;
-  }
-
-  75% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
 @media only screen and (max-width: 768px) {
   /* #splash h1 {
     margin: 0 0 -120px;

@@ -1,6 +1,9 @@
 const RANK_LEVEL_COUNT = 11;
 const MAX_CARD_COUNT = 24;
+const MAX_METER_VALUE = 100;
+const MIN_METER_VALUE = 0;
 let level = 1;
+let rank = 0;
 let pairCount = 2;
 let cardCount = pairCount * 2;
 let numberOfPairsMatched = 0;
@@ -8,6 +11,7 @@ let currentMatches = [];
 let canPlayEffects = true;
 let nextRevealTime = 15;
 let meterValue = 0;
+let comboMultiplier = 0;
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 let cardTypes = {
@@ -50,16 +54,53 @@ const winGameAudio = new Audio(
 );
 const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 
-function updatePowerMeter() {
-  const powerMeter = document.querySelector("header #level-indicator meter");
+function updatePowerMeter(direction) {
+  const powerMeter = document.querySelector("#power-meter > *:first-child");
+  const meterIncrement = Math.floor(
+    (1 / (level + 1)) * (MAX_METER_VALUE * (1 + comboMultiplier))
+  );
+  const meterDecrement = Math.floor((1 / (level + 1)) * MAX_METER_VALUE) * 1.2;
 
-  if (meterValue < 1) {
-    meterValue = 1;
-  } else if (meterValue > 100) {
-    meterValue = 100
+  switch (true) {
+    case direction < 0:
+      meterValue -= meterDecrement;
+      break;
+
+    case direction > 0:
+      meterValue += meterIncrement;
+      break;
+
+    default:
+      meterValue += 0;
+      break;
   }
 
-  powerMeter.value = meterValue;
+  if (meterValue < MIN_METER_VALUE) {
+    meterValue = MIN_METER_VALUE;
+  } else if (meterValue > MAX_METER_VALUE) {
+    meterValue = MAX_METER_VALUE;
+  }
+
+  switch (true) {
+    case meterValue === MAX_METER_VALUE:
+      powerMeter.parentElement.setAttribute("data-value", "max");
+      break;
+
+    case meterValue > 50 && meterValue <= MAX_METER_VALUE - 1:
+      powerMeter.parentElement.setAttribute("data-value", "high");
+      break;
+
+    case meterValue > 25 && meterValue <= 50:
+      powerMeter.parentElement.setAttribute("data-value", "optimum");
+      break;
+
+    case meterValue >= 0 && meterValue <= 25:
+    default:
+      powerMeter.parentElement.setAttribute("data-value", "low");
+      break;
+  }
+
+  powerMeter.style.width = `${meterValue}%`;
 }
 
 function getCardTypes() {
@@ -79,15 +120,10 @@ function getCardTypes() {
       tSliced.push(availableTypes[nextIndex]);
       nextIndex = nextIndex + 1 >= availableTypes.length ? 0 : nextIndex + 1;
       breakCount += 1;
-
-      console.log({ breakCount, remainingCount });
     }
   }
 
   tSliced = randomizeArray(repeatArray(tSliced, pairCount));
-
-  console.log(tSliced, numberOfPairsNeeded);
-
   return tSliced;
 }
 
@@ -240,8 +276,14 @@ function showInGameMenu() {
 
 function setGameScene(_level = level) {
   localStorage.setItem("game_level", _level);
-  const rank = Math.trunc(_level / RANK_LEVEL_COUNT);
 
+  meterValue = 0;
+  currentMatches = [];
+  nextRevealTime = 30;
+  comboMultiplier = 0;
+  numberOfPairsMatched = 0;
+
+  rank = Math.trunc(_level / RANK_LEVEL_COUNT);
   pairCount = Math.min(4, rank + 2);
   cardCount = Math.min((_level + 1) * pairCount, MAX_CARD_COUNT);
 
@@ -260,7 +302,7 @@ function setGameScene(_level = level) {
     "level-indicator"
   ).children[1].children[0].textContent = `CITY`;
 
-  updatePowerMeter();
+  updatePowerMeter(0);
 }
 
 function proceedToNextLevel() {
@@ -269,10 +311,6 @@ function proceedToNextLevel() {
   dialog.removeAttribute("open");
 
   level = level + 1;
-  numberOfPairsMatched = 0;
-  currentMatches = [];
-  nextRevealTime = 30;
-  meterValue = 0;
 
   showSplashScreen("play");
   setGameScene(level);
@@ -310,8 +348,6 @@ function checkWinStatus() {
 
 function handleCardClick(ev) {
   const delayForAnimation = 1200;
-  const meterIncrement = Math.floor((1 / (level + 1)) * 100);
-  const meterDecrement = meterIncrement * 1.2;
 
   if (ev.target.getAttribute("data-opened") === "false") {
     ev.target.setAttribute("data-opened", true);
@@ -336,7 +372,20 @@ function handleCardClick(ev) {
         .slice(0, pairCount)
         .map((cardInfo) => document.getElementById(cardInfo.id));
 
-      if (!didCardsMatch) {
+      if (didCardsMatch) {
+        window.setTimeout(() => {
+          playSoundEffect(matchCardAudio);
+          cardElements.forEach((card) => {
+            card.classList.toggle("matched", true);
+            card.classList.toggle("matched", true);
+          });
+          updatePowerMeter(+1);
+        }, delayForAnimation - 500);
+
+        comboMultiplier += 0.5;
+        numberOfPairsMatched += 1;
+        checkWinStatus();
+      } else {
         window.setTimeout(() => {
           // Cover matched cards
           cardElements.forEach((card) => {
@@ -345,22 +394,10 @@ function handleCardClick(ev) {
           });
 
           playSoundEffect(closeCardAudio);
-          meterValue -= meterDecrement;
-          updatePowerMeter();
+          updatePowerMeter(-1);
         }, delayForAnimation);
-      } else {
-        window.setTimeout(() => {
-          playSoundEffect(matchCardAudio);
-          cardElements.forEach((card) => {
-            card.classList.toggle("matched", true);
-            card.classList.toggle("matched", true);
-          });
-          meterValue += meterIncrement;
-          updatePowerMeter();
-        }, delayForAnimation - 500);
 
-        numberOfPairsMatched += 1;
-        checkWinStatus();
+        comboMultiplier = 0;
       }
 
       // Remove card info from currentMatches array
@@ -369,12 +406,12 @@ function handleCardClick(ev) {
       });
     }
 
-    console.log(currentMatches, numberOfPairsMatched);
+    console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
   }
 }
 
 function peekAllCards(duration = 2) {
-  // const cardBox = document.getElementById("card-box");
+  console.log("duration", duration);
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])"
   );
@@ -454,14 +491,18 @@ function setupListeners() {
     autoResizeCardBox();
   });
 
-  peekBtn.addEventListener("click", (ev) => peekAllCards(3));
+  peekBtn.addEventListener("click", (ev) => {
+    const duration = 3 + rank;
+    peekAllCards(duration);
+  });
   infoBtn.addEventListener("click", (ev) => {
     showLevelInfo();
   });
 
   startGameButton.addEventListener("click", (ev) => {
     window.location.hash = "play";
-    peekAllCards(3);
+    const duration = 3 + rank;
+    peekAllCards(duration);
     autoResizeCardBox();
   });
 
