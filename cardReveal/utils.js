@@ -52,33 +52,44 @@ function formatAsTime(milliseconds) {
   const anHour = 60 * aMinute;
   const aDay = 24 * anHour;
 
-  let unit = '';
-  let retValue = '';
+  let unit = "";
+  let retValue = 0;
+  let remainder = 0;
 
   switch (true) {
     case milliseconds >= anHour && milliseconds < aDay:
-      retValue = milliseconds / anHour;
-      unit = 'h';
+      retValue = Math.trunc(milliseconds / anHour);
+      remainder = milliseconds - retValue * anHour;
+      unit = "h";
       break;
 
     case milliseconds >= aMinute && milliseconds < anHour:
-      retValue = milliseconds / aMinute;
-      unit = 'm';
+      retValue = Math.trunc(milliseconds / aMinute);
+      remainder = milliseconds - retValue * aMinute;
+      unit = "m";
       break;
 
     case milliseconds < aSecond:
-      retValue = milliseconds;
-      unit = 'ms';
+      retValue = Math.trunc(milliseconds);
+      remainder = 0;
+      unit = "ms";
       break;
 
     case milliseconds >= aSecond && milliseconds < aMinute:
     default:
-      retValue = milliseconds / aSecond;
-      unit = 's';
+      retValue = Math.trunc(milliseconds / aSecond);
+      remainder = milliseconds - retValue * aSecond;
+      unit = "s";
       break;
   }
 
-  return `${retValue}${unit}`;
+  console.log(retValue, remainder);
+
+  if (remainder === 0) {
+    return `${retValue}${unit}`;
+  }
+
+  return `${retValue}${unit}` + formatAsTime(remainder);
 }
 
 // const s = [];

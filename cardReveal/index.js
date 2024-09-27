@@ -52,7 +52,13 @@ const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 
 function updatePowerMeter() {
   const powerMeter = document.querySelector("header #level-indicator meter");
-  powerMeter.max = level + 1;
+
+  if (meterValue < 1) {
+    meterValue = 1;
+  } else if (meterValue > 100) {
+    meterValue = 100
+  }
+
   powerMeter.value = meterValue;
 }
 
@@ -304,13 +310,14 @@ function checkWinStatus() {
 
 function handleCardClick(ev) {
   const delayForAnimation = 1200;
+  const meterIncrement = Math.floor((1 / (level + 1)) * 100);
+  const meterDecrement = meterIncrement * 1.2;
 
   if (ev.target.getAttribute("data-opened") === "false") {
     ev.target.setAttribute("data-opened", true);
     ev.target.classList.toggle("reveal", true);
 
     playSoundEffect(clickCardAudio);
-    meterValue += 1;
 
     currentMatches.push({
       id: ev.target.getAttribute("id"),
@@ -338,7 +345,8 @@ function handleCardClick(ev) {
           });
 
           playSoundEffect(closeCardAudio);
-          meterValue -= 2;
+          meterValue -= meterDecrement;
+          updatePowerMeter();
         }, delayForAnimation);
       } else {
         window.setTimeout(() => {
@@ -347,19 +355,21 @@ function handleCardClick(ev) {
             card.classList.toggle("matched", true);
             card.classList.toggle("matched", true);
           });
+          meterValue += meterIncrement;
+          updatePowerMeter();
         }, delayForAnimation - 500);
 
         numberOfPairsMatched += 1;
         checkWinStatus();
       }
 
+      // Remove card info from currentMatches array
       cardElements.forEach(() => {
         currentMatches.shift();
       });
     }
 
     console.log(currentMatches, numberOfPairsMatched);
-    updatePowerMeter();
   }
 }
 
@@ -370,7 +380,7 @@ function peekAllCards(duration = 2) {
   );
   const peekBtn = document.querySelector("main #peek-a-boo");
   peekBtn.setAttribute("disabled", true);
-  
+
   for (const card of unopenedCards) {
     card.classList.toggle("reveal", true);
   }
@@ -384,7 +394,6 @@ function peekAllCards(duration = 2) {
       playSoundEffect(closeCardAudio);
     }
 
-    
     peekBtn.style.cursor = "wait";
     peekBtn.setAttribute(
       "title",
