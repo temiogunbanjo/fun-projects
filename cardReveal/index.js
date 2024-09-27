@@ -371,7 +371,7 @@ function setupListeners() {
     autoResizeCardBox();
   });
 
-  peekBtn.addEventListener("click", (ev) => peekAllCards(2));
+  peekBtn.addEventListener("click", (ev) => peekAllCards(3));
   infoBtn.addEventListener("click", (ev) => {
     showLevelInfo();
   });
