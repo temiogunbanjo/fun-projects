@@ -6,6 +6,7 @@ let cardCount = pairCount * 2;
 let numberOfPairsMatched = 0;
 let currentMatches = [];
 let canPlayEffects = true;
+let nextRevealTime = 30;
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 let cardTypes = {
@@ -305,10 +306,21 @@ function peekAllCards(duration = 2) {
   playSoundEffect(peekCardAudio);
 
   window.setTimeout(() => {
+    // Close all revealed cards
     for (const card of unopenedCards) {
       card.classList.toggle("reveal", false);
       playSoundEffect(closeCardAudio);
     }
+
+    const peekBtn = document.querySelector("main #peek-a-boo");
+    peekBtn.setAttribute("disabled", true);
+    peekBtn.style.cursor = "wait";
+
+    window.setTimeout(() => {
+      peekBtn.removeAttribute("style");
+      peekBtn.removeAttribute("disabled");
+      nextRevealTime *= 2;
+    }, nextRevealTime * 1000);
   }, duration * 1000);
 }
 
