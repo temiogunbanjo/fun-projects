@@ -67,7 +67,7 @@
     url("./assets/boy2.png") no-repeat center/120px;
   background-blend-mode: normal, normal;
   background-color: var(--card-bgcolor);
-  border-radius: 15px;
+  border-radius: 20px;
   width: 100%;
   height: 100%;
   flex-direction: column;

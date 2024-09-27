@@ -1,4 +1,4 @@
-const RANK_LEVEL_COUNT = 11;
+const RANK_LEVEL_COUNT = 10;
 const MAX_CARD_COUNT = 24;
 let level = 1;
 let pairCount = 2;
@@ -185,7 +185,7 @@ function showInGameMenu() {
   button2.textContent = "Level Info";
 
   wrapper.setAttribute("id", "level-info");
-  wrapper.style.minHeight=  "300px";
+  wrapper.style.minHeight = "300px";
   wrapper.style.gap = "20px";
   wrapper.style.paddingBottom = "40px";
   wrapper.classList.add("game-border");
@@ -222,8 +222,7 @@ function setGameLevel(_level = level) {
   const rank = Math.trunc(_level / RANK_LEVEL_COUNT);
 
   pairCount = rank + 2 > 4 ? 4 : rank + 2;
-  cardCount =
-    level < RANK_LEVEL_COUNT ? (_level + 1) * pairCount : MAX_CARD_COUNT;
+  cardCount = Math.min((_level + 1) * pairCount, MAX_CARD_COUNT);
 
   const bgLevel = rank + 1;
   const newStyleClass = `l-${bgLevel}`;
