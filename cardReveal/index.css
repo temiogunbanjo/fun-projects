@@ -48,7 +48,7 @@ body.l-1 {
 body.l-2 {
   --story-text-color: rgb(255, 255, 255);
   --card-bgcolor: purple;
-  --light-glow-shadow: rgba(243, 38, 79, 0.27);
+  --light-glow-shadow: rgba(151, 38, 243, 0.17);
 }
 
 button.game-style {
