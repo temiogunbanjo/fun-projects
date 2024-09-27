@@ -166,6 +166,55 @@ function showLevelInfo(title) {
   dialog.setAttribute("open", true);
 }
 
+function showInGameMenu() {
+  const dialog = document.getElementById("win-badge-dialog");
+  dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  dialog.innerHTML = "";
+
+  const wrapper = document.createElement("div");
+  const heading = document.createElement("h2");
+  const buttonWrapper = document.createElement("div");
+  const button1 = document.createElement("button");
+  const button2 = document.createElement("button");
+
+  button1.classList.add("game-style");
+  button2.classList.add("game-style");
+
+  heading.textContent = "Game Menu";
+  button1.textContent = "Resume game";
+  button2.textContent = "Level Info";
+
+  wrapper.setAttribute("id", "level-info");
+  wrapper.style.gap = "20px";
+  wrapper.style.paddingBottom = "40px";
+
+  heading.style.margin = 0;
+
+  buttonWrapper.classList.add("center");
+  buttonWrapper.style.flexDirection = "column";
+  buttonWrapper.style.alignItems = "stretch";
+  buttonWrapper.style.gap = "18px";
+
+  button1.addEventListener("click", () => {
+    dialog.removeAttribute("style");
+    dialog.removeAttribute("open", true);
+    dialog.innerHTML = "";
+  });
+
+  button2.addEventListener("click", () => {
+    showLevelInfo();
+  });
+
+  buttonWrapper.appendChild(button1);
+  buttonWrapper.appendChild(button2);
+
+  wrapper.appendChild(heading);
+  wrapper.appendChild(buttonWrapper);
+
+  dialog.appendChild(wrapper);
+  dialog.setAttribute("open", true);
+}
+
 function setGameLevel(_level = level) {
   localStorage.setItem("game_level", _level);
   const rank = Math.trunc(_level / RANK_LEVEL_COUNT);
@@ -198,6 +247,7 @@ function proceedToNextLevel() {
   level = level + 1;
   numberOfPairsMatched = 0;
   currentMatches = [];
+  nextRevealTime = 30;
 
   showSplashScreen("play");
   setGameLevel(level);

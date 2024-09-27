@@ -7,7 +7,7 @@
     <title>Card Reveal | Train your mind</title>
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="splash.css" />
-    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon" />
     <script
       src="https://kit.fontawesome.com/f388f70b2b.js"
       crossorigin="anonymous"
@@ -38,11 +38,18 @@
     <main id="play">
       <!-- <h1>JING JUNG</h1> -->
       <header class="fa-3x">
-        <button
-          id="return-home"
-          class="game-style fa-solid fa-reply"
-          onclick="window.location.hash='main_menu';"
-        ></button>
+        <div class="center" style="gap: 10px">
+          <button
+            id="return-home"
+            class="game-style fa-solid fa-reply show-on-pc"
+            onclick="window.location.hash='main_menu';"
+          ></button>
+          <button
+            id="show-menu-mobile"
+            class="game-style fa-solid fa-pause show-on-mobile"
+            onclick="showInGameMenu();"
+          ></button>
+        </div>
 
         <div id="level-indicator">
           <span class="level-count">Lv 1</span>
@@ -61,7 +68,7 @@
             ></i>
           </button>
 
-          <button id="info" class="game-style">
+          <button id="info" class="game-style show-on-pc">
             <i class="fa-solid fa-info"></i>
           </button>
         </div>
