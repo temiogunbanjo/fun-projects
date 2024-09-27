@@ -1,4 +1,4 @@
-const RANK_LEVEL_COUNT = 10;
+const RANK_LEVEL_COUNT = 11;
 const MAX_CARD_COUNT = 24;
 let level = 1;
 let pairCount = 2;
@@ -6,7 +6,8 @@ let cardCount = pairCount * 2;
 let numberOfPairsMatched = 0;
 let currentMatches = [];
 let canPlayEffects = true;
-let nextRevealTime = 30;
+let nextRevealTime = 15;
+let meterValue = 0;
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 let cardTypes = {
@@ -48,6 +49,12 @@ const winGameAudio = new Audio(
   "./assets/audio/level-up-bonus-sequence-3-186892.mp3"
 );
 const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
+
+function updatePowerMeter() {
+  const powerMeter = document.querySelector("header #level-indicator meter");
+  powerMeter.max = level + 1;
+  powerMeter.value = meterValue;
+}
 
 function getCardTypes() {
   const numberOfPairsNeeded = Math.floor(cardCount / pairCount);
@@ -176,13 +183,16 @@ function showInGameMenu() {
   const buttonWrapper = document.createElement("div");
   const button1 = document.createElement("button");
   const button2 = document.createElement("button");
+  const button3 = document.createElement("button");
 
   button1.classList.add("game-style");
   button2.classList.add("game-style");
+  button3.classList.add("game-style", "variant-1");
 
   heading.textContent = "Game Menu";
-  button1.textContent = "Resume game";
   button2.textContent = "Level Info";
+  button1.textContent = "Resume game";
+  button3.textContent = "Back to Main menu";
 
   wrapper.setAttribute("id", "level-info");
   wrapper.style.minHeight = "300px";
@@ -207,8 +217,13 @@ function showInGameMenu() {
     showLevelInfo();
   });
 
+  button3.addEventListener("click", () => {
+    window.location.reload();
+  });
+
   buttonWrapper.appendChild(button1);
   buttonWrapper.appendChild(button2);
+  buttonWrapper.appendChild(button3);
 
   wrapper.appendChild(heading);
   wrapper.appendChild(buttonWrapper);
@@ -217,27 +232,29 @@ function showInGameMenu() {
   dialog.setAttribute("open", true);
 }
 
-function setGameLevel(_level = level) {
+function setGameScene(_level = level) {
   localStorage.setItem("game_level", _level);
   const rank = Math.trunc(_level / RANK_LEVEL_COUNT);
 
-  pairCount = rank + 2 > 4 ? 4 : rank + 2;
+  pairCount = Math.min(4, rank + 2);
   cardCount = Math.min((_level + 1) * pairCount, MAX_CARD_COUNT);
 
   const bgLevel = rank + 1;
   const newStyleClass = `l-${bgLevel}`;
   const oldStyleClass = `l-${bgLevel - 1}`;
   const body = document.body;
-
-  document.getElementById(
-    "level-indicator"
-  ).children[0].textContent = `Lv ${_level}`;
-  document.getElementById("level-indicator").children[1].textContent = `CITY`;
-
   body.classList.toggle(newStyleClass, true);
   body.classList.toggle(oldStyleClass, false);
 
-  console.log(bgLevel);
+  document.getElementById(
+    "level-indicator"
+  ).children[0].children[0].textContent = `Lv ${_level}`;
+
+  document.getElementById(
+    "level-indicator"
+  ).children[1].children[0].textContent = `CITY`;
+
+  updatePowerMeter();
 }
 
 function proceedToNextLevel() {
@@ -249,9 +266,10 @@ function proceedToNextLevel() {
   numberOfPairsMatched = 0;
   currentMatches = [];
   nextRevealTime = 30;
+  meterValue = 0;
 
   showSplashScreen("play");
-  setGameLevel(level);
+  setGameScene(level);
   generateCards();
   autoResizeCardBox();
 
@@ -292,6 +310,7 @@ function handleCardClick(ev) {
     ev.target.classList.toggle("reveal", true);
 
     playSoundEffect(clickCardAudio);
+    meterValue += 1;
 
     currentMatches.push({
       id: ev.target.getAttribute("id"),
@@ -305,9 +324,6 @@ function handleCardClick(ev) {
             .slice(0, pairCount)
             .map((cardInfo) => cardInfo.category)
         ).length === 1;
-      // .reduce((prevCardInfo, currentCardInfo) => {
-      //   return prevCardInfo.category === currentCardInfo.category;
-      // });
 
       const cardElements = currentMatches
         .slice(0, pairCount)
@@ -322,6 +338,7 @@ function handleCardClick(ev) {
           });
 
           playSoundEffect(closeCardAudio);
+          meterValue -= 2;
         }, delayForAnimation);
       } else {
         window.setTimeout(() => {
@@ -342,6 +359,7 @@ function handleCardClick(ev) {
     }
 
     console.log(currentMatches, numberOfPairsMatched);
+    updatePowerMeter();
   }
 }
 
@@ -383,7 +401,7 @@ function playSoundEffect(audio) {
 }
 
 function toggleSoundEffects() {
-  console.log(canPlayEffects);
+  // console.log(canPlayEffects);
   localStorage.setItem("sound_effect_is_on", !canPlayEffects);
   loadSettings();
 }
@@ -397,7 +415,7 @@ function loadSettings() {
   // audio.muted = isMusicOn;
   // audio.paused = isMusicOn;
   // healthCount = parseInt(window.localStorage.getItem("game_health") ?? 4);
-  setGameLevel();
+  setGameScene();
 }
 
 function setupListeners() {
