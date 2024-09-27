@@ -46,6 +46,41 @@ function removeRepeatingItems(array) {
   return uniqueArray;
 }
 
+function formatAsTime(milliseconds) {
+  const aSecond = 1000;
+  const aMinute = 60 * aSecond;
+  const anHour = 60 * aMinute;
+  const aDay = 24 * anHour;
+
+  let unit = '';
+  let retValue = '';
+
+  switch (true) {
+    case milliseconds >= anHour && milliseconds < aDay:
+      retValue = milliseconds / anHour;
+      unit = 'h';
+      break;
+
+    case milliseconds >= aMinute && milliseconds < anHour:
+      retValue = milliseconds / aMinute;
+      unit = 'm';
+      break;
+
+    case milliseconds < aSecond:
+      retValue = milliseconds;
+      unit = 'ms';
+      break;
+
+    case milliseconds >= aSecond && milliseconds < aMinute:
+    default:
+      retValue = milliseconds / aSecond;
+      unit = 's';
+      break;
+  }
+
+  return `${retValue}${unit}`;
+}
+
 // const s = [];
 // s["idle"] = { loc: [] };
 // s["jump"] = { loc: [] };

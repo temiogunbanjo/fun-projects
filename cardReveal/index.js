@@ -368,6 +368,9 @@ function peekAllCards(duration = 2) {
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])"
   );
+  const peekBtn = document.querySelector("main #peek-a-boo");
+  peekBtn.setAttribute("disabled", true);
+  
   for (const card of unopenedCards) {
     card.classList.toggle("reveal", true);
   }
@@ -381,10 +384,12 @@ function peekAllCards(duration = 2) {
       playSoundEffect(closeCardAudio);
     }
 
-    const peekBtn = document.querySelector("main #peek-a-boo");
-    peekBtn.setAttribute("disabled", true);
+    
     peekBtn.style.cursor = "wait";
-    peekBtn.setAttribute("title", `Reveal in ${nextRevealTime}s`);
+    peekBtn.setAttribute(
+      "title",
+      `Reveal in ${formatAsTime(nextRevealTime * 1000)}`
+    );
 
     window.setTimeout(() => {
       peekBtn.removeAttribute("style");
