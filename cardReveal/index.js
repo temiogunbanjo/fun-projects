@@ -185,8 +185,10 @@ function showInGameMenu() {
   button2.textContent = "Level Info";
 
   wrapper.setAttribute("id", "level-info");
+  wrapper.style.minHeight=  "300px";
   wrapper.style.gap = "20px";
   wrapper.style.paddingBottom = "40px";
+  wrapper.classList.add("game-border");
 
   heading.style.margin = 0;
 

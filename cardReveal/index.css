@@ -14,6 +14,14 @@
   align-items: center;
 }
 
+.game-border {
+  border: 15px ridge rgb(247, 212, 148);
+  border-left-width: 8px;
+  border-right-width: 8px;
+  box-shadow: none !important;
+  border-radius: 100%/10% !important;
+}
+
 .show-on-mobile {
   display: none !important;
 }
@@ -46,17 +54,18 @@ button.game-style {
   flex-direction: column;
   align-items: center;
   padding: 10px 12px;
-  /* font-family: "Varela Round", sans-serif; */
   font-weight: 800;
   font-size: 20px;
   color: purple;
-  background-color: wheat;
   border-radius: 12px;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
+  background-color: wheat;
+  transition: all 0.2s ease;
+  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px purple;
 }
 
 button.game-style:active {
+  transform: scale(0.96);
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 2px 1px purple;
 }
@@ -230,7 +239,6 @@ header #level-indicator *:last-child {
 
 #card-box .card {
   --image: url("./assets/boy2.png");
-
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     var(--image);
   background-position: center;
@@ -279,15 +287,6 @@ header #level-indicator *:last-child {
   opacity: 0.5;
   animation: glow 900ms ease 0s 1 normal forwards;
 }
-
-/* main #peek-a-boo {
-  background-color: purple;
-  padding: 16px;
-  border-radius: 12px;
-  color: white;
-  border: none;
-  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.295);
-} */
 
 @keyframes glow {
   0% {
