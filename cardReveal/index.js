@@ -315,6 +315,7 @@ function peekAllCards(duration = 2) {
     const peekBtn = document.querySelector("main #peek-a-boo");
     peekBtn.setAttribute("disabled", true);
     peekBtn.style.cursor = "wait";
+    peekBtn.setAttribute("title", `Reveal in ${nextRevealTime}s`);
 
     window.setTimeout(() => {
       peekBtn.removeAttribute("style");
