@@ -38,20 +38,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 180px;
-  height: 340px;
+  height: 280px;
   padding: 20px;
   margin: 0 0 0px;
   font-size: 70px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: initial;
-  text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 0px 2px 14px rgba(0, 0, 0, 0.9);
 }
 
 #splash h1 * {
   text-align: center;
   z-index: +999;
+  /* text-transform: uppercase; */
 }
 
 #splash h1::before,
@@ -78,13 +80,13 @@
 #splash h1::before {
   top: 0%;
   left: 50%;
-  transform: translate(-65%, -10%) rotateZ(-35deg) scale(0.8);
+  transform: translate(-70%, -10%) rotateZ(-35deg) scale(0.8);
 }
 
 #splash h1::after {
   top: 0%;
   right: 50%;
-  transform: translate(-35%, -10%) rotateZ(35deg) scale(0.8);
+  transform: translate(-25%, -10%) rotateZ(30deg) scale(0.8);
   box-shadow: inset 1px 3px 8px 2px rgba(255, 255, 255, 0.3),
     inset -2px -3px 8px rgba(0, 0, 0, 0.3), 1px 3px 35px rgba(50, 38, 63, 0.3);
 }
