@@ -51,13 +51,16 @@ let cardTypes = {
   },
 };
 
-const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
+const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
 const closeCardAudio = new Audio("./assets/audio/funny-swish-101878.mp3");
+const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
+const powerUpAudio = new Audio(
+  "./assets/audio/ui-beep-menu-positive-228336.mp3"
+);
 const winGameAudio = new Audio(
   "./assets/audio/level-up-bonus-sequence-3-186892.mp3"
 );
-const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 
 function calculateMeterIncrementAndDecrement() {
   const meterIncrement = Math.floor(
@@ -121,10 +124,12 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
   }
 
   if (meterValue === MAX_METER_VALUE) {
+    playSoundEffect(powerUpAudio);
     const a = window.setInterval(() => {
       meterIsDraining = true;
       peekBtn.removeAttribute("style");
       peekBtn.removeAttribute("disabled");
+      peekBtn.classList.toggle("max-power", true);
       updatePowerMeter(-1 * meterDrainRate, true);
 
       if (meterValue <= 0) {
@@ -132,6 +137,7 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
         meterIsDraining = false;
         nextRevealTime *= 2;
         disableReveal();
+        peekBtn.classList.toggle("max-power", false);
       }
     }, 300);
   }
