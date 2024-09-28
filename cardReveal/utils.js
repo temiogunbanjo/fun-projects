@@ -92,6 +92,70 @@ function formatAsTime(milliseconds) {
   return `${retValue}${unit}` + formatAsTime(remainder);
 }
 
+function numberWithCommas(number) {
+  return number?.toLocaleString("en-US", {
+    maximumFractionDigits: 0,
+  });
+}
+
+function convertToStandardFormat(n) {
+  // console.log(n);
+  n = `${n}`.replace(/,/g, "");
+  const isValidDigits = n.match(/^[0-9.]+$/gi) !== null;
+  
+  if (isValidDigits) {
+    n = Math.round(Number(n));
+    const numberOfDigits = `${n}`.length;
+    // console.log("numberOfDigits", numberOfDigits);
+
+    let newNumber = n;
+
+    switch (true) {
+      // 10,000 - 99,999 (Hundreds of Thousands)
+      case numberOfDigits > 4 && numberOfDigits <= 5:
+        newNumber = `${Number(n / 1e3).toFixed(2)} K`;
+        n = newNumber;
+        break;
+
+      // 100,000 - 999,999 (Hundreds of Thousands)
+      case numberOfDigits > 5 && numberOfDigits <= 6:
+        newNumber = `${Number(n / 1e3).toFixed(2)} K`;
+        n = newNumber;
+        break;
+
+      // 1,000,000 - 999,999,999 (Million)
+      case numberOfDigits > 6 && numberOfDigits <= 9:
+        newNumber = `${Number(n / 1e6).toFixed(2)} M`;
+        n = newNumber;
+        break;
+
+      // 1,000,000,000 - 999,999,999,999 (Billion)
+      case numberOfDigits > 9 && numberOfDigits <= 12:
+        newNumber = `${Number(n / 1e9).toFixed(2)} B`;
+        n = newNumber;
+        break;
+
+      // 1,000,000,000,000 - 999,999,999,999,999 (Trillion)
+      case numberOfDigits > 12 && numberOfDigits <= 15:
+        newNumber = `${Number(n / 1e12).toFixed(2)} T`;
+        n = newNumber;
+        break;
+
+      // 1,000,000,000,000,000 - 999,999,999,999,999,999 (Quadrillion)
+      case numberOfDigits > 15 && numberOfDigits <= 18:
+        newNumber = `${Number(n / 1e15).toFixed(2)} aa`;
+        n = newNumber;
+        break;
+
+      default:
+        n = numberWithCommas(n);
+        break;
+    }
+  }
+
+  return n;
+};
+
 // const s = [];
 // s["idle"] = { loc: [] };
 // s["jump"] = { loc: [] };

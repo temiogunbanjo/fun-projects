@@ -12,6 +12,8 @@ let canPlayEffects = true;
 let nextRevealTime = 15;
 let meterValue = 0;
 let comboMultiplier = 0;
+let gems = 0;
+let points = 0;
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 let cardTypes = {
@@ -54,24 +56,34 @@ const winGameAudio = new Audio(
 );
 const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 
-function updatePowerMeter(direction) {
-  const powerMeter = document.querySelector("#power-meter > *:first-child");
+function calculateMeterIncrementAndDecrement() {
   const meterIncrement = Math.floor(
     (1 / (level + 1)) * (MAX_METER_VALUE * (1 + comboMultiplier))
   );
   const meterDecrement = Math.floor((1 / (level + 1)) * MAX_METER_VALUE) * 1.2;
 
+  return {
+    increment: meterIncrement,
+    decrement: meterDecrement,
+  };
+}
+
+function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
+  const powerMeter = document.querySelector("#power-meter > *:first-child");
+  const { increment: meterIncrement, decrement: meterDecrement } =
+    calculateMeterIncrementAndDecrement();
+
   switch (true) {
     case direction < 0:
-      meterValue -= meterDecrement;
+      meterValue -= useDirectionAsIncrement ? direction : meterDecrement;
       break;
 
     case direction > 0:
-      meterValue += meterIncrement;
+      meterValue += useDirectionAsIncrement ? direction : meterIncrement;
       break;
 
     default:
-      meterValue += 0;
+      meterValue += useDirectionAsIncrement ? direction : 0;
       break;
   }
 
@@ -101,6 +113,22 @@ function updatePowerMeter(direction) {
   }
 
   powerMeter.style.height = `${meterValue}%`;
+}
+
+function updateScoreBoard(_gems = 0, _points = 0) {
+  _gems = _gems ?? gems;
+  _points = _points ?? points;
+  document.getElementById(
+    "level-indicator"
+  ).children[1].children[0].innerHTML = `<small>💰</small> ${convertToStandardFormat(
+    _points
+  )} &nbsp; &nbsp; <small>💎</small> ${convertToStandardFormat(_gems)}`;
+
+  gems = _gems;
+  points = _points;
+
+  localStorage.setItem("game_points", points);
+  localStorage.setItem("game_gems", gems);
 }
 
 function getCardTypes() {
@@ -298,10 +326,7 @@ function setGameScene(_level = level) {
     "level-indicator"
   ).children[0].children[0].textContent = `Lv ${_level}`;
 
-  document.getElementById(
-    "level-indicator"
-  ).children[1].children[0].textContent = `⭐ ⭐ ⭐`;
-
+  updateScoreBoard(gems, points);
   updatePowerMeter(0);
 }
 
@@ -348,12 +373,15 @@ function checkWinStatus() {
 
 function handleCardClick(ev) {
   const delayForAnimation = 1200;
+  const { decrement } = calculateMeterIncrementAndDecrement();
+  const meterTapInc = decrement * (1.5 / pairCount);
 
   if (ev.target.getAttribute("data-opened") === "false") {
     ev.target.setAttribute("data-opened", true);
     ev.target.classList.toggle("reveal", true);
 
     playSoundEffect(clickCardAudio);
+    updatePowerMeter(meterTapInc, true);
 
     currentMatches.push({
       id: ev.target.getAttribute("id"),
@@ -380,6 +408,7 @@ function handleCardClick(ev) {
             card.classList.toggle("matched", true);
           });
           updatePowerMeter(+1);
+          updateScoreBoard(gems, points + 1);
         }, delayForAnimation - 500);
 
         comboMultiplier += 0.5;
@@ -459,6 +488,8 @@ function toggleSoundEffects() {
 
 function loadSettings() {
   level = parseInt(window.localStorage.getItem("game_level") ?? 1);
+  points = parseInt(window.localStorage.getItem("game_points") ?? 0);
+  gems = parseInt(window.localStorage.getItem("game_gems") ?? 0);
   canPlayEffects = JSON.parse(
     window.localStorage.getItem("sound_effect_is_on") ?? "true"
   );

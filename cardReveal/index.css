@@ -89,7 +89,7 @@ body.l-3 {
   border-top-left-radius: 10px;
   box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.15);
   animation: none;
-  transition: height, background-color 0.3s ease;
+  transition: height, background-color 0.3s ease 100ms;
 }
 
 #power-meter[data-value="low"] > *:first-child {
@@ -97,7 +97,7 @@ body.l-3 {
 }
 
 #power-meter[data-value="optimum"] > *:first-child {
-  background-color: orange;
+  background-color: purple;
 }
 
 #power-meter[data-value="high"] > *:first-child {
@@ -105,7 +105,7 @@ body.l-3 {
 }
 
 #power-meter[data-value="max"] > *:first-child {
-  background-color: #90c721;
+  background-color: rgb(255, 0, 76);
   /* animation: winGlow 800ms ease-in-out 5ms infinite alternate forwards; */
   animation: powerUpFlash 600ms linear 0s infinite alternate both;
 }
@@ -286,7 +286,7 @@ header #level-indicator #level-name {
   flex-direction: column;
   /* gap: 10px; */
   align-items: center;
-  padding: 4px 12px;
+  padding: 4px 30px 4px 12px;
   font-weight: 800;
   font-size: 20px;
   color: var(--secondary-color);
@@ -383,9 +383,11 @@ header #level-indicator #power-meter {
   }
 
   header #level-indicator #level-name {
-    width: 40%;
+    width: auto;
     min-width: 150px;
-    max-width: 200px;
+    max-width: 300px;
+    font-weight: 700;
+  font-size: 18px;
   }
 
   #card-box {
