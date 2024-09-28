@@ -28,10 +28,10 @@
 
     <section id="main_menu">
       <button class="game-style">Start</button>
-      <button class="game-style" onclick="window.location.hash='settings';">
+      <button class="game-style" onclick="playSoundEffect(clickButtonAudio);window.location.hash='settings';">
         Settings
       </button>
-      <button class="game-style" onclick="window.location.hash='about';">
+      <button class="game-style" onclick="playSoundEffect(clickButtonAudio);window.location.hash='about';">
         About Game
       </button>
       <button class="game-style">Quit</button>
@@ -44,12 +44,12 @@
           <button
             id="return-home"
             class="game-style fa-solid fa-reply show-on-pc"
-            onclick="window.location.reload();"
+            onclick="playSoundEffect(clickButtonAudio);window.location.reload();"
           ></button>
           <button
             id="show-menu-mobile"
             class="game-style fa-solid fa-pause show-on-mobile"
-            onclick="showInGameMenu();"
+            onclick="playSoundEffect(clickButtonAudio);showInGameMenu();"
           ></button>
         </div>
 
@@ -126,7 +126,7 @@
 
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="playSoundEffect(clickButtonAudio);window.location.hash='main_menu';"
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-music"></i>
@@ -135,7 +135,7 @@
 
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="playSoundEffect(clickButtonAudio);window.location.hash='main_menu';"
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-reply"></i>

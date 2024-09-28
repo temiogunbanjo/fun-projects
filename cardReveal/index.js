@@ -53,6 +53,7 @@ let cardTypes = {
 
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
 const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
+const clickButtonAudio = new Audio("./assets/audio/analog-appliance-button-2-185277.mp3");
 const closeCardAudio = new Audio("./assets/audio/funny-swish-101878.mp3");
 // const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 const matchCardAudio = new Audio("./assets/audio/marimba-bloop-2-188149.mp3");
@@ -62,6 +63,12 @@ const powerUpAudio = new Audio(
 const winGameAudio = new Audio(
   "./assets/audio/level-up-bonus-sequence-3-186892.mp3"
 );
+
+function playSoundEffect(audio) {
+  if (canPlayEffects) {
+    audio.play();
+  }
+}
 
 function calculateMeterIncrementAndDecrement() {
   const meterIncrement = Math.floor(
@@ -261,6 +268,7 @@ function showLevelInfo(title) {
   heading.style.margin = 0;
 
   button.addEventListener("click", () => {
+    playSoundEffect(clickButtonAudio);
     dialog.removeAttribute("style");
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
@@ -309,16 +317,19 @@ function showInGameMenu() {
   buttonWrapper.style.gap = "18px";
 
   button1.addEventListener("click", () => {
+    playSoundEffect(clickButtonAudio);
     dialog.removeAttribute("style");
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
   });
 
   button2.addEventListener("click", () => {
+    playSoundEffect(clickButtonAudio);
     showLevelInfo();
   });
 
   button3.addEventListener("click", () => {
+    playSoundEffect(clickButtonAudio);
     window.location.reload();
   });
 
@@ -522,14 +533,8 @@ function peekAllCards(duration = 2) {
   }, duration * 1000);
 }
 
-function playSoundEffect(audio) {
-  if (canPlayEffects) {
-    audio.play();
-  }
-}
-
 function handleSoundEffectsToggle() {
-  // console.log(canPlayEffects);
+  playSoundEffect(clickButtonAudio);
   localStorage.setItem("sound_effect_is_on", !canPlayEffects);
   loadSettings();
 }
@@ -571,14 +576,18 @@ function setupListeners() {
   });
 
   peekBtn.addEventListener("click", (ev) => {
+    playSoundEffect(clickButtonAudio);
     const duration = 3 + rank * 1.5;
     peekAllCards(duration);
   });
+
   infoBtn.addEventListener("click", (ev) => {
+    playSoundEffect(clickButtonAudio);
     showLevelInfo();
   });
 
   startGameButton.addEventListener("click", (ev) => {
+    playSoundEffect(clickButtonAudio);
     window.location.hash = "play";
     const duration = 3 + rank * 1.5;
     peekAllCards(duration);
@@ -586,6 +595,7 @@ function setupListeners() {
   });
 
   quitGameButton.addEventListener("click", (ev) => {
+    playSoundEffect(clickButtonAudio);
     resetGame();
   });
 
