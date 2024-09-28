@@ -374,7 +374,7 @@ function checkWinStatus() {
 function handleCardClick(ev) {
   const delayForAnimation = 1200;
   const { decrement } = calculateMeterIncrementAndDecrement();
-  const meterTapInc = decrement * (1.5 / pairCount);
+  const meterTapInc = decrement * (1.2 / pairCount);
 
   if (ev.target.getAttribute("data-opened") === "false") {
     ev.target.setAttribute("data-opened", true);
@@ -389,16 +389,14 @@ function handleCardClick(ev) {
     });
 
     if (currentMatches.length >= pairCount) {
-      const didCardsMatch =
-        removeRepeatingItems(
-          currentMatches
-            .slice(0, pairCount)
-            .map((cardInfo) => cardInfo.category)
-        ).length === 1;
+      const selectedCards = currentMatches.slice(0, pairCount);
+      const cardElements = selectedCards.map((cardInfo) =>
+        document.getElementById(cardInfo.id)
+      );
 
-      const cardElements = currentMatches
-        .slice(0, pairCount)
-        .map((cardInfo) => document.getElementById(cardInfo.id));
+      const didCardsMatch =
+        removeRepeatingItems(selectedCards.map((cardInfo) => cardInfo.category))
+          .length === 1;
 
       if (didCardsMatch) {
         window.setTimeout(() => {
@@ -408,7 +406,7 @@ function handleCardClick(ev) {
             card.classList.toggle("matched", true);
           });
           updatePowerMeter(+1);
-          updateScoreBoard(gems, points + 1);
+          updateScoreBoard(gems, points + 1 * Math.max(1, comboMultiplier));
         }, delayForAnimation - 500);
 
         comboMultiplier += 0.5;
