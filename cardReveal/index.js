@@ -490,7 +490,7 @@ function peekAllCards(duration = 2) {
   }
 
   if (!meterIsDraining) peekBtn.setAttribute("disabled", true);
-  else meterDrainRate *= 2;
+  else meterDrainRate *= 1.5;
 
   playSoundEffect(peekCardAudio);
 
