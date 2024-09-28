@@ -100,7 +100,7 @@ function updatePowerMeter(direction) {
       break;
   }
 
-  powerMeter.style.width = `${meterValue}%`;
+  powerMeter.style.height = `${meterValue}%`;
 }
 
 function getCardTypes() {
@@ -300,7 +300,7 @@ function setGameScene(_level = level) {
 
   document.getElementById(
     "level-indicator"
-  ).children[1].children[0].textContent = `CITY`;
+  ).children[1].children[0].textContent = `⭐ ⭐ ⭐`;
 
   updatePowerMeter(0);
 }

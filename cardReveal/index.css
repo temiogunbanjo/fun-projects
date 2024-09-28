@@ -67,27 +67,33 @@ body.l-3 {
 }
 
 #power-meter {
-  background-color: rgba(196, 179, 145, 0.847);
-  border-radius: 5px;
-  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  height: 40px;
+  background-color: rgb(228, 206, 167);
+  border: 4px solid wheat;
   overflow: hidden;
-  border: 1px solid rgba(196, 179, 145, 0.87);
+  border-radius: 12px;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15),
+    2px 4px 1px rgba(128, 0, 128, 0.777);
 }
 
 #power-meter > *:first-child {
-  /* display: block; */
-  border-radius: 5px;
-  height: 100%;
-  width: 100%;
-  background-color: crimson;
-  box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.24),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.25);
+  width: 10px;
+  height: 50%;
+  background-color: darkblue;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.15);
   animation: none;
-  transition: width 0.3s ease;
+  transition: height, background-color 0.3s ease;
 }
 
 #power-meter[data-value="low"] > *:first-child {
-  background-color: crimson;
+  background-color: darkblue;
 }
 
 #power-meter[data-value="optimum"] > *:first-child {
@@ -95,7 +101,7 @@ body.l-3 {
 }
 
 #power-meter[data-value="high"] > *:first-child {
-  background-color: olivedrab;
+  background-color: crimson;
 }
 
 #power-meter[data-value="max"] > *:first-child {
@@ -253,19 +259,13 @@ header button {
 }
 
 header #level-indicator {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-header #level-indicator #power-meter {
-  margin: 0.2rem 0;
-  height: 10px;
-  width: 50%;
-  min-width: 75px;
-}
-
-header #level-indicator > *:first-child {
+header #level-indicator #level-count {
   padding: 0 22px;
   text-align: center;
   font-size: 12px;
@@ -281,9 +281,10 @@ header #level-indicator > *:first-child {
     2px 4px 1px var(--secondary-color);
 }
 
-header #level-indicator > *:last-child {
+header #level-indicator #level-name {
   display: flex;
   flex-direction: column;
+  /* gap: 10px; */
   align-items: center;
   padding: 4px 12px;
   font-weight: 800;
@@ -294,6 +295,15 @@ header #level-indicator > *:last-child {
   min-width: 200px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
+}
+
+header #level-indicator #power-meter {
+  --height: 0.488rem;
+  position: absolute;
+  top: var(--height);
+  left: calc(100% - 18px);
+  height: calc(100% - var(--height));
+  border-bottom-left-radius: 1px;
 }
 
 #card-box {
@@ -372,7 +382,7 @@ header #level-indicator > *:last-child {
     gap: 18px;
   }
 
-  header #level-indicator > *:last-child {
+  header #level-indicator #level-name {
     width: 40%;
     min-width: 150px;
     max-width: 200px;
