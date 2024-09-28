@@ -54,7 +54,8 @@ let cardTypes = {
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
 const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
 const closeCardAudio = new Audio("./assets/audio/funny-swish-101878.mp3");
-const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
+// const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
+const matchCardAudio = new Audio("./assets/audio/marimba-bloop-2-188149.mp3");
 const powerUpAudio = new Audio(
   "./assets/audio/ui-beep-menu-positive-228336.mp3"
 );
