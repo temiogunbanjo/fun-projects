@@ -34,3 +34,11 @@ function showTInfo(title) {
   dialog.appendChild(wrapper);
   dialog.setAttribute("open", true);
 }
+
+function tutor(callback, ...args) {
+  const isTutorialDone = false;
+
+  if (!isTutorialDone) {
+    callback(...args);
+  }
+}
