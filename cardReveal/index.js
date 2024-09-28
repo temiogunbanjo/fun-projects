@@ -70,6 +70,10 @@ function playSoundEffect(audio) {
   }
 }
 
+function showComment(comment) {
+
+}
+
 function calculateMeterIncrementAndDecrement() {
   const meterIncrement = Math.floor(
     (1 / (level + 1)) * (MAX_METER_VALUE * (1 + comboMultiplier))
@@ -133,6 +137,7 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
 
   if (meterValue === MAX_METER_VALUE) {
     playSoundEffect(powerUpAudio);
+    showComment("Power Up!");
     const a = window.setInterval(() => {
       meterIsDraining = true;
       peekBtn.removeAttribute("style");
@@ -458,6 +463,10 @@ function handleCardClick(ev) {
           if (!meterIsDraining) updatePowerMeter(+1);
           updateScoreBoard(gems, points + 1 * Math.max(1, comboMultiplier));
           cardClicks = 0;
+          showComment("Nice!");
+          if (comboMultiplier % 2 === 0) {
+            showComment(`Nice Combo X${comboMultiplier}!`);
+          }
         }, delayForAnimation - 500);
 
         comboMultiplier += 0.5;
