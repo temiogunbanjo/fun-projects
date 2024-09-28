@@ -528,7 +528,7 @@ function playSoundEffect(audio) {
   }
 }
 
-function toggleSoundEffects() {
+function handleSoundEffectsToggle() {
   // console.log(canPlayEffects);
   localStorage.setItem("sound_effect_is_on", !canPlayEffects);
   loadSettings();
