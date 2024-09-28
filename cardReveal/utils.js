@@ -102,7 +102,7 @@ function convertToStandardFormat(n) {
   // console.log(n);
   n = `${n}`.replace(/,/g, "");
   const isValidDigits = n.match(/^[0-9.]+$/gi) !== null;
-  
+
   if (isValidDigits) {
     n = Math.round(Number(n));
     const numberOfDigits = `${n}`.length;
@@ -154,7 +154,25 @@ function convertToStandardFormat(n) {
   }
 
   return n;
-};
+}
+
+function getDirectionVector(
+  angle,
+  positiveRatio = 1,
+  negativeRatio = 1,
+  factorRatiosInDirection = true
+) {
+  const direction =
+    Math.sin(angle * positiveRatio) + Math.sin(angle * negativeRatio);
+
+  let unitDirection = direction / Math.abs(direction);
+
+  if (factorRatiosInDirection) {
+    unitDirection *= unitDirection >= 0 ? positiveRatio : negativeRatio;
+  }
+
+  return unitDirection;
+}
 
 // const s = [];
 // s["idle"] = { loc: [] };

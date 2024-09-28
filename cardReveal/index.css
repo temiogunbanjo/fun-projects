@@ -126,10 +126,11 @@ button.game-style {
 }
 
 button.game-style.variant-1 {
-  color: white;
-  background-color: #3c1518;
-  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px #f4a261;
+  color: rgb(255, 246, 228);
+  background-color: #D58936;
+  border: none;
+  /* box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px #f4a261; */
 }
 
 button.game-style:active {

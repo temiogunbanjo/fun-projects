@@ -401,9 +401,12 @@ function handleCardClick(ev) {
   cardClicks++;
   const delayForAnimation = 1200;
   const { decrement } = calculateMeterIncrementAndDecrement();
-  const direction = 2 * Math.cos(cardClicks / 2);
-  console.log({ direction, cardClicks: cardClicks / 2 });
-  const meterTapInc = decrement * (1.2 / pairCount) * 1;
+
+  // Takes 8 turnPoint for directionVector to become a negative
+  const turnPoint = cardClicks / 2;
+  const directionVector = getDirectionVector(turnPoint, 1, 1 / 3);
+
+  const meterTapInc = decrement * (1.2 / pairCount) * directionVector;
 
   if (ev.target.getAttribute("data-opened") === "false") {
     ev.target.setAttribute("data-opened", true);
@@ -436,6 +439,7 @@ function handleCardClick(ev) {
           });
           if (!meterIsDraining) updatePowerMeter(+1);
           updateScoreBoard(gems, points + 1 * Math.max(1, comboMultiplier));
+          cardClicks = 0;
         }, delayForAnimation - 500);
 
         comboMultiplier += 0.5;
