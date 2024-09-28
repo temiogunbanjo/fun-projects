@@ -1,4 +1,4 @@
-const RANK_LEVEL_COUNT = 11;
+const RANK_LEVEL_COUNT = 22;
 const MAX_CARD_COUNT = 24;
 const MAX_METER_VALUE = 100;
 const MIN_METER_VALUE = 0;
@@ -53,7 +53,9 @@ let cardTypes = {
 
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
 const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
-const clickButtonAudio = new Audio("./assets/audio/analog-appliance-button-2-185277.mp3");
+const clickButtonAudio = new Audio(
+  "./assets/audio/analog-appliance-button-2-185277.mp3"
+);
 const closeCardAudio = new Audio("./assets/audio/funny-swish-101878.mp3");
 // const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 const matchCardAudio = new Audio("./assets/audio/marimba-bloop-2-188149.mp3");
@@ -71,7 +73,21 @@ function playSoundEffect(audio) {
 }
 
 function showComment(comment) {
+  const commentary = document.querySelector("#commentary");
+  commentary.style.display = "inline";
+  console.log(comment);
 
+  const id = `comment-${Math.random().toString().slice(2)}`;
+  const text = document.createElement("span");
+  text.setAttribute("id", id);
+  text.textContent = comment;
+  commentary.appendChild(text);
+
+  delay(1.9 * 1000, () => {
+    // hide commentary
+    commentary.style.display = "none";
+    commentary.removeChild(text);
+  });
 }
 
 function calculateMeterIncrementAndDecrement() {
@@ -399,6 +415,7 @@ function proceedToNextLevel() {
 }
 
 function checkWinStatus() {
+  const commentary = document.querySelector("#commentary");
   const numberOfPairsAvailable = Math.floor(cardCount / pairCount);
   const hasWon = numberOfPairsMatched >= numberOfPairsAvailable;
   if (hasWon) {
@@ -409,14 +426,14 @@ function checkWinStatus() {
 
     delay(900, () => {
       playSoundEffect(winGameAudio);
-      // winGameAudio.playbackRate = 0.5
+      commentary.style.display = "none";
+      commentary.textContent = "";
       dialog.setAttribute("open", true);
 
       delay(1000, () => {
         proceedToNextLevel();
       });
     });
-    // alert(hasWon);
   }
 }
 
@@ -454,7 +471,7 @@ function handleCardClick(ev) {
           .length === 1;
 
       if (didCardsMatch) {
-        window.setTimeout(() => {
+        delay(delayForAnimation - 500, () => {
           playSoundEffect(matchCardAudio);
           cardElements.forEach((card) => {
             card.classList.toggle("matched", true);
@@ -463,17 +480,18 @@ function handleCardClick(ev) {
           if (!meterIsDraining) updatePowerMeter(+1);
           updateScoreBoard(gems, points + 1 * Math.max(1, comboMultiplier));
           cardClicks = 0;
-          showComment("Nice!");
-          if (comboMultiplier % 2 === 0) {
+          if (comboMultiplier % 1.5 === 0) {
             showComment(`Nice Combo X${comboMultiplier}!`);
+          } else {
+            showComment("Amazing!");
           }
-        }, delayForAnimation - 500);
+        });
 
         comboMultiplier += 0.5;
         numberOfPairsMatched += 1;
         checkWinStatus();
       } else {
-        window.setTimeout(() => {
+        delay(delayForAnimation, () => {
           // Cover matched cards
           cardElements.forEach((card) => {
             card.classList.toggle("reveal", false);
@@ -482,7 +500,7 @@ function handleCardClick(ev) {
 
           playSoundEffect(closeCardAudio);
           if (!meterIsDraining) updatePowerMeter(-1);
-        }, delayForAnimation);
+        });
 
         comboMultiplier = 0;
       }
@@ -506,11 +524,11 @@ function disableReveal() {
     `Reveal in ${formatAsTime(nextRevealTime * 1000)}`
   );
 
-  window.setTimeout(() => {
+  delay(nextRevealTime * 1000, () => {
     peekBtn.removeAttribute("style");
     peekBtn.removeAttribute("disabled");
     nextRevealTime *= 2;
-  }, nextRevealTime * 1000);
+  });
 }
 
 function peekAllCards(duration = 2) {
@@ -529,7 +547,7 @@ function peekAllCards(duration = 2) {
 
   playSoundEffect(peekCardAudio);
 
-  window.setTimeout(() => {
+  delay(duration * 1000, () => {
     // Close all revealed cards
     for (const card of unopenedCards) {
       card.classList.toggle("reveal", false);
@@ -539,7 +557,7 @@ function peekAllCards(duration = 2) {
     if (!meterIsDraining) {
       disableReveal();
     }
-  }, duration * 1000);
+  });
 }
 
 function handleSoundEffectsToggle() {
@@ -618,11 +636,11 @@ function showSplashScreen(redirectTo = `main_menu`) {
   splashScreen.style.display = "flex";
   window.location.hash = redirectTo;
 
-  window.setTimeout(() => {
+  delay(9700, () => {
     document.querySelector("main").classList.toggle("not-started");
     setupListeners();
     splashScreen.style.display = "none";
-  }, 9700);
+  });
 }
 
 function resetGame() {
@@ -636,9 +654,31 @@ function resetGame() {
   }
 }
 
+async function registerServiceWorker() {
+  console.log(window.location);
+  if ("serviceWorker" in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register("/sw.js", {
+        scope: "/",
+      });
+
+      if (registration.installing) {
+        console.log("Service worker installing");
+      } else if (registration.waiting) {
+        console.log("Service worker waiting");
+      } else if (registration.active) {
+        console.log("Service worker active");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
 function startGame(ev) {
   loadSettings();
   generateCards();
+  registerServiceWorker();
   showSplashScreen();
 }
 

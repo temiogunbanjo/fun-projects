@@ -33,7 +33,6 @@
   }
 }
 
-
 @keyframes glow {
   0% {
     opacity: var(--glow-opacity);
@@ -43,6 +42,19 @@
   100% {
     opacity: 0;
     transform: scale(var(--glow-scale));
+  }
+}
+
+@keyframes scaleAndFly {
+  0% {
+    opacity: 0.7;
+    transform: scale(1), translate(-50%, -50%);
+  }
+
+  100% {
+    top: -40vh;
+    opacity: 0;
+    transform: scale(1.5), translate(-50%, -50%);
   }
 }
 

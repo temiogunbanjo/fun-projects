@@ -4,7 +4,7 @@ function chooseRandomItem(array) {
 }
 
 function delay(time, callback) {
-  return window.setTimeout(() => callback(), time);
+  return window.setTimeout(callback, time);
 }
 
 /**
