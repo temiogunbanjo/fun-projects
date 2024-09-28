@@ -7,6 +7,7 @@ let rank = 0;
 let gems = 0;
 let points = 0;
 let pairCount = 2;
+let cardClicks = 0;
 let cardCount = pairCount * 2;
 let numberOfPairsMatched = 0;
 let currentMatches = [];
@@ -327,7 +328,7 @@ function showInGameMenu() {
 
 function setGameScene(_level = level) {
   localStorage.setItem("game_level", _level);
-
+  cardClicks = 0;
   meterValue = 0;
   meterDrainRate = 0.6;
   meterIsDraining = false;
@@ -397,9 +398,12 @@ function checkWinStatus() {
 }
 
 function handleCardClick(ev) {
+  cardClicks++;
   const delayForAnimation = 1200;
   const { decrement } = calculateMeterIncrementAndDecrement();
-  const meterTapInc = decrement * (1.2 / pairCount);
+  const direction = 2 * Math.cos(cardClicks / 2);
+  console.log({ direction, cardClicks: cardClicks / 2 });
+  const meterTapInc = decrement * (1.2 / pairCount) * 1;
 
   if (ev.target.getAttribute("data-opened") === "false") {
     ev.target.setAttribute("data-opened", true);
