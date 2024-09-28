@@ -4,6 +4,8 @@ const MAX_METER_VALUE = 100;
 const MIN_METER_VALUE = 0;
 let level = 1;
 let rank = 0;
+let gems = 0;
+let points = 0;
 let pairCount = 2;
 let cardCount = pairCount * 2;
 let numberOfPairsMatched = 0;
@@ -11,9 +13,9 @@ let currentMatches = [];
 let canPlayEffects = true;
 let nextRevealTime = 15;
 let meterValue = 0;
+let meterDrainRate = 0.6;
+let meterIsDraining = false;
 let comboMultiplier = 0;
-let gems = 0;
-let points = 0;
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 let cardTypes = {
@@ -70,20 +72,25 @@ function calculateMeterIncrementAndDecrement() {
 
 function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
   const powerMeter = document.querySelector("#power-meter > *:first-child");
+  const peekBtn = document.querySelector("main #peek-a-boo");
   const { increment: meterIncrement, decrement: meterDecrement } =
     calculateMeterIncrementAndDecrement();
 
   switch (true) {
     case direction < 0:
-      meterValue -= useDirectionAsIncrement ? direction : meterDecrement;
+      meterValue -= useDirectionAsIncrement
+        ? Math.abs(direction)
+        : meterDecrement;
       break;
 
     case direction > 0:
-      meterValue += useDirectionAsIncrement ? direction : meterIncrement;
+      meterValue += useDirectionAsIncrement
+        ? Math.abs(direction)
+        : meterIncrement;
       break;
 
     default:
-      meterValue += useDirectionAsIncrement ? direction : 0;
+      meterValue += useDirectionAsIncrement ? Math.abs(direction) : 0;
       break;
   }
 
@@ -110,6 +117,22 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
     default:
       powerMeter.parentElement.setAttribute("data-value", "low");
       break;
+  }
+
+  if (meterValue === MAX_METER_VALUE) {
+    const a = window.setInterval(() => {
+      meterIsDraining = true;
+      peekBtn.removeAttribute("style");
+      peekBtn.removeAttribute("disabled");
+      updatePowerMeter(-1 * meterDrainRate, true);
+
+      if (meterValue <= 0) {
+        clearInterval(a);
+        meterIsDraining = false;
+        nextRevealTime *= 2;
+        disableReveal();
+      }
+    }, 300);
   }
 
   powerMeter.style.height = `${meterValue}%`;
@@ -306,6 +329,8 @@ function setGameScene(_level = level) {
   localStorage.setItem("game_level", _level);
 
   meterValue = 0;
+  meterDrainRate = 0.6;
+  meterIsDraining = false;
   currentMatches = [];
   nextRevealTime = 30;
   comboMultiplier = 0;
@@ -381,7 +406,7 @@ function handleCardClick(ev) {
     ev.target.classList.toggle("reveal", true);
 
     playSoundEffect(clickCardAudio);
-    updatePowerMeter(meterTapInc, true);
+    if (!meterIsDraining) updatePowerMeter(meterTapInc, true);
 
     currentMatches.push({
       id: ev.target.getAttribute("id"),
@@ -405,7 +430,7 @@ function handleCardClick(ev) {
             card.classList.toggle("matched", true);
             card.classList.toggle("matched", true);
           });
-          updatePowerMeter(+1);
+          if (!meterIsDraining) updatePowerMeter(+1);
           updateScoreBoard(gems, points + 1 * Math.max(1, comboMultiplier));
         }, delayForAnimation - 500);
 
@@ -421,7 +446,7 @@ function handleCardClick(ev) {
           });
 
           playSoundEffect(closeCardAudio);
-          updatePowerMeter(-1);
+          if (!meterIsDraining) updatePowerMeter(-1);
         }, delayForAnimation);
 
         comboMultiplier = 0;
@@ -437,17 +462,35 @@ function handleCardClick(ev) {
   }
 }
 
+function disableReveal() {
+  const peekBtn = document.querySelector("main #peek-a-boo");
+  peekBtn.setAttribute("disabled", true);
+  peekBtn.style.cursor = "wait";
+  peekBtn.setAttribute(
+    "title",
+    `Reveal in ${formatAsTime(nextRevealTime * 1000)}`
+  );
+
+  window.setTimeout(() => {
+    peekBtn.removeAttribute("style");
+    peekBtn.removeAttribute("disabled");
+    nextRevealTime *= 2;
+  }, nextRevealTime * 1000);
+}
+
 function peekAllCards(duration = 2) {
   console.log("duration", duration);
+  const peekBtn = document.querySelector("main #peek-a-boo");
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])"
   );
-  const peekBtn = document.querySelector("main #peek-a-boo");
-  peekBtn.setAttribute("disabled", true);
 
   for (const card of unopenedCards) {
     card.classList.toggle("reveal", true);
   }
+
+  if (!meterIsDraining) peekBtn.setAttribute("disabled", true);
+  else meterDrainRate *= 2;
 
   playSoundEffect(peekCardAudio);
 
@@ -458,17 +501,9 @@ function peekAllCards(duration = 2) {
       playSoundEffect(closeCardAudio);
     }
 
-    peekBtn.style.cursor = "wait";
-    peekBtn.setAttribute(
-      "title",
-      `Reveal in ${formatAsTime(nextRevealTime * 1000)}`
-    );
-
-    window.setTimeout(() => {
-      peekBtn.removeAttribute("style");
-      peekBtn.removeAttribute("disabled");
-      nextRevealTime *= 2;
-    }, nextRevealTime * 1000);
+    if (!meterIsDraining) {
+      disableReveal();
+    }
   }, duration * 1000);
 }
 
