@@ -20,7 +20,7 @@ const deleteCacheKey = async (key) => {
 };
 
 const clearOldCache = async () => {
-  const keepList = ["v2"];
+  const keepList = cacheKeys.filter((key) => key === chosenKey);
   const keyList = await caches.keys();
 
   const cachesToDelete = keyList.filter((key) => !keepList.includes(key));
