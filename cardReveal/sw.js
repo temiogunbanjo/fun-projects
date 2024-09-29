@@ -3,7 +3,10 @@ const cacheKeys = ["v1", "v2"];
 let chosenKey = cacheKeys[0];
 
 const addResources = async (resources) => {
-  if (caches.has(chosenKey)) {
+  const hasKey = await caches.has(chosenKey)
+  console.log(chosenKey, hasKey);
+
+  if (hasKey) {
     console.log("Using v2...");
     chosenKey = cacheKeys[1];
   }
@@ -77,8 +80,8 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", async (event) => {
   event.waitUntil(enableNavigationPreload());
-  event.waitUntil(clients.claim());
   event.waitUntil(clearOldCache());
+  event.waitUntil(clients.claim());
 });
 
 self.addEventListener("fetch", async (event) => {
