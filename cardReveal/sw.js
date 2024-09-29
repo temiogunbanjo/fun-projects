@@ -4,6 +4,7 @@ let chosenKey = cacheKeys[0];
 
 const addResources = async (resources) => {
   if (caches.has(chosenKey)) {
+    console.log("Using v2...");
     chosenKey = cacheKeys[1];
   }
   const cache = await caches.open(chosenKey);
