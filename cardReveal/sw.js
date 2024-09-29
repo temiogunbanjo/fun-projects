@@ -4,10 +4,8 @@ let chosenKey = cacheKeys[0];
 
 const addResources = async (resources) => {
   const hasKey = await caches.has(chosenKey)
-  console.log(chosenKey, hasKey);
 
   if (hasKey) {
-    console.log("Using v2...");
     chosenKey = cacheKeys[1];
   }
   const cache = await caches.open(chosenKey);
@@ -74,9 +72,14 @@ self.addEventListener("install", (event) => {
       `${basePath}/assets`,
       `${basePath}/assets/audio`,
       "https://kit.fontawesome.com/f388f70b2b.js",
+      "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f388f70b2b"
     ])
   );
 });
+
+// self.addEventListener("waiting", (event) => {
+//   console.log("waiting");
+// });
 
 self.addEventListener("activate", async (event) => {
   event.waitUntil(enableNavigationPreload());
