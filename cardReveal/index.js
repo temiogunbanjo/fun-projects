@@ -655,7 +655,7 @@ function resetGame() {
 }
 
 async function registerServiceWorker() {
-  console.log(window.location);
+  // console.log(window.location);
   if ("serviceWorker" in navigator) {
     try {
       const registration = await navigator.serviceWorker.register("/sw.js", {

@@ -27,7 +27,7 @@ const clearOldCache = async () => {
   await Promise.all(cachesToDelete.map(deleteCacheKey));
 };
 
-const cacheFirstRequest = async (request) => {
+const cacheFirstRequest = async ({ request, preloadResponsePromise }) => {
   const cacheResponse = await caches.match(request);
 
   if (cacheResponse && cacheResponse.headers.get("Content-Length") > 0) {
@@ -35,10 +35,32 @@ const cacheFirstRequest = async (request) => {
     return cacheResponse;
   }
 
-  console.log(request.url, "Loading live request...");
-  const fetchResponse = await fetch(request);
-  storeInCache(request, fetchResponse.clone());
-  return fetchResponse;
+  const preloadResponse = await preloadResponsePromise;
+  if (preloadResponse) {
+    console.log(request.url, "Loading from preload...");
+    storeInCache(request, preloadResponse.clone());
+    return preloadResponse;
+  }
+
+  try {
+    console.log(request.url, "Loading live request...");
+    const fetchResponse = await fetch(request);
+    storeInCache(request, fetchResponse.clone());
+    return fetchResponse;
+  } catch (error) {
+    return new Response("Network Error happened", {
+      status: 408,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
+  }
+};
+
+const enableNavigationPreload = async () => {
+  if (self.registration.navigationPreload) {
+    await self.registration.navigationPreload.enable();
+  }
 };
 
 self.addEventListener("install", (event) => {
@@ -53,9 +75,16 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", async (event) => {
+  event.waitUntil(enableNavigationPreload());
+  event.waitUntil(clients.claim());
   event.waitUntil(clearOldCache());
 });
 
 self.addEventListener("fetch", async (event) => {
-  event.respondWith(cacheFirstRequest(event.request));
+  event.respondWith(
+    cacheFirstRequest({
+      request: event.request,
+      preloadResponsePromise: event.preloadResponse,
+    })
+  );
 });
