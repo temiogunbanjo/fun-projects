@@ -31,7 +31,7 @@ const cacheFirstRequest = async (request) => {
   const cacheResponse = await caches.match(request);
 
   if (cacheResponse && cacheResponse.headers.get("Content-Length") > 0) {
-    console.log(cacheResponse.url, "Loading from cache...");
+    // console.log(cacheResponse.url, "Loading from cache...");
     return cacheResponse;
   }
 
@@ -42,7 +42,14 @@ const cacheFirstRequest = async (request) => {
 };
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(addResources([`${basePath}/`, `${basePath}/assets`]));
+  event.waitUntil(
+    addResources([
+      `${basePath}/`,
+      `${basePath}/assets`,
+      `${basePath}/assets/audio`,
+      "https://kit.fontawesome.com/f388f70b2b.js",
+    ])
+  );
 });
 
 self.addEventListener("activate", async (event) => {
