@@ -83,8 +83,8 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", async (event) => {
   event.waitUntil(enableNavigationPreload());
-  event.waitUntil(clearOldCache());
   event.waitUntil(clients.claim());
+  event.waitUntil(clearOldCache());
 });
 
 self.addEventListener("fetch", async (event) => {
