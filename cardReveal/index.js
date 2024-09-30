@@ -24,49 +24,49 @@ let cardTypes = {
   bread: {
     image: "./assets/bread-i8k.png",
     unlocksAt: 1,
-    description: ""
+    description: "",
   },
   strawberry: {
     image: "./assets/strawberry_PNG2587.png",
     unlocksAt: 1,
-    description: ""
+    description: "",
   },
   vehicles: {
     image: "./assets/land-rover-range-rover-car-png-25.png",
     unlocksAt: 5,
-    description: ""
+    description: "",
   },
   places: {
     image: "./assets/japan-famous-landmark-png.webp",
     unlocksAt: 13,
-    description: ""
+    description: "",
   },
   sneakers: {
     image:
       "./assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
     unlocksAt: 21,
-    description: ""
+    description: "",
   },
   guava: {
     image: "./assets/pngimg.com - guava_PNG18.png",
     unlocksAt: 29,
-    description: ""
+    description: "",
   },
   furniture: {
     image:
       "./assets/ai-generated-armchair-furniture-isolated-on-transparent-background-free-png.webp",
     unlocksAt: 29,
-    description: ""
+    description: "",
   },
   shoes: {
     image: "./assets/pngimg.com - men_shoes_PNG7492.png",
     unlocksAt: 29,
-    description: ""
+    description: "",
   },
   pineapple: {
     image: "./assets/pngimg.com - pineapple_PNG2733.webp",
     unlocksAt: 33,
-    description: ""
+    description: "",
   },
 };
 
@@ -564,6 +564,7 @@ function handleCardClick(ev) {
           cardClicks = 0;
           if (Math.ceil(comboMultiplier / 1.5) % 2 === 0) {
             showComment(`Combo On Fire X${comboMultiplier}!`);
+            updateScoreBoard(gems + 1 * Math.min(3, comboMultiplier), points);
           } else {
             showComment("Amazing!");
           }
