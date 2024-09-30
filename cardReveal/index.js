@@ -19,35 +19,54 @@ let meterIsDraining = false;
 let comboMultiplier = 0;
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
+// 1, 1, 2, 3, 5, 8, 13, 21, 33, 54, 87, 141
 let cardTypes = {
   bread: {
     image: "./assets/bread-i8k.png",
+    unlocksAt: 1,
+    description: ""
   },
   strawberry: {
     image: "./assets/strawberry_PNG2587.png",
+    unlocksAt: 1,
+    description: ""
   },
-  furniture: {
-    image:
-      "./assets/ai-generated-armchair-furniture-isolated-on-transparent-background-free-png.webp",
+  vehicles: {
+    image: "./assets/land-rover-range-rover-car-png-25.png",
+    unlocksAt: 5,
+    description: ""
+  },
+  places: {
+    image: "./assets/japan-famous-landmark-png.webp",
+    unlocksAt: 13,
+    description: ""
   },
   sneakers: {
     image:
       "./assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
+    unlocksAt: 21,
+    description: ""
   },
   guava: {
     image: "./assets/pngimg.com - guava_PNG18.png",
+    unlocksAt: 29,
+    description: ""
+  },
+  furniture: {
+    image:
+      "./assets/ai-generated-armchair-furniture-isolated-on-transparent-background-free-png.webp",
+    unlocksAt: 29,
+    description: ""
   },
   shoes: {
     image: "./assets/pngimg.com - men_shoes_PNG7492.png",
+    unlocksAt: 29,
+    description: ""
   },
   pineapple: {
     image: "./assets/pngimg.com - pineapple_PNG2733.webp",
-  },
-  vehicles: {
-    image: "./assets/land-rover-range-rover-car-png-25.png",
-  },
-  places: {
-    image: "./assets/japan-famous-landmark-png.webp",
+    unlocksAt: 33,
+    description: ""
   },
 };
 
@@ -192,7 +211,15 @@ function updateScoreBoard(_gems = 0, _points = 0) {
 
 function getCardTypes() {
   const numberOfPairsNeeded = Math.floor(cardCount / pairCount);
-  let availableTypes = randomizeArray(Object.keys(cardTypes));
+  let availableTypes = randomizeArray(
+    Object.entries(cardTypes)
+      .filter(([type, typeOption]) => {
+        return typeOption.unlocksAt <= level;
+      })
+      .map(([type]) => {
+        return type;
+      })
+  );
 
   let tSliced = availableTypes;
 
@@ -265,7 +292,7 @@ function generateCards() {
   autoResizeCardBox();
 }
 
-function showLevelInfo(title) {
+function showLevelInfo(title, callback = () => {}) {
   const dialog = document.getElementById("win-badge-dialog");
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
@@ -293,6 +320,7 @@ function showLevelInfo(title) {
     dialog.removeAttribute("style");
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
+    callback();
   });
 
   wrapper.appendChild(heading);
@@ -300,6 +328,51 @@ function showLevelInfo(title) {
   wrapper.appendChild(button);
 
   dialog.appendChild(wrapper);
+  dialog.setAttribute("open", true);
+}
+
+function showCardUnlockedInfo(title, cardsUnlocked, callback) {
+  const dialog = document.getElementById("win-badge-dialog");
+  dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  dialog.innerHTML = "";
+
+  const wrapper = document.createElement("div");
+  const heading = document.createElement("h2");
+  const cardBox = document.createElement("div");
+  const button = document.createElement("button");
+
+  button.classList.add("game-style");
+  cardBox.classList.add("center");
+
+  heading.textContent = title ?? "New Cards Unlocked";
+  button.textContent = "Close";
+
+  wrapper.setAttribute("id", "level-info");
+
+  heading.style.margin = 0;
+  cardBox.style.gap = "10px";
+  cardBox.style.margin = "1rem 0";
+
+  button.addEventListener("click", () => {
+    playSoundEffect(clickButtonAudio);
+    dialog.removeAttribute("style");
+    dialog.removeAttribute("open", true);
+    dialog.innerHTML = "";
+    callback();
+  });
+
+  cardsUnlocked.forEach(([type, typeOption]) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.setAttribute("style", `--image: url('${typeOption.image}');`);
+    cardBox.appendChild(card);
+  });
+
+  wrapper.appendChild(heading);
+  wrapper.appendChild(cardBox);
+  wrapper.appendChild(button);
+  dialog.appendChild(wrapper);
+
   dialog.setAttribute("open", true);
 }
 
@@ -409,8 +482,17 @@ function proceedToNextLevel() {
 
   delay(9500, () => {
     const isRankingLevel = level % RANK_LEVEL_COUNT === 0;
-    if (isRankingLevel) showLevelInfo("Difficulty Increased!");
-    peekAllCards(3);
+    const cardsUnlocked = Object.entries(cardTypes).filter(([, typeOption]) => {
+      return typeOption.unlocksAt === level;
+    });
+
+    if (isRankingLevel) {
+      showLevelInfo("Difficulty Increased!", () => peekAllCards(3));
+    } else if (cardsUnlocked.length > 0) {
+      showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () =>
+        peekAllCards(3)
+      );
+    } else peekAllCards(3);
   });
 }
 
@@ -480,8 +562,8 @@ function handleCardClick(ev) {
           if (!meterIsDraining) updatePowerMeter(+1);
           updateScoreBoard(gems, points + 1 * Math.max(1, comboMultiplier));
           cardClicks = 0;
-          if (comboMultiplier % 1.5 === 0) {
-            showComment(`Nice Combo X${comboMultiplier}!`);
+          if (Math.ceil(comboMultiplier / 1.5) % 2 === 0) {
+            showComment(`Combo On Fire X${comboMultiplier}!`);
           } else {
             showComment("Amazing!");
           }
@@ -510,9 +592,8 @@ function handleCardClick(ev) {
         currentMatches.shift();
       });
     }
-
-    console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
   }
+  console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
 }
 
 function disableReveal() {
@@ -532,7 +613,6 @@ function disableReveal() {
 }
 
 function peekAllCards(duration = 2) {
-  console.log("duration", duration);
   const peekBtn = document.querySelector("main #peek-a-boo");
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])"
@@ -594,7 +674,6 @@ function setupListeners() {
   }
 
   window.addEventListener("resize", function () {
-    console.log("resizing");
     autoResizeCardBox();
   });
 

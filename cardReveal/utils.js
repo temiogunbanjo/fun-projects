@@ -42,7 +42,7 @@ function repeatArray(array, count) {
 
 function removeRepeatingItems(array) {
   const uniqueArray = Array.from(new Set(array));
-  console.log(uniqueArray);
+  // console.log(uniqueArray);
   return uniqueArray;
 }
 
@@ -83,7 +83,7 @@ function formatAsTime(milliseconds) {
       break;
   }
 
-  console.log(retValue, remainder);
+  // console.log(retValue, remainder);
 
   if (remainder === 0) {
     return `${retValue}${unit}`;

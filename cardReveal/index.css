@@ -287,8 +287,8 @@ header button {
 }
 
 header button#peek-a-boo.max-power::after {
-  --glow-scale: 1.6;
-  --glow-opacity: 0.5;
+  --glow-scale: 2.6;
+  --glow-opacity: 0.6;
   content: "";
   z-index: -1;
   position: absolute;
@@ -330,7 +330,7 @@ header #level-indicator #level-name {
   flex-direction: column;
   /* gap: 10px; */
   align-items: center;
-  padding: 4px 30px 4px 12px;
+  padding: 6px 30px 6px 12px;
   font-weight: 800;
   font-size: 20px;
   color: var(--secondary-color);
@@ -342,7 +342,7 @@ header #level-indicator #level-name {
 }
 
 header #level-indicator #power-meter {
-  --height: 0.488rem;
+  --height: 0.528rem;
   position: absolute;
   top: var(--height);
   left: calc(100% - 18px);
@@ -361,6 +361,33 @@ header #level-indicator #power-meter {
   /* border: 1px solid greenyellow; */
 }
 
+.card {
+  /* 
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    var(--image); */
+  /* --image: url("./assets/boy2.png"); */
+  background-image: var(--image);
+  background-position: center;
+  background-size: min(70px, 80%);
+  background-repeat: no-repeat;
+  background-color: white;
+  position: relative;
+  padding: 25px;
+  min-width: 105px;
+  min-height: 115px;
+  max-height: 420px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--story-text-color);
+  text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.158);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.25);
+  transition-property: background-image, background-blend-mode;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
 #card-box .card {
   --image: url("./assets/boy2.png");
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
@@ -371,18 +398,7 @@ header #level-indicator #power-meter {
   background-blend-mode: normal, screen;
   background-color: var(--card-bgcolor);
   position: relative;
-  padding: 25px;
-  min-width: 105px;
-  min-height: 115px;
-  max-height: 420px;
-  border-radius: 15px;
   border: none;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.8;
-  letter-spacing: 1px;
-  color: var(--story-text-color);
-  text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.158);
   box-shadow: inset 2px 2px 2px 2px var(--light-glow-shadow),
     inset -1px -4px 6px rgba(0, 0, 0, 0.25), 1px 2px 3px rgba(0, 0, 0, 0.25);
   transition-property: background-image, background-blend-mode;
