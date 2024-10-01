@@ -297,9 +297,9 @@ function showLevelInfo(title, callback = () => {}) {
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
 
-  const about = `The goal of this level is to match each card type on the board in ${
+  const about = `The goal of this level is to match each card type in ${
     pairCount > 2 ? `sets of ${pairCount}s` : "pairs"
-  }. You can click on a card to reveal what is behind it. Good luck!`;
+  } until every set has been matched. There are various card types, and each type appears in multiples of ${pairCount}. To successfully match a set, you must reveal and match all ${pairCount} cards of the same type consecutively. Good luck!`;
 
   const wrapper = document.createElement("div");
   const heading = document.createElement("h2");
@@ -461,10 +461,8 @@ function setGameScene(_level = level) {
 
   const bgLevel = rank + 1;
   const newStyleClass = `l-${bgLevel}`;
-  const oldStyleClass = `l-${bgLevel - 1}`;
   const body = document.body;
   body.classList.toggle(newStyleClass, true);
-  body.classList.toggle(oldStyleClass, false);
 
   document.getElementById(
     "level-indicator"
@@ -478,6 +476,10 @@ function proceedToNextLevel() {
   const dialog = document.getElementById("win-badge-dialog");
   dialog.innerHTML = "";
   dialog.removeAttribute("open");
+
+  const bgLevel = rank + 1;
+  const newStyleClass = `l-${bgLevel}`;
+  document.body.classList.toggle(newStyleClass, false);
 
   level = level + 1;
 
