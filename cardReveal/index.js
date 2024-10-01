@@ -352,6 +352,7 @@ function showCardUnlockedInfo(title, cardsUnlocked, callback) {
   heading.style.margin = 0;
   cardBox.style.gap = "10px";
   cardBox.style.margin = "1rem 0";
+  cardBox.style.flexWrap = "wrap";
 
   button.addEventListener("click", () => {
     playSoundEffect(clickButtonAudio);
