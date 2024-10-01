@@ -174,6 +174,16 @@ function getDirectionVector(
   return unitDirection;
 }
 
+// const a = [1, 2, 3, 4, 5, 6, 7, 8];
+// let repeatSeq = 2;
+
+// console.log(
+//   a.map((l) => {
+//     let fnCardCount = Math.floor((l + (repeatSeq - 1)) / repeatSeq) + 1;
+//     return fnCardCount;
+//   })
+// );
+
 // const s = [];
 // s["idle"] = { loc: [] };
 // s["jump"] = { loc: [] };

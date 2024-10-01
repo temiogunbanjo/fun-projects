@@ -449,11 +449,15 @@ function setGameScene(_level = level) {
   meterDrainRate = 0.6;
   meterIsDraining = false;
   numberOfPairsMatched = 0;
-
   rank =
-    _level % RANK_LEVEL_COUNT === 0 ? Math.trunc(_level / RANK_LEVEL_COUNT) : 1;
+    _level % RANK_LEVEL_COUNT === 0 ? Math.trunc(_level / RANK_LEVEL_COUNT) : 0;
   pairCount = Math.min(4, rank + 2);
-  cardCount = Math.min((_level + 1) * pairCount, MAX_CARD_COUNT);
+
+  let repeatSeq = 2;
+  let fnCardCount = Math.floor((_level + (repeatSeq - 1)) / repeatSeq) + 1; // Generates a sequence (2, 2, 3, 3, 4, 4) given (1, 2, 3, 4, 5)
+  cardCount = Math.min(fnCardCount * pairCount, MAX_CARD_COUNT);
+
+  // console.log({ rank, _level, fnCardCount, cardCount, pairCount });
 
   const bgLevel = rank + 1;
   const newStyleClass = `l-${bgLevel}`;
