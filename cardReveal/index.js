@@ -442,14 +442,15 @@ function setGameScene(_level = level) {
   localStorage.setItem("game_level", _level);
   cardClicks = 0;
   meterValue = 0;
-  meterDrainRate = 0.6;
-  meterIsDraining = false;
   currentMatches = [];
   nextRevealTime = 30;
   comboMultiplier = 0;
+  meterDrainRate = 0.6;
+  meterIsDraining = false;
   numberOfPairsMatched = 0;
 
-  rank = Math.trunc(_level / RANK_LEVEL_COUNT);
+  rank =
+    _level % RANK_LEVEL_COUNT === 0 ? Math.trunc(_level / RANK_LEVEL_COUNT) : 1;
   pairCount = Math.min(4, rank + 2);
   cardCount = Math.min((_level + 1) * pairCount, MAX_CARD_COUNT);
 
