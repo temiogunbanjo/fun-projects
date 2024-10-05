@@ -79,10 +79,6 @@ self.addEventListener("install", (event) => {
   );
 });
 
-// self.addEventListener("waiting", (event) => {
-//   console.log("waiting");
-// });
-
 self.addEventListener("activate", async (event) => {
   event.waitUntil(
     Promise.all([
