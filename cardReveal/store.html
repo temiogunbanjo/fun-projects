@@ -8,220 +8,280 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- <link rel="stylesheet" href="index.css" /> -->
     <style>
       #store {
-        box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 20px;
-        margin: 24px;
-        gap: 20px;
-        width: calc(100% - 48px);
-        border: 4px ridge wheat;
-        border-radius: 16px;
-        background-color: rgb(32, 44, 44);
+        width: 100%;
+        height: 100vh;
+        padding: 24px;
+        margin: auto;
+      }
+
+      #store button.game-style {
+        min-width: 50px;
+      }
+
+      #store fieldset {
+        padding: 20px 0 0;
+        border: none;
+      }
+
+      #store > fieldset {
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 5px 20px 35px;
+        gap: 30px;
+        border: none;
+        border-radius: 15px;
+        background-color: rgba(32, 14, 16, 0.877);
+      }
+
+      #store > fieldset > legend {
+        /* margin: 0 10px; */
+        z-index: 9999;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+        color: white;
+        background-color: crimson;
+        padding: 12px 24px;
+        border-radius: 12px;
+        box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.35),
+          inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+          1px 2px 2px rgb(250, 212, 169);
+      }
+
+      #store legend.title {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 1px;
       }
 
       header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        padding: 15px;
-        background-color: #5a1a89; /* Purple (secondary color) */
-        border-radius: 10px;
+        /* margin-top: -15px; */
       }
 
-      header div {
-        display: flex;
-        gap: 10px;
-        align-items: center;
+      body {
+        --secondary-color: purple;
       }
 
-      header div span {
-        font-size: 1.2rem;
-      }
-
-      header div i {
-        font-size: 1.5rem;
-        color: wheat; /* Primary theme color */
-      }
-
-      .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      button {
-        padding: 10px 20px;
-        font-size: 1.1rem;
-        background-color: wheat; /* Primary theme color */
-        color: #000;
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 5px #d2b48c;
-        cursor: pointer;
-        transition: 0.3s ease;
-      }
-
-      button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 15px rgba(245, 222, 179, 0.7);
-      }
-
-      button:active {
-        transform: translateY(0);
-        box-shadow: 0 5px #d2b48c;
-      }
-
+      #card-box,
+      #card-library,
       #ads-section {
         display: flex;
-        width: 100%;
-        margin-bottom: 20px;
-        text-align: center;
         gap: 20px;
+        /* border: 1px solid; */
       }
 
-      .ads {
-        width: 100%;
-        height: 150px;
-        background-color: #5a1a89;
-        border-radius: 16px;
-        box-shadow: inset 1px 3px 8px 2px rgba(255, 255, 255, 0.3),
-          inset -2px -3px 8px rgba(0, 0, 0, 0.3),
-          1px 3px 35px rgba(199, 155, 250, 0.1);
+      #card-box {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
       }
 
-      .ads h2 {
-        color: wheat; /* Primary theme color */
-      }
-
-      #cards-section {
-        width: 100%;
+      #card-library {
         display: flex;
-        justify-content: space-between;
-        gap: 20px;
+        flex-wrap: nowrap;
+        max-width: calc(100vw - 104px);
+        overflow: auto;
       }
 
-      .cards-list {
-        flex: 1;
-        padding: 15px;
-        background-color: #3a3a3a;
-        border-radius: 10px;
-      }
-
-      .cards-list h3 {
-        text-align: center;
-        margin-bottom: 10px;
-        color: wheat; /* Primary theme color */
-      }
-
-      .cards-list ul {
-        list-style: none;
-        padding: 0;
-      }
-
-      .cards-list ul li {
-        --image: url("./assets/boy2.png");
-        --card-bgcolor: #2c2c2c;
-        --light-glow-shadow: rgba(240, 192, 64, 0.3);
-        background-image: linear-gradient(
-            rgba(0, 0, 0, 0.1),
-            rgba(0, 0, 0, 0.1)
-          ),
-          var(--image);
-        background-position: center;
-        background-size: cover, min(70px, 80%);
-        background-repeat: no-repeat;
-        background-blend-mode: normal, screen;
-        background-color: var(--card-bgcolor);
-        position: relative;
+      #ads-section .card,
+      #card-library .card,
+      #card-box .card {
+        display: flex;
+        flex: none;
         border: none;
-        box-shadow: inset 2px 2px 2px 2px var(--light-glow-shadow),
-          inset -1px -4px 6px rgba(0, 0, 0, 0.25),
-          1px 2px 3px rgba(0, 0, 0, 0.25);
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        text-align: center;
-        color: #fff;
-        transition-property: background-image, background-blend-mode;
-        transition-duration: 0.3s;
-        transition-timing-function: ease;
-        pointer-events: initial;
+        border-radius: 12px;
+        flex-grow: 1;
+        min-width: 125px;
+        min-height: 125px;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.25);
+        background-image: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0)
+        );
       }
 
-      .cards-list ul li:hover {
-        background-blend-mode: multiply, screen;
+      #ads-section .card {
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0)
+          ),
+          url("assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png")
+            no-repeat right/contain;
+        background-color: dodgerblue;
+      }
+
+      #card-box .card,
+      #card-library .card {
+        min-height: 150px;
+        /* width: calc(18%); */
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0)
+          ),
+          url("assets/boy2.png") no-repeat center/100px;
+        background-color: crimson;
+        box-shadow: 1px 4px 1px rgba(128, 0, 128, 0.452);
+      }
+
+      #card-library .card {
+        padding: 15px;
+        color: white;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        min-width: 175px;
+        min-height: 250px;
+        /* width: calc(18%); */
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0)
+          ),
+          url("https://cdn0.iconfinder.com/data/icons/recommendations/128/Question_mark-512.png") no-repeat center/80px,
+          url("assets/padlock-closed.webp") no-repeat 90% 10px/20px;
+        background-blend-mode: normal, normal, hue;
+        background-color: crimson;
+        box-shadow: 1px 4px 1px rgba(128, 0, 128, 0.452);
+      }
+
+      #card-library .card .price {
+        width: 100%;
+        border-radius: 5vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        text-align: center;
+        padding: 6px;
+        color: white;
       }
     </style>
   </head>
 
   <body>
-    <section id="store" class="">
-      <!-- Header Section -->
-      <header>
-        <button
-          class="game-style center"
-          onclick="window.location.href='/';"
-          style="flex-direction: row; gap: 5px"
-        >
-          <i class="fa-solid fa-reply"></i>
-          <!-- <span>Return to Menu</span> -->
-        </button>
+    <main id="store">
+      <fieldset class="" style="width: 100%; height: 100%">
+        <legend>
+          <span>Game Store</span>
+        </legend>
 
-        <div>
-          <i class="fas fa-gem"></i>
-          <span>Gems: 150</span>
-        </div>
-        <div>
-          <i class="fas fa-coins"></i>
-          <span>Points: 1200</span>
-        </div>
-        <div>
-          <i class="fas fa-level-up-alt"></i>
-          <span>Level: 7</span>
-        </div>
-      </header>
+        <header class="fa-3x">
+          <div class="center" style="gap: 10px">
+            <button
+              id="return-home"
+              class="game-style fa-solid fa-reply show-on-pc"
+              onclick="window.location.href='/#main_menu';"
+            ></button>
+            <button
+              id="show-menu-mobile"
+              class="game-style fa-solid fa-pause show-on-mobile"
+            ></button>
+          </div>
 
-      <!-- Ads Section -->
-      <section id="ads-section">
-        <div class="ads">
-          <h2>Advertisement</h2>
-          <p>Place your ad here!</p>
-        </div>
+          <div class="center" style="gap: 10px">
+            <button id="info" class="game-style show-on-pc">
+              <i class="fa-solid fa-info"></i>
+            </button>
+          </div>
+        </header>
 
-        <div class="ads">
-          <h2>Advertisement</h2>
-          <p>Place your ad here!</p>
-        </div>
-      </section>
+        <fieldset>
+          <!-- <legend>Advertisements</legend> -->
+          <section id="ads-section">
+            <button class="card"></button>
+            <button class="card"></button>
+            <button class="card"></button>
+          </section>
+        </fieldset>
 
-      <!-- Cards Section -->
-      <section id="cards-section">
-        <!-- Unlocked Cards -->
-        <section class="cards-list">
-          <h3>Unlocked Game Cards</h3>
-          <ul>
-            <li>Card 1</li>
-            <li>Card 2</li>
-            <li>Card 3</li>
-          </ul>
-        </section>
+        <fieldset>
+          <legend class="title">My Cards</legend>
+          <section id="card-box">
+            <button class="card"></button>
+            <button class="card"></button>
+            <button class="card"></button>
+            <button class="card"></button>
+            <button class="card"></button>
+          </section>
+        </fieldset>
 
-        <!-- Upcoming Cards -->
-        <section class="cards-list">
-          <h3>Upcoming Cards</h3>
-          <ul>
-            <li>Card 4 (Level 10)</li>
-            <li>Card 5 (Level 12)</li>
-            <li>Card 6 (Level 15)</li>
-          </ul>
-        </section>
-      </section>
-    </section>
+        <fieldset>
+          <legend class="title">Card Library</legend>
+          <section id="card-library">
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+            <button class="card">
+              <div class="price">
+                <span>Unlock for 3 💎</span>
+              </div>
+            </button>
+          </section>
+        </fieldset>
+      </fieldset>
+    </main>
   </body>
 </html>

@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap");
+
+* {
+  font-family: "Fredoka", sans-serif;
+  box-sizing: border-box;
+}
+
+a {
+  color: bisque;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.show-on-mobile {
+  display: none !important;
+}
+
+.show-on-pc {
+  display: initial !important;
+}
+
+body {
+  color: white;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: chocolate;
+  font-weight: 300;
+  padding: 0;
+  margin: 0;
+}
+
+button.game-style {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 12px;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--secondary-color);
+  border-radius: 12px;
+  background-color: wheat;
+  transition: all 0.2s ease;
+  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
+}
+
+button.game-style.variant-1 {
+  color: rgb(255, 246, 228);
+  background-color: #d58936;
+  border: none;
+  /* box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.35),
+      inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px #f4a261; */
+}
+
+button.game-style:active {
+  transform: scale(0.96);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 2px 1px var(--secondary-color);
+}
+
+button.game-style:disabled {
+  opacity: 0.6;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 2px 1px var(--secondary-color);
+}
+
+@media only screen and (max-width: 768px) {
+  .show-on-mobile {
+    display: initial !important;
+  }
+
+  .show-on-pc {
+    display: none !important;
+  }
+}
