@@ -190,6 +190,7 @@ header button#peek-a-boo.max-power {
 
 main #commentary {
   /* display: none; */
+  pointer-events: none;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -197,6 +198,7 @@ main #commentary {
 }
 
 main #commentary > * {
+  pointer-events: none;
   display: inline-block;
   --start-opacity: 0.7;
   text-transform: capitalize;
