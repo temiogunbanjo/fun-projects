@@ -91,7 +91,7 @@ function playSoundEffect(audio) {
   }
 }
 
-function showComment(comment) {
+function showComment(comment, styleClass = "") {
   const commentary = document.querySelector("#commentary");
   commentary.style.display = "inline";
   console.log(comment);
@@ -99,6 +99,7 @@ function showComment(comment) {
   const id = `comment-${Math.random().toString().slice(2)}`;
   const text = document.createElement("span");
   text.setAttribute("id", id);
+  if (styleClass) text.classList.add(styleClass);
   text.textContent = comment;
   commentary.appendChild(text);
 
@@ -172,7 +173,7 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
 
   if (meterValue === MAX_METER_VALUE) {
     playSoundEffect(powerUpAudio);
-    showComment("Power Up!");
+    showComment("Power Up!", "power-up");
     const a = window.setInterval(() => {
       meterIsDraining = true;
       peekBtn.removeAttribute("style");
@@ -495,7 +496,7 @@ function proceedToNextLevel() {
     });
 
     if (isRankingLevel) {
-      showLevelInfo("Difficulty Increased!", () => peekAllCards(3));
+      showLevelInfo("Boss Level!", () => peekAllCards(3));
     } else if (cardsUnlocked.length > 0) {
       showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () =>
         peekAllCards(3)
@@ -766,7 +767,7 @@ async function registerServiceWorker() {
 function startGame(ev) {
   loadSettings();
   generateCards();
-  registerServiceWorker();
+  // registerServiceWorker();
   showSplashScreen();
 }
 

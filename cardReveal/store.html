@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Store</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <style>
+      #store {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        margin: 24px;
+        gap: 20px;
+        width: calc(100% - 48px);
+        border: 4px ridge wheat;
+        border-radius: 16px;
+        background-color: rgb(32, 44, 44);
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 15px;
+        background-color: #5a1a89; /* Purple (secondary color) */
+        border-radius: 10px;
+      }
+
+      header div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      header div span {
+        font-size: 1.2rem;
+      }
+
+      header div i {
+        font-size: 1.5rem;
+        color: wheat; /* Primary theme color */
+      }
+
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        background-color: wheat; /* Primary theme color */
+        color: #000;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 5px #d2b48c;
+        cursor: pointer;
+        transition: 0.3s ease;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(245, 222, 179, 0.7);
+      }
+
+      button:active {
+        transform: translateY(0);
+        box-shadow: 0 5px #d2b48c;
+      }
+
+      #ads-section {
+        display: flex;
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+        gap: 20px;
+      }
+
+      .ads {
+        width: 100%;
+        height: 150px;
+        background-color: #5a1a89;
+        border-radius: 16px;
+        box-shadow: inset 1px 3px 8px 2px rgba(255, 255, 255, 0.3),
+          inset -2px -3px 8px rgba(0, 0, 0, 0.3),
+          1px 3px 35px rgba(199, 155, 250, 0.1);
+      }
+
+      .ads h2 {
+        color: wheat; /* Primary theme color */
+      }
+
+      #cards-section {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .cards-list {
+        flex: 1;
+        padding: 15px;
+        background-color: #3a3a3a;
+        border-radius: 10px;
+      }
+
+      .cards-list h3 {
+        text-align: center;
+        margin-bottom: 10px;
+        color: wheat; /* Primary theme color */
+      }
+
+      .cards-list ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .cards-list ul li {
+        --image: url("./assets/boy2.png");
+        --card-bgcolor: #2c2c2c;
+        --light-glow-shadow: rgba(240, 192, 64, 0.3);
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.1)
+          ),
+          var(--image);
+        background-position: center;
+        background-size: cover, min(70px, 80%);
+        background-repeat: no-repeat;
+        background-blend-mode: normal, screen;
+        background-color: var(--card-bgcolor);
+        position: relative;
+        border: none;
+        box-shadow: inset 2px 2px 2px 2px var(--light-glow-shadow),
+          inset -1px -4px 6px rgba(0, 0, 0, 0.25),
+          1px 2px 3px rgba(0, 0, 0, 0.25);
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: #fff;
+        transition-property: background-image, background-blend-mode;
+        transition-duration: 0.3s;
+        transition-timing-function: ease;
+        pointer-events: initial;
+      }
+
+      .cards-list ul li:hover {
+        background-blend-mode: multiply, screen;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section id="store" class="">
+      <!-- Header Section -->
+      <header>
+        <button
+          class="game-style center"
+          onclick="window.location.href='/';"
+          style="flex-direction: row; gap: 5px"
+        >
+          <i class="fa-solid fa-reply"></i>
+          <!-- <span>Return to Menu</span> -->
+        </button>
+
+        <div>
+          <i class="fas fa-gem"></i>
+          <span>Gems: 150</span>
+        </div>
+        <div>
+          <i class="fas fa-coins"></i>
+          <span>Points: 1200</span>
+        </div>
+        <div>
+          <i class="fas fa-level-up-alt"></i>
+          <span>Level: 7</span>
+        </div>
+      </header>
+
+      <!-- Ads Section -->
+      <section id="ads-section">
+        <div class="ads">
+          <h2>Advertisement</h2>
+          <p>Place your ad here!</p>
+        </div>
+
+        <div class="ads">
+          <h2>Advertisement</h2>
+          <p>Place your ad here!</p>
+        </div>
+      </section>
+
+      <!-- Cards Section -->
+      <section id="cards-section">
+        <!-- Unlocked Cards -->
+        <section class="cards-list">
+          <h3>Unlocked Game Cards</h3>
+          <ul>
+            <li>Card 1</li>
+            <li>Card 2</li>
+            <li>Card 3</li>
+          </ul>
+        </section>
+
+        <!-- Upcoming Cards -->
+        <section class="cards-list">
+          <h3>Upcoming Cards</h3>
+          <ul>
+            <li>Card 4 (Level 10)</li>
+            <li>Card 5 (Level 12)</li>
+            <li>Card 6 (Level 15)</li>
+          </ul>
+        </section>
+      </section>
+    </section>
+  </body>
+</html>
