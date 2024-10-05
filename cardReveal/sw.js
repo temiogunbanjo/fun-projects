@@ -9,7 +9,7 @@ const addResources = async (resources) => {
     chosenKey = cacheKeys[1];
   }
   const cache = await caches.open(chosenKey);
-  await cache.addAll(resources);
+  return cache.addAll(resources);
 };
 
 const storeInCache = async (request, response) => {
@@ -26,7 +26,7 @@ const clearOldCache = async () => {
   const keyList = await caches.keys();
 
   const cachesToDelete = keyList.filter((key) => !keepList.includes(key));
-  await Promise.all(cachesToDelete.map(deleteCacheKey));
+  return Promise.all(cachesToDelete.map(deleteCacheKey));
 };
 
 const cacheFirstRequest = async ({ request, preloadResponsePromise }) => {
@@ -66,6 +66,7 @@ const enableNavigationPreload = async () => {
 };
 
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
     addResources([
       `${basePath}/`,
@@ -83,9 +84,13 @@ self.addEventListener("install", (event) => {
 // });
 
 self.addEventListener("activate", async (event) => {
-  event.waitUntil(enableNavigationPreload());
-  event.waitUntil(clients.claim());
-  event.waitUntil(clearOldCache());
+  event.waitUntil(
+    Promise.all([
+      clients.claim(),
+      enableNavigationPreload(),
+      clearOldCache()
+    ]
+  ));
 });
 
 self.addEventListener("fetch", async (event) => {
