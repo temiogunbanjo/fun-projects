@@ -767,7 +767,7 @@ async function registerServiceWorker() {
 function startGame(ev) {
   loadSettings();
   generateCards();
-  // registerServiceWorker();
+  registerServiceWorker();
   showSplashScreen();
 }
 
