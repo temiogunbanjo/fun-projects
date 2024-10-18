@@ -28,6 +28,17 @@ body.l-3 {
   --secondary-color: #9e4c12;
 }
 
+body.power-up {
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15),
+    2px 4px 1px rgba(128, 0, 128, 0.777);
+
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0) 30%,
+    rgba(75, 0, 0, 0.56)
+  );
+}
+
 #power-meter {
   display: flex;
   align-items: flex-end;
@@ -211,7 +222,7 @@ main #commentary > * {
   font-size: 50px;
   opacity: var(--start-opacity);
   text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.45);
-  animation: scaleAndFly 1000ms ease-in 100ms 1 normal both;
+  /* animation: scaleAndFly 1000ms ease-in 100ms 1 normal both; */
 }
 
 main #commentary > *.power-up {

@@ -94,7 +94,7 @@ function playSoundEffect(audio) {
 function showComment(comment, styleClass = "") {
   const commentary = document.querySelector("#commentary");
   commentary.style.display = "inline";
-  console.log(comment);
+  // console.log(comment);
 
   const id = `comment-${Math.random().toString().slice(2)}`;
   const text = document.createElement("span");
@@ -103,11 +103,59 @@ function showComment(comment, styleClass = "") {
   text.textContent = comment;
   commentary.appendChild(text);
 
-  delay(1.9 * 1000, () => {
-    // hide commentary
-    commentary.style.display = "none";
-    commentary.removeChild(text);
-  });
+  switch (true) {
+    case styleClass === "power-up":
+      gsap.fromTo(
+        text,
+        {
+          duration: 1,
+          opacity: 0.6,
+          xPercent: 0,
+          yPercent: -50,
+        },
+        {
+          duration: 1,
+          top: "-40vh",
+          opacity: 0,
+          xPercent: 0,
+          yPercent: -50,
+          // arrow functions are handy for concise callbacks
+          onComplete: () => {
+            delay(0.9 * 1000, () => {
+              // hide commentary
+              commentary.style.display = "none";
+              commentary.removeChild(text);
+            });
+          },
+        }
+      );
+      break;
+
+    default:
+      gsap.fromTo(
+        text,
+        {
+          duration: 1,
+          opacity: 0.6,
+          xPercent: -50,
+          yPercent: -50,
+        },
+        {
+          duration: 1,
+          top: "-40vh",
+          opacity: 0,
+          xPercent: -50,
+          yPercent: -50,
+          // arrow functions are handy for concise callbacks
+          onComplete: () => {
+            // hide commentary
+            commentary.style.display = "none";
+            commentary.removeChild(text);
+          },
+        }
+      );
+      break;
+  }
 }
 
 function calculateMeterIncrementAndDecrement() {
@@ -173,12 +221,13 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
 
   if (meterValue === MAX_METER_VALUE) {
     playSoundEffect(powerUpAudio);
-    showComment("Power Up!", "power-up");
+    showComment("Infinity Reveal!", "power-up");
     const a = window.setInterval(() => {
       meterIsDraining = true;
       peekBtn.removeAttribute("style");
       peekBtn.removeAttribute("disabled");
       peekBtn.classList.toggle("max-power", true);
+      document.body.classList.toggle("power-up", true);
       updatePowerMeter(-1 * meterDrainRate, true);
 
       if (meterValue <= 0) {
@@ -187,6 +236,7 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
         nextRevealTime *= 2;
         disableReveal();
         peekBtn.classList.toggle("max-power", false);
+        document.body.classList.toggle("power-up", false);
       }
     }, 300);
   }
@@ -720,10 +770,63 @@ function setupListeners() {
   }
 }
 
-function showSplashScreen(redirectTo = `main_menu`) {
+function showSplashScreen(redirectTo = `main_menu`, animate = false) {
   const splashScreen = document.getElementById("splash");
   splashScreen.style.display = "flex";
   window.location.hash = redirectTo;
+
+  const leftCard = "#splash #logo-container .logo-card.left";
+  const middleCard = "#splash #logo-container .logo-card.middle";
+  const rightCard = "#splash #logo-container .logo-card.right";
+
+  let tl = gsap.timeline();
+
+  if (animate) {
+    tl.from([middleCard, rightCard, leftCard], {
+      opacity: 0,
+      rotation: 0,
+      scale: 0.5,
+      duration: 2.5,
+      // ease: "bounce.out",
+      ease: "elastic.out(1,0.3)",
+      // ease: "power4.out",
+      // ease: "slow(0.7,0.7,false)",
+      stagger: 0.3,
+      // ease: "expoScale(0.9,7,none)",
+    });
+
+    tl.from(
+      "#splash #logo-container h1",
+      {
+        opacity: 0,
+        letterSpacing: "55px",
+        duration: 2,
+        ease: "power2.in",
+        ease: "back.out(1)",
+        // ease: "bounce.out",
+        // ease: "elastic.out(1,0.3)",
+        // ease: "slow(0.7,0.7,false)",
+        // ease: "expoScale(0.9,7,none)",
+      },
+      "-=1.5"
+    );
+  }
+
+  tl.fromTo(
+    "#splash p",
+    {
+      opacity: 0,
+      duration: 1,
+      yoyo: true,
+      repeat: -1,
+    },
+    {
+      opacity: 1,
+      duration: 1,
+      yoyo: true,
+      repeat: -1,
+    }
+  );
 
   delay(9700, () => {
     document.querySelector("main").classList.toggle("not-started");
@@ -768,7 +871,7 @@ function startGame(ev) {
   loadSettings();
   generateCards();
   registerServiceWorker();
-  showSplashScreen();
+  showSplashScreen(undefined, true);
 }
 
 document.addEventListener("DOMContentLoaded", startGame);
