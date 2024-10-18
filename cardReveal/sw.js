@@ -70,6 +70,7 @@ self.addEventListener("install", (event) => {
     addResources([
       `${basePath}/assets`,
       `${basePath}/assets/audio`,
+      `${basePath}/libraries/gsap/minified`,
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
       "https://kit.fontawesome.com/f388f70b2b.js",
       "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f388f70b2b",
