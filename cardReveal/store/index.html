@@ -28,14 +28,18 @@
       content="Play an exciting online card reveal game! Flip and memorize cards in this fun memory challenge. Match sets to win and improve your skills. Play now!"
     />
     <title>Card Reveal | My Store</title>
-    <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="../assets/favicon.png"
+      type="image/x-icon"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="libraries/gsap/minified/gsap.min.js"></script>
-    <script src="utils.js"></script>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../libraries/gsap/minified/gsap.min.js"></script>
+    <script src="../utils.js"></script>
     <style>
       #store {
         display: flex;
@@ -100,7 +104,7 @@
         --secondary-color: purple;
       }
 
-      #card-box,
+      #power-library,
       #card-library,
       #ads-section {
         display: flex;
@@ -108,9 +112,19 @@
         /* border: 1px solid; */
       }
 
-      #card-box {
+      #power-library {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(1, 1fr);
+      }
+
+      #power-library .slot {
+        display: flex;
+        gap: 35px;
+        padding: 5px min(2%, 10px);
+      }
+
+      #power-library .card + * {
+        width: 80%;
       }
 
       #card-library {
@@ -122,7 +136,7 @@
 
       #ads-section .card,
       #card-library .card,
-      #card-box .card {
+      #power-library .card {
         display: flex;
         flex: none;
         border: none;
@@ -144,13 +158,14 @@
             rgba(0, 0, 0, 0.3),
             rgba(0, 0, 0, 0)
           ),
-          url("assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png")
+          url("../assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png")
             no-repeat right/contain;
         background-color: dodgerblue;
       }
 
-      #card-box .card,
+      #power-library .card,
       #card-library .card {
+        --card-image: url("../assets/boy2.png");
         min-height: 150px;
         /* width: calc(18%); */
         background: linear-gradient(
@@ -158,7 +173,7 @@
             rgba(0, 0, 0, 0.3),
             rgba(0, 0, 0, 0)
           ),
-          url("assets/boy2.png") no-repeat center/100px;
+          var(--card-image) no-repeat center/100px;
         background-color: crimson;
         box-shadow: 1px 4px 1px rgba(128, 0, 128, 0.452);
       }
@@ -207,18 +222,26 @@
           <div class="center" style="gap: 10px">
             <button
               id="return-home"
-              class="game-style fa-solid fa-reply show-on-pc"
+              class="game-style"
               onclick="window.location.href='/#main_menu';"
-            ></button>
-            <button
-              id="show-menu-mobile"
-              class="game-style fa-solid fa-pause show-on-mobile"
-            ></button>
+            >
+              <i class="fa-solid fa-reply"></i>
+              <span style="font-size: 16px; text-transform: capitalize"
+                >Back</span
+              >
+            </button>
           </div>
 
           <div class="center" style="gap: 10px">
-            <button id="info" class="game-style show-on-pc">
-              <i class="fa-solid fa-info"></i>
+            <button
+              id="info"
+              class="game-style"
+              style="display: flex; align-items: center"
+            >
+              <i class="fa-solid fa-user"></i>
+              <span style="font-size: 16px; text-transform: capitalize"
+                >Login</span
+              >
             </button>
           </div>
         </header>
@@ -233,13 +256,55 @@
         </fieldset>
 
         <fieldset>
-          <legend class="title">My Cards</legend>
-          <section id="card-box">
-            <button class="card"></button>
-            <button class="card"></button>
-            <button class="card"></button>
-            <button class="card"></button>
-            <button class="card"></button>
+          <legend class="title">Power Ups</legend>
+          <section id="power-library">
+            <div class="slot">
+              <button
+                class="card"
+                style="--card-image: url('../assets/64945.png')"
+              ></button>
+              <div>
+                <h3>Peek-A-Boo</h3>
+                <p>
+                  Allows user reveal all cards for every 3 seconds. Note that
+                  every time player uses this skill, the wait time is doubled.
+                </p>
+                <div class="actions">
+                  <span>Unlock for 3 💎</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slot">
+              <button
+                class="card"
+                style="--card-image: url('../assets/bomb-color-illustration-png.webp')"
+              ></button>
+              <div>
+                <h3>Mega Blaster</h3>
+                <p>Activating this power-up blasts 1 set of card type</p>
+                <div class="actions">
+                  <span>Unlock for 3 💎</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slot">
+              <button
+                class="card"
+                style="--card-image: url('../assets/5501313.png')"
+              ></button>
+              <div>
+                <h3>Secret Santa</h3>
+                <p>
+                  Activating the power up gives the player an X-ray ability for
+                  5 seconds
+                </p>
+                <div class="actions">
+                  <span>Unlock for 30 💎</span>
+                </div>
+              </div>
+            </div>
           </section>
         </fieldset>
 
@@ -321,7 +386,7 @@
         // ease: "elastic.out(1,0.3)",
         ease: "power4.out",
         // ease: "slow(0.7,0.7,false)",
-        stagger: 0.25,
+        stagger: 0.15,
         // ease: "expoScale(0.9,7,none)",
       });
 
@@ -335,20 +400,20 @@
           // ease: "elastic.out(1,0.3)",
           ease: "power4.out",
           // ease: "slow(0.7,0.7,false)",
-          stagger: 0.25,
+          stagger: 0.15,
           // ease: "expoScale(0.9,7,none)",
         },
         "<"
       );
 
       tl.from(
-        "#card-box .card",
+        "#power-library .slot",
         {
           opacity: 0,
-          scale: 0.5,
-          duration: 0.5,
+          marginLeft: "30vw",
+          duration: 1,
           // ease: "bounce.out",
-          ease: "elastic.out(1,0.6)",
+          ease: "elastic.out(1,0.9)",
           // ease: "power4.out",
           // ease: "slow(0.7,0.7,false)",
           stagger: 0.25,

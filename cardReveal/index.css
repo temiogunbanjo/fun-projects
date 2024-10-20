@@ -335,6 +335,7 @@ header #level-indicator #power-meter {
 }
 
 .card {
+  cursor: pointer;
   background-image: var(--image);
   background-position: center;
   background-size: min(70px, 80%);

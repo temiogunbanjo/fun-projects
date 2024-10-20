@@ -122,9 +122,13 @@ function showComment(comment, styleClass = "") {
           // arrow functions are handy for concise callbacks
           onComplete: () => {
             delay(0.9 * 1000, () => {
-              // hide commentary
-              commentary.style.display = "none";
-              commentary.removeChild(text);
+              try {
+                // hide commentary
+                commentary.style.display = "none";
+                commentary.removeChild(text);
+              } catch (error) {
+                console.log(error);
+              }
             });
           },
         }
@@ -148,9 +152,13 @@ function showComment(comment, styleClass = "") {
           yPercent: -50,
           // arrow functions are handy for concise callbacks
           onComplete: () => {
-            // hide commentary
-            commentary.style.display = "none";
-            commentary.removeChild(text);
+            try {
+              // hide commentary
+              commentary.style.display = "none";
+              commentary.removeChild(text);
+            } catch (error) {
+              console.log(error);
+            }
           },
         }
       );
@@ -221,7 +229,7 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
 
   if (meterValue === MAX_METER_VALUE) {
     playSoundEffect(powerUpAudio);
-    showComment("Infinity Reveal!", "power-up");
+    showComment("Power Up!", "power-up");
     const a = window.setInterval(() => {
       meterIsDraining = true;
       peekBtn.removeAttribute("style");
@@ -396,7 +404,7 @@ function showCardUnlockedInfo(title, cardsUnlocked, callback) {
   cardBox.classList.add("center");
 
   heading.textContent = title ?? "New Cards Unlocked";
-  button.textContent = "Close";
+  button.textContent = "Continue";
 
   wrapper.setAttribute("id", "level-info");
 
@@ -780,21 +788,16 @@ function showSplashScreen(redirectTo = `main_menu`, animate = false) {
   const rightCard = "#splash #logo-container .logo-card.right";
 
   let tl = gsap.timeline();
+  tl.from([middleCard, rightCard, leftCard], {
+    opacity: 0,
+    rotation: 0,
+    scale: 0.5,
+    duration: 2.5,
+    ease: "elastic.out(1,0.3)",
+    stagger: 0.3,
+  });
 
   if (animate) {
-    tl.from([middleCard, rightCard, leftCard], {
-      opacity: 0,
-      rotation: 0,
-      scale: 0.5,
-      duration: 2.5,
-      // ease: "bounce.out",
-      ease: "elastic.out(1,0.3)",
-      // ease: "power4.out",
-      // ease: "slow(0.7,0.7,false)",
-      stagger: 0.3,
-      // ease: "expoScale(0.9,7,none)",
-    });
-
     tl.from(
       "#splash #logo-container h1",
       {
