@@ -284,6 +284,11 @@ function updateScoreBoard(_gems = 0, _points = 0) {
   localStorage.setItem("game_gems", gems);
 }
 
+function getRevealDuration() {
+  const duration = 3 + rank * 1.5;
+  return duration;
+}
+
 function getCardTypes() {
   const numberOfPairsNeeded = Math.floor(cardCount / pairCount);
   let availableTypes = randomizeArray(
@@ -345,11 +350,12 @@ function autoScroll() {
   const container = document.getElementById("card-box");
   // Get the current scroll position
   let currentScroll = 0;
+  container.scrollTo(0, 0);
 
   // Set the scrolling interval
   let scrollInterval = setInterval(function () {
     // Increment the current scroll position
-    currentScroll += 10;
+    currentScroll += 200;
     container.scrollTo(0, currentScroll);
 
     // Check if the bottom of the page has been reached
@@ -358,7 +364,7 @@ function autoScroll() {
       clearInterval(scrollInterval);
       container.scrollTo(0, 0);
     }
-  }, 50);
+  }, 1000);
 }
 
 function generateCards() {
@@ -588,16 +594,15 @@ function proceedToNextLevel() {
     const cardsUnlocked = Object.entries(cardTypes).filter(([, typeOption]) => {
       return typeOption.unlocksAt === level;
     });
-
-    // autoScroll();
+    const revealDuration = getRevealDuration();
 
     if (isRankingLevel) {
-      showLevelInfo("Boss Level!", () => peekAllCards(3));
+      showLevelInfo("Boss Level!", () => peekAllCards(revealDuration));
     } else if (cardsUnlocked.length > 0) {
-      showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () =>
-        peekAllCards(3)
-      );
-    } else peekAllCards(3);
+      showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
+        peekAllCards(revealDuration);
+      });
+    } else peekAllCards(revealDuration);
   });
 }
 
@@ -719,20 +724,21 @@ function disableReveal() {
 }
 
 function peekAllCards(duration = 2) {
-  autoScroll();
   const peekBtn = document.querySelector("main #peek-a-boo");
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])"
   );
 
+  playSoundEffect(peekCardAudio);
+
   for (const card of unopenedCards) {
     card.classList.toggle("reveal", true);
   }
 
+  autoScroll();
+
   if (!meterIsDraining) peekBtn.setAttribute("disabled", true);
   else meterDrainRate *= 1.5;
-
-  playSoundEffect(peekCardAudio);
 
   delay(duration * 1000, () => {
     // Close all revealed cards
@@ -790,7 +796,7 @@ function setupListeners() {
 
   peekBtn.addEventListener("click", (ev) => {
     playSoundEffect(clickButtonAudio);
-    const duration = 3 + rank * 1.5;
+    const duration = getRevealDuration();
     peekAllCards(duration);
   });
 
@@ -802,7 +808,7 @@ function setupListeners() {
   startGameButton.addEventListener("click", (ev) => {
     playSoundEffect(clickButtonAudio);
     window.location.hash = "play";
-    const duration = 3 + rank * 1.5;
+    const duration = getRevealDuration();
     peekAllCards(duration);
     autoResizeCardBox();
   });

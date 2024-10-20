@@ -6,6 +6,7 @@
 * {
   font-family: "Fredoka", sans-serif;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 a {
