@@ -68,6 +68,22 @@ let cardTypes = {
     unlocksAt: 33,
     description: "",
   },
+  banana: {
+    image: "./assets/Banana-Stack-PNG.png",
+    unlocksAt: 2,
+    description: "",
+  },
+  sapphire: {
+    image:
+      "./assets/ai-generated-blue-gem-stone-isolated-on-transparent-background-png.webp",
+    unlocksAt: 38,
+    description: "",
+  },
+  ruby: {
+    image: "./assets/Gem-PNG-Download-Image.png",
+    unlocksAt: 38,
+    description: "",
+  },
 };
 
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
@@ -325,6 +341,26 @@ function autoResizeCardBox(cardBox) {
   }, 1fr)`;
 }
 
+function autoScroll() {
+  const container = document.getElementById("card-box");
+  // Get the current scroll position
+  let currentScroll = 0;
+
+  // Set the scrolling interval
+  let scrollInterval = setInterval(function () {
+    // Increment the current scroll position
+    currentScroll += 10;
+    container.scrollTo(0, currentScroll);
+
+    // Check if the bottom of the page has been reached
+    if (currentScroll >= document.body.scrollHeight) {
+      // Clear the interval and stop scrolling
+      clearInterval(scrollInterval);
+      container.scrollTo(0, 0);
+    }
+  }, 50);
+}
+
 function generateCards() {
   const cardBox = document.getElementById("card-box");
   cardBox.innerHTML = "";
@@ -553,6 +589,8 @@ function proceedToNextLevel() {
       return typeOption.unlocksAt === level;
     });
 
+    // autoScroll();
+
     if (isRankingLevel) {
       showLevelInfo("Boss Level!", () => peekAllCards(3));
     } else if (cardsUnlocked.length > 0) {
@@ -681,6 +719,7 @@ function disableReveal() {
 }
 
 function peekAllCards(duration = 2) {
+  autoScroll();
   const peekBtn = document.querySelector("main #peek-a-boo");
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])"
