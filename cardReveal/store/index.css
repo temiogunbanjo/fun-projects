@@ -23,7 +23,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  padding: 5px 20px 35px;
+  padding: 5px 30px 35px;
   gap: 30px;
   border: none;
   border-radius: 15px;
@@ -70,7 +70,7 @@ body {
 
 #power-library {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
 }
 
 #power-library .slot {
@@ -109,12 +109,18 @@ body {
 }
 
 #ads-section .card {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)) no-repeat
-      center/cover,
-    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhfHSC-eghYNN2xPCvhVPqC7fjfhHw4CJwoQ&s")
-      no-repeat right/cover;
+  box-shadow: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0))
+      no-repeat center/cover,
+    url("../assets/r6gh7ur93m241.webp") no-repeat right/cover;
   background-color: dodgerblue;
   min-height: 225px;
+}
+
+#ads-section .card:first-child {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0))
+      no-repeat center/cover,
+    url("../assets/fakemobileads2.png") no-repeat right/cover;
 }
 
 #power-library .card,
