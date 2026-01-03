@@ -47,6 +47,7 @@
       src="https://kit.fontawesome.com/f388f70b2b.js"
       crossorigin="anonymous"
     ></script>
+    <script src="constants.js"></script>
     <script src="tutorials.js"></script>
     <script src="utils.js"></script>
     <script src="index.js"></script>
@@ -60,7 +61,6 @@
         <div class="logo-card middle"></div>
 
         <h1>CardVeal</h1>
-        
       </div>
 
       <p>Loading...</p>
@@ -120,13 +120,24 @@
         </div>
 
         <div class="center" style="gap: 10px">
-          <button id="peek-a-boo" class="game-style">
+          <button id="peek-a-boo" class="game-style equipped-power-btn">
             <i
               class="fa-solid fa-eye fa-beat"
               style="
                 --fa-animation-iteration-count: 3;
                 --fa-animation-delay: 15s;
-                --fa-beat-scale: 1.6;
+                --fa-beat-scale: 1.4;
+              "
+            ></i>
+          </button>
+
+          <button id="blast-card" class="game-style equipped-power-btn">
+            <i
+              class="fa-solid fa-bomb fa-beat"
+              style="
+                --fa-animation-iteration-count: 3;
+                --fa-animation-delay: 15s;
+                --fa-beat-scale: 1.4;
               "
             ></i>
           </button>

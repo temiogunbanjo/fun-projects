@@ -12,79 +12,14 @@ let cardCount = pairCount * 2;
 let numberOfPairsMatched = 0;
 let currentMatches = [];
 let canPlayEffects = true;
-let nextRevealTime = 15;
+let nextActivePowerTime = 15;
 let meterValue = 0;
 let meterDrainRate = 0.6;
 let meterIsDraining = false;
 let comboMultiplier = 0;
-const screenBreakpoint = window.matchMedia("(max-width: 600px)");
+let equippedBtn = availablePowerTypes[0];
 
-// 1, 1, 2, 3, 5, 8, 13, 21, 33, 54, 87, 141
-let cardTypes = {
-  bread: {
-    image: "./assets/bread-i8k.png",
-    unlocksAt: 1,
-    description: "",
-  },
-  strawberry: {
-    image: "./assets/strawberry_PNG2587.png",
-    unlocksAt: 1,
-    description: "",
-  },
-  vehicles: {
-    image: "./assets/land-rover-range-rover-car-png-25.png",
-    unlocksAt: 5,
-    description: "",
-  },
-  places: {
-    image: "./assets/japan-famous-landmark-png.webp",
-    unlocksAt: 13,
-    description: "",
-  },
-  sneakers: {
-    image:
-      "./assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png",
-    unlocksAt: 21,
-    description: "",
-  },
-  guava: {
-    image: "./assets/pngimg.com - guava_PNG18.png",
-    unlocksAt: 29,
-    description: "",
-  },
-  furniture: {
-    image:
-      "./assets/ai-generated-armchair-furniture-isolated-on-transparent-background-free-png.webp",
-    unlocksAt: 29,
-    description: "",
-  },
-  shoes: {
-    image: "./assets/pngimg.com - men_shoes_PNG7492.png",
-    unlocksAt: 29,
-    description: "",
-  },
-  pineapple: {
-    image: "./assets/pngimg.com - pineapple_PNG2733.webp",
-    unlocksAt: 33,
-    description: "",
-  },
-  banana: {
-    image: "./assets/Banana-Stack-PNG.png",
-    unlocksAt: 2,
-    description: "",
-  },
-  sapphire: {
-    image:
-      "./assets/ai-generated-blue-gem-stone-isolated-on-transparent-background-png.webp",
-    unlocksAt: 38,
-    description: "",
-  },
-  ruby: {
-    image: "./assets/Gem-PNG-Download-Image.png",
-    unlocksAt: 38,
-    description: "",
-  },
-};
+const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
 const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
@@ -110,7 +45,6 @@ function playSoundEffect(audio) {
 function showComment(comment, styleClass = "") {
   const commentary = document.querySelector("#commentary");
   commentary.style.display = "inline";
-  // console.log(comment);
 
   const id = `comment-${Math.random().toString().slice(2)}`;
   const text = document.createElement("span");
@@ -196,7 +130,9 @@ function calculateMeterIncrementAndDecrement() {
 
 function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
   const powerMeter = document.querySelector("#power-meter > *:first-child");
-  const peekBtn = document.querySelector("main #peek-a-boo");
+  const equippedPowerBtn = document.querySelector(
+    `main #${powerActionTypes[equippedBtn].id}`
+  );
   const { increment: meterIncrement, decrement: meterDecrement } =
     calculateMeterIncrementAndDecrement();
 
@@ -248,18 +184,18 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
     showComment("Power Up!", "power-up");
     const a = window.setInterval(() => {
       meterIsDraining = true;
-      peekBtn.removeAttribute("style");
-      peekBtn.removeAttribute("disabled");
-      peekBtn.classList.toggle("max-power", true);
+      equippedPowerBtn.removeAttribute("style");
+      equippedPowerBtn.removeAttribute("disabled");
+      equippedPowerBtn.classList.toggle("max-power", true);
       document.body.classList.toggle("power-up", true);
       updatePowerMeter(-1 * meterDrainRate, true);
 
       if (meterValue <= 0) {
         clearInterval(a);
         meterIsDraining = false;
-        nextRevealTime *= 2;
-        disableReveal();
-        peekBtn.classList.toggle("max-power", false);
+        nextActivePowerTime *= 2;
+        disablePowerAction();
+        equippedPowerBtn.classList.toggle("max-power", false);
         document.body.classList.toggle("power-up", false);
       }
     }, 300);
@@ -545,7 +481,7 @@ function setGameScene(_level = level) {
   cardClicks = 0;
   meterValue = 0;
   currentMatches = [];
-  nextRevealTime = 30;
+  nextActivePowerTime = 30;
   comboMultiplier = 0;
   meterDrainRate = 0.6;
   meterIsDraining = false;
@@ -630,6 +566,7 @@ function checkWinStatus() {
 }
 
 function handleCardClick(ev) {
+  console.log('click card');
   cardClicks++;
   const delayForAnimation = 1200;
   const { decrement } = calculateMeterIncrementAndDecrement();
@@ -707,19 +644,20 @@ function handleCardClick(ev) {
   console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
 }
 
-function disableReveal() {
-  const peekBtn = document.querySelector("main #peek-a-boo");
-  peekBtn.setAttribute("disabled", true);
-  peekBtn.style.cursor = "wait";
-  peekBtn.setAttribute(
+function disablePowerAction() {
+  const equippedBtnId = powerActionTypes[equippedBtn].id;
+  const equippedPowerBtn = document.querySelector(`main #${equippedBtnId}`);
+  equippedPowerBtn.setAttribute("disabled", true);
+  equippedPowerBtn.style.cursor = "wait";
+  equippedPowerBtn.setAttribute(
     "title",
-    `Reveal in ${formatAsTime(nextRevealTime * 1000)}`
+    `Next active in ${formatAsTime(nextActivePowerTime * 1000)}`
   );
 
-  delay(nextRevealTime * 1000, () => {
-    peekBtn.removeAttribute("style");
-    peekBtn.removeAttribute("disabled");
-    nextRevealTime *= 2;
+  delay(nextActivePowerTime * 1000, () => {
+    equippedPowerBtn.removeAttribute("style");
+    equippedPowerBtn.removeAttribute("disabled");
+    nextActivePowerTime *= 2;
   });
 }
 
@@ -737,8 +675,11 @@ function peekAllCards(duration = 2) {
 
   autoScroll();
 
-  if (!meterIsDraining) peekBtn.setAttribute("disabled", true);
-  else meterDrainRate *= 1.5;
+  if (!meterIsDraining) {
+    if (peekBtn) peekBtn.setAttribute("disabled", true);
+  } else {
+    meterDrainRate *= 1.5;
+  }
 
   delay(duration * 1000, () => {
     // Close all revealed cards
@@ -748,7 +689,7 @@ function peekAllCards(duration = 2) {
     }
 
     if (!meterIsDraining) {
-      disableReveal();
+      disablePowerAction();
     }
   });
 }
@@ -773,13 +714,20 @@ function loadSettings() {
   setGameScene();
 }
 
+const peekABooEventHandler = (ev) => {
+  playSoundEffect(clickButtonAudio);
+  const duration = getRevealDuration();
+  peekAllCards(duration);
+};
+
 function setupListeners() {
-  const cardBox = document.getElementById("card-box");
-  const peekBtn = document.querySelector("main #peek-a-boo");
-  const infoBtn = document.querySelector("main #info");
   const startGameButton = document.querySelector(
     "#main_menu button:first-child"
   );
+  const equippedBtnId = powerActionTypes[equippedBtn].id;
+  const cardBox = document.getElementById("card-box");
+  const infoBtn = document.querySelector("main #info");
+  const equippedPowerBtn = document.querySelector(`main #${equippedBtnId}`);
   const quitGameButton = document.querySelector("#main_menu button:last-child");
 
   if (level > 1) {
@@ -794,10 +742,13 @@ function setupListeners() {
     autoResizeCardBox();
   });
 
-  peekBtn.addEventListener("click", (ev) => {
-    playSoundEffect(clickButtonAudio);
-    const duration = getRevealDuration();
-    peekAllCards(duration);
+  console.log('Equipping power ups...');
+  equippedPowerBtn.addEventListener("click", peekABooEventHandler);
+  // Hide non-equipped buttons
+  document.querySelectorAll("main button.equipped-power-btn").forEach((btn) => {
+    if (btn.getAttribute("id") !== equippedBtnId) {
+      btn.style.display = "none";
+    }
   });
 
   infoBtn.addEventListener("click", (ev) => {
@@ -818,6 +769,7 @@ function setupListeners() {
     resetGame();
   });
 
+  console.log('Adding card listeners...');
   for (const card of cardBox.children) {
     card.addEventListener("click", handleCardClick);
   }
@@ -876,9 +828,10 @@ function showSplashScreen(redirectTo = `main_menu`, animate = false) {
     }
   );
 
+  setupListeners();
+
   delay(9700, () => {
     document.querySelector("main").classList.toggle("not-started");
-    setupListeners();
     splashScreen.style.display = "none";
   });
 }

@@ -11,6 +11,8 @@ body.l-1 {
   --secondary-color: purple;
   --card-bgcolor: #dc143c;
   --light-glow-shadow: rgba(243, 38, 79, 0.27);
+  --expense-green: 122 39% 49%;
+  --expense-green: 121 38% 79%;
 }
 
 body.l-2 {
@@ -23,6 +25,9 @@ body.l-2 {
 body.l-3 {
   background: radial-gradient(circle, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.26)),
     url("https://img.freepik.com/premium-vector/cartoon-animation-scene-outdoor-scenery-game-wallpaper-background-illustration-design-banner_953932-7907.jpg");
+    background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   --card-bgcolor: chocolate;
   --secondary-color: saddlebrown;
@@ -189,7 +194,7 @@ main header {
 }
 
 main #commentary > *.power-up,
-header button#peek-a-boo.max-power {
+header button.equipped-power-btn.max-power {
   background-image: linear-gradient(
     to left,
     #00ff00,
@@ -254,12 +259,13 @@ main header button {
   z-index: +99;
 }
 
-header button#peek-a-boo.max-power {
+header button.equipped-power-btn.max-power {
   color: wheat;
   animation: rainbow_animation 1.5s linear infinite;
 }
 
-header button#peek-a-boo.max-power::after {
+header button#peek-a-boo.max-power::after,
+header button#blast-card.max-power::after {
   --glow-scale: 2.3;
   --glow-opacity: 0.6;
   content: "";
