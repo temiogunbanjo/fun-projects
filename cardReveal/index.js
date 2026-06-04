@@ -75,7 +75,7 @@ function showComment(comment, styleClass = "") {
               try {
                 // hide commentary
                 const commentaryEl = document.querySelector("#commentary");
-                commentaryEl?.style?.display = "none";
+                if (commentaryEl) commentaryEl.style.display = "none";
                 commentaryEl?.removeChild(text);
               } catch (error) {
                 console.log(error);
@@ -106,7 +106,7 @@ function showComment(comment, styleClass = "") {
             try {
               // hide commentary
               const commentaryEl = document.querySelector("#commentary");
-              commentaryEl?.style?.display = "none";
+              if (commentaryEl) commentaryEl.style.display = "none";
               commentaryEl?.removeChild(text);
             } catch (error) {
               console.log(error);
