@@ -24,16 +24,16 @@ const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
 const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
 const clickButtonAudio = new Audio(
-  "./assets/audio/analog-appliance-button-2-185277.mp3"
+  "./assets/audio/analog-appliance-button-2-185277.mp3",
 );
 const closeCardAudio = new Audio("./assets/audio/funny-swish-101878.mp3");
 // const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
 const matchCardAudio = new Audio("./assets/audio/marimba-bloop-2-188149.mp3");
 const powerUpAudio = new Audio(
-  "./assets/audio/ui-beep-menu-positive-228336.mp3"
+  "./assets/audio/ui-beep-menu-positive-228336.mp3",
 );
 const winGameAudio = new Audio(
-  "./assets/audio/level-up-bonus-sequence-3-186892.mp3"
+  "./assets/audio/level-up-bonus-sequence-3-186892.mp3",
 );
 
 function playSoundEffect(audio) {
@@ -74,15 +74,14 @@ function showComment(comment, styleClass = "") {
             delay(0.9 * 1000, () => {
               try {
                 // hide commentary
-                const commentaryEl = document.querySelector("#commentary");
-                if (commentaryEl) commentaryEl.style.display = "none";
-                commentaryEl?.removeChild(text);
+                if (text) text.style.display = "none";
+                text?.remove();
               } catch (error) {
                 console.log(error);
               }
             });
           },
-        }
+        },
       );
       break;
 
@@ -105,14 +104,13 @@ function showComment(comment, styleClass = "") {
           onComplete: () => {
             try {
               // hide commentary
-              const commentaryEl = document.querySelector("#commentary");
-              if (commentaryEl) commentaryEl.style.display = "none";
-              commentaryEl?.removeChild(text);
+              if (text) text.style.display = "none";
+              text?.remove();
             } catch (error) {
               console.log(error);
             }
           },
-        }
+        },
       );
       break;
   }
@@ -120,7 +118,7 @@ function showComment(comment, styleClass = "") {
 
 function calculateMeterIncrementAndDecrement() {
   const meterIncrement = Math.floor(
-    (1 / (level + 1)) * (MAX_METER_VALUE * (1 + comboMultiplier))
+    (1 / (level + 1)) * (MAX_METER_VALUE * (1 + comboMultiplier)),
   );
   const meterDecrement = Math.floor((1 / (level + 1)) * MAX_METER_VALUE) * 1.2;
 
@@ -133,7 +131,7 @@ function calculateMeterIncrementAndDecrement() {
 function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
   const powerMeter = document.querySelector("#power-meter > *:first-child");
   const equippedPowerBtn = document.querySelector(
-    `main #${powerActionTypes[equippedBtn].id}`
+    `main #${powerActionTypes[equippedBtn].id}`,
   );
   const { increment: meterIncrement, decrement: meterDecrement } =
     calculateMeterIncrementAndDecrement();
@@ -209,11 +207,10 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
 function updateScoreBoard(_gems = 0, _points = 0) {
   _gems = _gems ?? gems;
   _points = _points ?? points;
-  document.getElementById(
-    "level-indicator"
-  ).children[1].children[0].innerHTML = `<small>💰</small> ${convertToStandardFormat(
-    _points
-  )} &nbsp; &nbsp; <small>💎</small> ${convertToStandardFormat(_gems)}`;
+  document.getElementById("level-indicator").children[1].children[0].innerHTML =
+    `<small>💰</small> ${convertToStandardFormat(
+      _points,
+    )} &nbsp; &nbsp; <small>💎</small> ${convertToStandardFormat(_gems)}`;
 
   gems = _gems;
   points = _points;
@@ -236,7 +233,7 @@ function getCardTypes() {
       })
       .map(([type]) => {
         return type;
-      })
+      }),
   );
 
   let tSliced = availableTypes;
@@ -322,7 +319,7 @@ function generateCards() {
     cardElement.dataset.opened = false;
     cardElement.setAttribute(
       "style",
-      `--reveal-image: url('${typeOption.image}')`
+      `--reveal-image: url('${typeOption.image}')`,
     );
 
     cardBox.appendChild(cardElement);
@@ -504,7 +501,7 @@ function setGameScene(_level = level) {
   body.classList.toggle(newStyleClass, true);
 
   document.getElementById(
-    "level-indicator"
+    "level-indicator",
   ).children[0].children[0].textContent = `Lv ${_level}`;
 
   updateScoreBoard(gems, points);
@@ -568,7 +565,7 @@ function checkWinStatus() {
 }
 
 function handleCardClick(ev) {
-  console.log('click card');
+  console.log("click card");
   cardClicks++;
   const delayForAnimation = 1200;
   const { decrement } = calculateMeterIncrementAndDecrement();
@@ -594,7 +591,7 @@ function handleCardClick(ev) {
     if (currentMatches.length >= pairCount) {
       const selectedCards = currentMatches.slice(0, pairCount);
       const cardElements = selectedCards.map((cardInfo) =>
-        document.getElementById(cardInfo.id)
+        document.getElementById(cardInfo.id),
       );
 
       const didCardsMatch =
@@ -653,7 +650,7 @@ function disablePowerAction() {
   equippedPowerBtn.style.cursor = "wait";
   equippedPowerBtn.setAttribute(
     "title",
-    `Next active in ${formatAsTime(nextActivePowerTime * 1000)}`
+    `Next active in ${formatAsTime(nextActivePowerTime * 1000)}`,
   );
 
   delay(nextActivePowerTime * 1000, () => {
@@ -666,7 +663,7 @@ function disablePowerAction() {
 function peekAllCards(duration = 2) {
   const peekBtn = document.querySelector("main #peek-a-boo");
   const unopenedCards = document.querySelectorAll(
-    "#card-box > .card:not([data-opened='true'])"
+    "#card-box > .card:not([data-opened='true'])",
   );
 
   playSoundEffect(peekCardAudio);
@@ -705,7 +702,7 @@ function loadSettings() {
   points = Number.parseInt(window.localStorage.getItem("game_points") ?? 0);
   gems = Number.parseInt(window.localStorage.getItem("game_gems") ?? 0);
   canPlayEffects = JSON.parse(
-    window.localStorage.getItem("sound_effect_is_on") ?? "true"
+    window.localStorage.getItem("sound_effect_is_on") ?? "true",
   );
   // const audio = document.getElementById("bg-audio");
   // audio.muted = isMusicOn;
@@ -722,7 +719,7 @@ const peekABooEventHandler = (ev) => {
 
 function setupListeners() {
   const startGameButton = document.querySelector(
-    "#main_menu button:first-child"
+    "#main_menu button:first-child",
   );
   const equippedBtnId = powerActionTypes[equippedBtn].id;
   const cardBox = document.getElementById("card-box");
@@ -742,7 +739,7 @@ function setupListeners() {
     autoResizeCardBox();
   });
 
-  console.log('Equipping power ups...');
+  console.log("Equipping power ups...");
   equippedPowerBtn.addEventListener("click", peekABooEventHandler);
   // Hide non-equipped buttons
   document.querySelectorAll("main button.equipped-power-btn").forEach((btn) => {
@@ -769,7 +766,7 @@ function setupListeners() {
     resetGame();
   });
 
-  console.log('Adding card listeners...');
+  console.log("Adding card listeners...");
   for (const card of cardBox.children) {
     card.addEventListener("click", handleCardClick);
   }
@@ -808,7 +805,7 @@ function showSplashScreen(redirectTo = `main_menu`, animate = false) {
         // ease: "slow(0.7,0.7,false)",
         // ease: "expoScale(0.9,7,none)",
       },
-      "-=1.5"
+      "-=1.5",
     );
   }
 
@@ -825,7 +822,7 @@ function showSplashScreen(redirectTo = `main_menu`, animate = false) {
       duration: 1,
       yoyo: true,
       repeat: -1,
-    }
+    },
   );
 
   setupListeners();
@@ -838,7 +835,7 @@ function showSplashScreen(redirectTo = `main_menu`, animate = false) {
 
 function resetGame() {
   const a = confirm(
-    "Quitting will reset your progress so far, whould you like to continue?"
+    "Quitting will reset your progress so far, whould you like to continue?",
   );
   console.log(a);
   if (a === true) {
