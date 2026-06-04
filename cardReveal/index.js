@@ -74,8 +74,9 @@ function showComment(comment, styleClass = "") {
             delay(0.9 * 1000, () => {
               try {
                 // hide commentary
-                commentary.style.display = "none";
-                commentary.removeChild(text);
+                const commentaryEl = document.querySelector("#commentary");
+                commentaryEl?.style?.display = "none";
+                commentaryEl?.removeChild(text);
               } catch (error) {
                 console.log(error);
               }
@@ -104,8 +105,9 @@ function showComment(comment, styleClass = "") {
           onComplete: () => {
             try {
               // hide commentary
-              commentary.style.display = "none";
-              commentary.removeChild(text);
+              const commentaryEl = document.querySelector("#commentary");
+              commentaryEl?.style?.display = "none";
+              commentaryEl?.removeChild(text);
             } catch (error) {
               console.log(error);
             }
@@ -162,20 +164,20 @@ function updatePowerMeter(direction = 0, useDirectionAsIncrement = false) {
 
   switch (true) {
     case meterValue === MAX_METER_VALUE:
-      powerMeter.parentElement.setAttribute("data-value", "max");
+      powerMeter.parentElement.dataset.value = "max";
       break;
 
     case meterValue > 50 && meterValue <= MAX_METER_VALUE - 1:
-      powerMeter.parentElement.setAttribute("data-value", "high");
+      powerMeter.parentElement.dataset.value = "high";
       break;
 
     case meterValue > 25 && meterValue <= 50:
-      powerMeter.parentElement.setAttribute("data-value", "optimum");
+      powerMeter.parentElement.dataset.value = "optimum";
       break;
 
     case meterValue >= 0 && meterValue <= 25:
     default:
-      powerMeter.parentElement.setAttribute("data-value", "low");
+      powerMeter.parentElement.dataset.value = "low";
       break;
   }
 
@@ -316,8 +318,8 @@ function generateCards() {
     const cardElement = document.createElement("button");
     cardElement.setAttribute("class", "card");
     cardElement.setAttribute("id", `card-${i}`);
-    cardElement.setAttribute("data-id", `card-${type}`);
-    cardElement.setAttribute("data-opened", false);
+    cardElement.dataset.id = `card-${type}`;
+    cardElement.dataset.opened = false;
     cardElement.setAttribute(
       "style",
       `--reveal-image: url('${typeOption.image}')`
@@ -577,8 +579,8 @@ function handleCardClick(ev) {
 
   const meterTapInc = decrement * (1.2 / pairCount) * directionVector;
 
-  if (ev.target.getAttribute("data-opened") === "false") {
-    ev.target.setAttribute("data-opened", true);
+  if (ev.target.dataset.opened === "false") {
+    ev.target.dataset.opened = true;
     ev.target.classList.toggle("reveal", true);
 
     playSoundEffect(clickCardAudio);
@@ -586,7 +588,7 @@ function handleCardClick(ev) {
 
     currentMatches.push({
       id: ev.target.getAttribute("id"),
-      category: ev.target.getAttribute("data-id"),
+      category: ev.target.dataset.id,
     });
 
     if (currentMatches.length >= pairCount) {
@@ -625,7 +627,7 @@ function handleCardClick(ev) {
           // Cover matched cards
           cardElements.forEach((card) => {
             card.classList.toggle("reveal", false);
-            card.setAttribute("data-opened", false);
+            card.dataset.opened = false;
           });
 
           playSoundEffect(closeCardAudio);
@@ -675,11 +677,9 @@ function peekAllCards(duration = 2) {
 
   autoScroll();
 
-  if (!meterIsDraining) {
-    if (peekBtn) peekBtn.setAttribute("disabled", true);
-  } else {
+  if (meterIsDraining) {
     meterDrainRate *= 1.5;
-  }
+  } else if (peekBtn) peekBtn.setAttribute("disabled", true);
 
   delay(duration * 1000, () => {
     // Close all revealed cards
@@ -701,9 +701,9 @@ function handleSoundEffectsToggle() {
 }
 
 function loadSettings() {
-  level = parseInt(window.localStorage.getItem("game_level") ?? 1);
-  points = parseInt(window.localStorage.getItem("game_points") ?? 0);
-  gems = parseInt(window.localStorage.getItem("game_gems") ?? 0);
+  level = Number.parseInt(window.localStorage.getItem("game_level") ?? 1);
+  points = Number.parseInt(window.localStorage.getItem("game_points") ?? 0);
+  gems = Number.parseInt(window.localStorage.getItem("game_gems") ?? 0);
   canPlayEffects = JSON.parse(
     window.localStorage.getItem("sound_effect_is_on") ?? "true"
   );
