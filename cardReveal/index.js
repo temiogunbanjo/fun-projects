@@ -74,7 +74,7 @@ function showComment(comment, styleClass = "") {
             delay(0.9 * 1000, () => {
               try {
                 // hide commentary
-                if (text) text.style.display = "none";
+                if (commentary) commentary.style.display = "none";
                 text?.remove();
               } catch (error) {
                 console.log(error);
@@ -104,7 +104,7 @@ function showComment(comment, styleClass = "") {
           onComplete: () => {
             try {
               // hide commentary
-              if (text) text.style.display = "none";
+              if (commentary) commentary.style.display = "none";
               text?.remove();
             } catch (error) {
               console.log(error);
