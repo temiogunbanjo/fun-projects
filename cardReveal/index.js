@@ -325,6 +325,7 @@ function generateCards() {
     cardBox.appendChild(cardElement);
   }
 
+  addCardListeners();
   autoResizeCardBox();
 }
 
@@ -722,7 +723,6 @@ function setupListeners() {
     "#main_menu button:first-child",
   );
   const equippedBtnId = powerActionTypes[equippedBtn].id;
-  const cardBox = document.getElementById("card-box");
   const infoBtn = document.querySelector("main #info");
   const equippedPowerBtn = document.querySelector(`main #${equippedBtnId}`);
   const quitGameButton = document.querySelector("#main_menu button:last-child");
@@ -766,6 +766,11 @@ function setupListeners() {
     resetGame();
   });
 
+  // addCardListeners()
+}
+
+const addCardListeners = () => {
+  const cardBox = document.getElementById("card-box");
   console.log("Adding card listeners...");
   for (const card of cardBox.children) {
     card.addEventListener("click", handleCardClick);
