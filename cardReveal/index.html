@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -27,6 +27,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6903692907552928"
+      crossorigin="anonymous"
+    ></script>
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -70,19 +75,28 @@
       <button class="game-style">Start</button>
       <button
         class="game-style"
-        onclick="playSoundEffect(clickButtonAudio);window.location.href='/store';"
+        onclick="
+          playSoundEffect(clickButtonAudio);
+          window.location.href = '/store';
+        "
       >
         Visit Store
       </button>
       <button
         class="game-style"
-        onclick="playSoundEffect(clickButtonAudio);window.location.hash='settings';"
+        onclick="
+          playSoundEffect(clickButtonAudio);
+          window.location.hash = 'settings';
+        "
       >
         Settings
       </button>
       <button
         class="game-style"
-        onclick="playSoundEffect(clickButtonAudio);window.location.hash='about';"
+        onclick="
+          playSoundEffect(clickButtonAudio);
+          window.location.hash = 'about';
+        "
       >
         About Game
       </button>
@@ -96,12 +110,18 @@
           <button
             id="return-home"
             class="game-style fa-solid fa-reply show-on-pc"
-            onclick="playSoundEffect(clickButtonAudio);window.location.reload();"
+            onclick="
+              playSoundEffect(clickButtonAudio);
+              window.location.reload();
+            "
           ></button>
           <button
             id="show-menu-mobile"
             class="game-style fa-solid fa-pause show-on-mobile"
-            onclick="playSoundEffect(clickButtonAudio);showInGameMenu();"
+            onclick="
+              playSoundEffect(clickButtonAudio);
+              showInGameMenu();
+            "
           ></button>
         </div>
 
@@ -201,7 +221,7 @@
       </div>
       <button
         class="game-style center"
-        onclick="window.location.hash='main_menu';"
+        onclick="window.location.hash = 'main_menu'"
         style="flex-direction: row; gap: 5px"
       >
         <i class="fa-solid fa-reply"></i>
@@ -223,7 +243,10 @@
 
       <button
         class="game-style center"
-        onclick="playSoundEffect(clickButtonAudio);window.location.hash='main_menu';"
+        onclick="
+          playSoundEffect(clickButtonAudio);
+          window.location.hash = 'main_menu';
+        "
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-music"></i>
@@ -232,7 +255,10 @@
 
       <button
         class="game-style center"
-        onclick="playSoundEffect(clickButtonAudio);window.location.hash='main_menu';"
+        onclick="
+          playSoundEffect(clickButtonAudio);
+          window.location.hash = 'main_menu';
+        "
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-reply"></i>
