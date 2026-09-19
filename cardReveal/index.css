@@ -378,8 +378,116 @@ header #level-indicator #power-meter {
   padding: 10px;
   min-height: 350px;
   max-height: calc(100% - 70px);
+  overflow-y: auto;
   grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
   /* border: 1px solid greenyellow; */
+}
+
+.level-card {
+  cursor: pointer;
+  background-color: var(--card-bgcolor);
+  color: white;
+  position: relative;
+  min-width: 80px;
+  min-height: 80px;
+  border-radius: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  border: 3px solid wheat;
+  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
+  transition: all 0.2s ease;
+  pointer-events: initial;
+}
+
+.level-card:hover:not(.locked) {
+  transform: scale(1.05);
+  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.5),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.3), 1px 4px 1px var(--secondary-color),
+    0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+.level-card .level-number {
+  font-size: 24px;
+  font-weight: 800;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.level-card .fa-crown,
+.level-card .fa-lock,
+.level-card .fa-star {
+  font-size: 14px;
+  position: absolute;
+}
+
+.level-card.boss {
+  border-color: gold;
+  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 0 0 10px rgba(255, 215, 0, 0.6);
+  background-color: var(--secondary-color);
+}
+
+.level-card.boss .level-number {
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+}
+
+.level-card.boss .fa-crown {
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: gold;
+  font-size: 16px;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+}
+
+.level-card.completed .fa-star {
+  bottom: 4px;
+  right: 4px;
+  color: gold;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+}
+
+.level-card.current .level-number {
+  color: wheat;
+  animation: levelCurrentGlow 1.5s ease-in-out 0s infinite alternate;
+}
+
+@keyframes levelCurrentGlow {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9),
+      0 0 30px rgba(255, 255, 255, 0.7);
+  }
+}
+
+.level-card.locked {
+  cursor: not-allowed;
+  background-color: #444;
+  border-color: #2a2a2a;
+  color: #aaa;
+  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.1),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.level-card.locked .level-number {
+  opacity: 0.5;
+  text-shadow: none;
+}
+
+.level-card.locked .fa-lock {
+  bottom: 4px;
+  right: 4px;
+  color: #888;
+  text-shadow: none;
 }
 
 .card {

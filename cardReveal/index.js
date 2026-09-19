@@ -1,8 +1,10 @@
 const RANK_LEVEL_COUNT = 22;
+const MAX_MAP_LEVEL = 100;
 const MAX_CARD_COUNT = 24;
 const MAX_METER_VALUE = 100;
 const MIN_METER_VALUE = 0;
 let level = 1;
+let highestLevel = 1;
 let rank = 0;
 let gems = 0;
 let points = 0;
@@ -273,7 +275,7 @@ function autoResizeCardBox(cardBox) {
   }
 
   const extraColumn = isOverflowingVertically ? 1 : 0;
-  const gridCellCount = Math.ceil(Math.sqrt(cardCount)) + extraColumn;
+  const gridCellCount = Math.ceil(Math.sqrt(cardBox.children.length)) + extraColumn;
 
   cardBox.style.gridTemplateRows = `repeat(auto-fill, 1fr)`;
   cardBox.style.gridTemplateColumns = `repeat(${
@@ -327,18 +329,65 @@ function populateCardGrid(container, types, idPrefix = "card") {
 function updateMapHeader() {
   const label = document.getElementById("map-level-label");
   if (label) {
-    label.textContent = `Level ${level}`;
+    label.textContent = `Select Level (Max: ${highestLevel})`;
   }
 }
 
 function generateMap() {
   mapStarted = false;
-  boardTypes = getCardTypes();
   const levelBox = document.getElementById("level-box");
-  populateCardGrid(levelBox, boardTypes, "map-card");
+  populateLevelGrid(levelBox);
   updateMapHeader();
   addMapListeners();
   autoResizeCardBox(levelBox);
+}
+
+function populateLevelGrid(container) {
+  container.innerHTML = "";
+
+  for (let i = 1; i <= MAX_MAP_LEVEL; i++) {
+    const isUnlocked = i <= highestLevel;
+    const isBossLevel = i % RANK_LEVEL_COUNT === 0;
+    const isCompleted = i < level;
+    const isCurrent = i === level;
+
+    const cardElement = document.createElement("button");
+    cardElement.setAttribute("class", "level-card");
+    cardElement.dataset.level = i;
+
+    if (!isUnlocked) {
+      cardElement.classList.add("locked");
+      cardElement.setAttribute("disabled", true);
+    }
+    if (isBossLevel) cardElement.classList.add("boss");
+    if (isCompleted && isUnlocked) cardElement.classList.add("completed");
+    if (isCurrent && isUnlocked) cardElement.classList.add("current");
+
+    const levelSpan = document.createElement("span");
+    levelSpan.classList.add("level-number");
+    levelSpan.textContent = i;
+    cardElement.appendChild(levelSpan);
+
+    if (isBossLevel) {
+      const bossIcon = document.createElement("i");
+      bossIcon.classList.add("fa-solid", "fa-crown");
+      cardElement.appendChild(bossIcon);
+    }
+
+    if (!isUnlocked) {
+      const lockIcon = document.createElement("i");
+      lockIcon.classList.add("fa-solid", "fa-lock");
+      cardElement.appendChild(lockIcon);
+    }
+
+    if (isCompleted && isUnlocked) {
+      const starIcon = document.createElement("i");
+      starIcon.classList.add("fa-solid", "fa-star");
+      cardElement.appendChild(starIcon);
+    }
+
+    container.appendChild(cardElement);
+  }
 }
 
 function generateCards() {
@@ -526,7 +575,9 @@ function showInGameMenu() {
 }
 
 function setGameScene(_level = level) {
-  localStorage.setItem("game_level", _level);
+  if (_level >= highestLevel) {
+    localStorage.setItem("game_level", _level);
+  }
   cardClicks = 0;
   meterValue = 0;
   currentMatches = [];
@@ -567,7 +618,18 @@ function proceedToNextLevel() {
   const newStyleClass = `l-${bgLevel}`;
   document.body.classList.toggle(newStyleClass, false);
 
+  // If this was a replayed level (below highest), return to map
+  if (level < highestLevel) {
+    window.location.hash = "map";
+    level = highestLevel;
+    generateMap();
+    return;
+  }
+
   level = level + 1;
+  highestLevel = level;
+  localStorage.setItem("game_level", level);
+  localStorage.setItem("game_highest_level", highestLevel);
 
   showSplashScreen("play");
   setGameScene(level);
@@ -693,17 +755,24 @@ function handleCardClick(ev) {
   console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
 }
 
-function handleLevelClick(ev) {
+function handleLevelMapClick(ev) {
   if (mapStarted) {
+    return;
+  }
+
+  const selectedLevel = Number(ev.currentTarget.dataset.level);
+  if (selectedLevel > highestLevel) {
     return;
   }
 
   mapStarted = true;
   playSoundEffect(clickButtonAudio);
   resetRoundState();
+  level = selectedLevel;
+  setGameScene(level);
   generateCards();
-  window.location.hash = "play";
   autoResizeCardBox();
+  window.location.hash = "play";
   runLevelIntro();
 }
 
@@ -763,6 +832,8 @@ function handleSoundEffectsToggle() {
 
 function loadSettings() {
   level = Number.parseInt(window.localStorage.getItem("game_level") ?? 1);
+  highestLevel =
+    Number.parseInt(window.localStorage.getItem("game_highest_level") ?? level);
   points = Number.parseInt(window.localStorage.getItem("game_points") ?? 0);
   gems = Number.parseInt(window.localStorage.getItem("game_gems") ?? 0);
   canPlayEffects = JSON.parse(
@@ -841,10 +912,10 @@ const addCardListeners = () => {
 };
 
 const addMapListeners = () => {
-  const cardBox = document.getElementById("level-box");
-  console.log("Adding card listeners...");
-  for (const card of cardBox.children) {
-    card.addEventListener("click", handleLevelClick);
+  const levelBox = document.getElementById("level-box");
+  console.log("Adding level map listeners...");
+  for (const levelCard of levelBox.children) {
+    levelCard.addEventListener("click", handleLevelMapClick);
   }
 };
 
