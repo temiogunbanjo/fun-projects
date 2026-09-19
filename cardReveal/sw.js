@@ -13,8 +13,13 @@ const addResources = async (resources) => {
 };
 
 const storeInCache = async (request, response) => {
-  const cache = await caches.open(chosenKey);
-  await cache.put(request, response);
+  // console.log(request.method);
+  if (request.method === "GET") {
+    const cache = await caches.open(chosenKey);
+    await cache.put(request, response);
+  } else {
+    // console.log("Skipping cache for", request.method, "requests");
+  }
 };
 
 const deleteCacheKey = async (key) => {
@@ -32,6 +37,12 @@ const clearOldCache = async () => {
 
 const cacheFallbackRequest = async ({ request, preloadResponsePromise }) => {
   try {
+    const cacheResponse = await caches.match(request);
+    if (cacheResponse && cacheResponse.headers.get("Content-Length") > 0) {
+      console.log(cacheResponse.url, "Loading from cache...");
+      return cacheResponse;
+    }
+
     const preloadResponse = await preloadResponsePromise;
     if (preloadResponse) {
       console.log(request.url, "Loading from preload...");
@@ -74,14 +85,14 @@ self.addEventListener("install", (event) => {
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
       "https://kit.fontawesome.com/f388f70b2b.js",
       "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f388f70b2b",
-    ])
+    ]),
   );
   self.skipWaiting();
 });
 
 self.addEventListener("activate", async (event) => {
   event.waitUntil(
-    Promise.all([clients.claim(), enableNavigationPreload(), clearOldCache()])
+    Promise.all([clients.claim(), enableNavigationPreload(), clearOldCache()]),
   );
 });
 
@@ -90,6 +101,6 @@ self.addEventListener("fetch", async (event) => {
     cacheFallbackRequest({
       request: event.request,
       preloadResponsePromise: event.preloadResponse,
-    })
+    }),
   );
 });
