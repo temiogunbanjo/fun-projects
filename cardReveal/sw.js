@@ -38,7 +38,11 @@ const clearOldCache = async () => {
 const cacheFallbackRequest = async ({ request, preloadResponsePromise }) => {
   try {
     const cacheResponse = await caches.match(request);
-    if (cacheResponse && cacheResponse.headers.get("Content-Length") > 0) {
+    if (
+      cacheResponse &&
+      cacheResponse.headers.get("Content-Length") > 0 &&
+      cacheResponse.url.includes("assets")
+    ) {
       console.log(cacheResponse.url, "Loading from cache...");
       return cacheResponse;
     }
