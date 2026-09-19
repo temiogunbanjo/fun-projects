@@ -9,16 +9,15 @@ const addResources = async (resources) => {
     chosenKey = cacheKeys[1];
   }
   const cache = await caches.open(chosenKey);
-  for (const url of resources) {
-    try {
-      await cache.add(url);
-      console.log("Cached:", url);
-    } catch (error) {
-      console.error("Failed to cache:", url, error);
-    }
-  }
-  // cache.addAll(resources);
-  return;
+  // for (const url of resources) {
+  //   try {
+  //     await cache.add(url);
+  //     console.log("Cached:", url);
+  //   } catch (error) {
+  //     console.error("Failed to cache:", url, error);
+  //   }
+  // }
+  return cache.addAll(resources);
 };
 
 const storeInCache = async (request, response) => {
@@ -92,6 +91,7 @@ const enableNavigationPreload = async () => {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     addResources([
+      `${basePath}/assets/favicon.png`,
       `${basePath}/assets/bread-i8k.png`,
       `${basePath}/assets/strawberry_PNG2587.png`,
       `${basePath}/assets/land-rover-range-rover-car-png-25.png`,
