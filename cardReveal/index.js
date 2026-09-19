@@ -18,6 +18,8 @@ let meterDrainRate = 0.6;
 let meterIsDraining = false;
 let comboMultiplier = 0;
 let equippedBtn = availablePowerTypes[0];
+let boardTypes = null;
+let mapStarted = false;
 
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
@@ -302,19 +304,15 @@ function autoScroll() {
   }, 1000);
 }
 
-function generateCards() {
-  const cardBox = document.getElementById("card-box");
-  cardBox.innerHTML = "";
+function populateCardGrid(container, types, idPrefix = "card") {
+  container.innerHTML = "";
 
-  const generatedTypes = getCardTypes();
-
-  for (let i = 0; i < cardCount; i += 1) {
-    const type = generatedTypes[i];
+  for (let i = 0; i < types.length; i += 1) {
+    const type = types[i];
     const typeOption = cardTypes[type];
-    // <button class="card reveal" data-opened="true"></button>
     const cardElement = document.createElement("button");
     cardElement.setAttribute("class", "card");
-    cardElement.setAttribute("id", `card-${i}`);
+    cardElement.setAttribute("id", `${idPrefix}-${i}`);
     cardElement.dataset.id = `card-${type}`;
     cardElement.dataset.opened = false;
     cardElement.setAttribute(
@@ -322,11 +320,62 @@ function generateCards() {
       `--reveal-image: url('${typeOption.image}')`,
     );
 
-    cardBox.appendChild(cardElement);
+    container.appendChild(cardElement);
   }
+}
 
+function updateMapHeader() {
+  const label = document.getElementById("map-level-label");
+  if (label) {
+    label.textContent = `Level ${level}`;
+  }
+}
+
+function generateMap() {
+  mapStarted = false;
+  boardTypes = getCardTypes();
+  const levelBox = document.getElementById("level-box");
+  populateCardGrid(levelBox, boardTypes, "map-card");
+  updateMapHeader();
+  addMapListeners();
+  autoResizeCardBox(levelBox);
+}
+
+function generateCards() {
+  const types = boardTypes ?? getCardTypes();
+  boardTypes = null;
+  const cardBox = document.getElementById("card-box");
+  populateCardGrid(cardBox, types, "card");
   addCardListeners();
   autoResizeCardBox();
+}
+
+function resetRoundState() {
+  cardClicks = 0;
+  meterValue = 0;
+  currentMatches = [];
+  numberOfPairsMatched = 0;
+  comboMultiplier = 0;
+  meterIsDraining = false;
+  updatePowerMeter(0);
+}
+
+function runLevelIntro() {
+  const isRankingLevel = level % RANK_LEVEL_COUNT === 0;
+  const cardsUnlocked = Object.entries(cardTypes).filter(([, typeOption]) => {
+    return typeOption.unlocksAt === level;
+  });
+  const revealDuration = getRevealDuration();
+
+  if (isRankingLevel) {
+    showLevelInfo("Boss Level!", () => peekAllCards(revealDuration));
+  } else if (cardsUnlocked.length > 0) {
+    showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
+      peekAllCards(revealDuration);
+    });
+  } else {
+    peekAllCards(revealDuration);
+  }
 }
 
 function showLevelInfo(title, callback = () => {}) {
@@ -644,6 +693,20 @@ function handleCardClick(ev) {
   console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
 }
 
+function handleLevelClick(ev) {
+  if (mapStarted) {
+    return;
+  }
+
+  mapStarted = true;
+  playSoundEffect(clickButtonAudio);
+  resetRoundState();
+  generateCards();
+  window.location.hash = "play";
+  autoResizeCardBox();
+  runLevelIntro();
+}
+
 function disablePowerAction() {
   const equippedBtnId = powerActionTypes[equippedBtn].id;
   const equippedPowerBtn = document.querySelector(`main #${equippedBtnId}`);
@@ -732,11 +795,13 @@ function setupListeners() {
   }
 
   window.addEventListener("resize", function () {
-    autoResizeCardBox();
+    autoResizeCardBox(document.getElementById("card-box"));
+    autoResizeCardBox(document.getElementById("level-box"));
   });
 
   screenBreakpoint.addEventListener("change", function () {
-    autoResizeCardBox();
+    autoResizeCardBox(document.getElementById("card-box"));
+    autoResizeCardBox(document.getElementById("level-box"));
   });
 
   console.log("Equipping power ups...");
@@ -755,10 +820,8 @@ function setupListeners() {
 
   startGameButton.addEventListener("click", (ev) => {
     playSoundEffect(clickButtonAudio);
-    window.location.hash = "play";
-    const duration = getRevealDuration();
-    peekAllCards(duration);
-    autoResizeCardBox();
+    window.location.hash = "map";
+    generateMap();
   });
 
   quitGameButton.addEventListener("click", (ev) => {
@@ -775,7 +838,15 @@ const addCardListeners = () => {
   for (const card of cardBox.children) {
     card.addEventListener("click", handleCardClick);
   }
-}
+};
+
+const addMapListeners = () => {
+  const cardBox = document.getElementById("level-box");
+  console.log("Adding card listeners...");
+  for (const card of cardBox.children) {
+    card.addEventListener("click", handleLevelClick);
+  }
+};
 
 function showSplashScreen(redirectTo = `main_menu`, animate = false) {
   const splashScreen = document.getElementById("splash");
@@ -872,7 +943,6 @@ async function registerServiceWorker() {
 
 function startGame(ev) {
   loadSettings();
-  generateCards();
   registerServiceWorker();
   showSplashScreen(undefined, true);
 }

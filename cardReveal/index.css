@@ -152,7 +152,7 @@ dialog h3::before {
   animation: winGlow 800ms ease-in-out 5ms 1 normal forwards;
 }
 
-body > *:is(main, section) {
+body > *:is(main, section, aside) {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -162,6 +162,37 @@ body > *:is(main, section) {
   padding: 24px;
   margin: auto;
   /* border: 3px solid green; */
+}
+
+aside#map .map-header {
+  display: flex;
+  width: 100%;
+  max-width: 1075px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+aside#map .map-header button {
+  flex-direction: row;
+  gap: 8px;
+}
+
+aside#map #map-level-label {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+aside#map #map-hint {
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.9;
+  text-align: center;
+}
+
+aside#map #level-box {
+  max-width: 1075px;
 }
 
 section#main_menu {
@@ -340,6 +371,17 @@ header #level-indicator #power-meter {
   /* border: 1px solid greenyellow; */
 }
 
+#level-box {
+  display: grid;
+  gap: 15px;
+  width: 100%;
+  padding: 10px;
+  min-height: 350px;
+  max-height: calc(100% - 70px);
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  /* border: 1px solid greenyellow; */
+}
+
 .card {
   cursor: pointer;
   background-image: var(--image);
@@ -363,7 +405,8 @@ header #level-indicator #power-meter {
   transition-timing-function: ease;
 }
 
-#card-box .card {
+#card-box .card,
+#level-box .card {
   --image: url("./assets/boy2.png");
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     var(--image);
@@ -416,14 +459,16 @@ header #level-indicator #power-meter {
     font-size: 18px;
   }
 
-  #card-box {
+  #card-box,
+  #level-box {
     display: grid;
     gap: 15px;
     grid-template-columns: repeat(3, 1fr);
     overflow-y: auto;
   }
 
-  #card-box .card {
+  #card-box .card,
+  #level-box .card {
     background-size: cover, min(50px, 80%);
     padding: 25px;
     min-width: 105px;

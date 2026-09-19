@@ -189,6 +189,25 @@
       </span>
     </main>
 
+    <aside id="map">
+      <header class="map-header">
+        <button
+          type="button"
+          class="game-style"
+          onclick="
+            playSoundEffect(clickButtonAudio);
+            window.location.hash = 'main_menu';
+          "
+        >
+          <i class="fa-solid fa-reply"></i>
+          <span style="font-size: 16px">Menu</span>
+        </button>
+        <span id="map-level-label">Level 1</span>
+      </header>
+      <p id="map-hint">Tap any card to start this level</p>
+      <div id="level-box"></div>
+    </aside>
+
     <section id="about" class="center">
       <h2 style="margin: 0.2rem 0">About Game</h2>
       <p style="text-align: center; max-width: 650px; line-height: 1.5">
