@@ -92,9 +92,16 @@ const enableNavigationPreload = async () => {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     addResources([
-      `${basePath}/assets`,
-      `${basePath}/assets/audio`,
-      `${basePath}/libraries/gsap/minified`,
+      `${basePath}/assets/bread-i8k.png`,
+      `${basePath}/assets/strawberry_PNG2587.png`,
+      `${basePath}/assets/land-rover-range-rover-car-png-25.png`,
+      `${basePath}/assets/pngimg.com - guava_PNG18.png`,
+      `${basePath}/assets/pngimg.com - men_shoes_PNG7492.png`,
+      `${basePath}/assets/pngimg.com - pineapple_PNG2733.png`,
+      `${basePath}/assets/pngtree-dropshipping-men-hole-sole-jogging-shoes-png-image_11389148.png`,
+      `${basePath}/assets/audio/wistful-1-39105.mp3`,
+      `${basePath}/assets/audio/analog-appliance-button-2-185277.mp3`,
+      `${basePath}/libraries/gsap/minified/gsap.min.js`,
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
       "https://kit.fontawesome.com/f388f70b2b.js",
       "https://ka-f.fontawesome.com/releases/v6.6.0/css/free.min.css?token=f388f70b2b",
