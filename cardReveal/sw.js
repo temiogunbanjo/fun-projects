@@ -9,7 +9,16 @@ const addResources = async (resources) => {
     chosenKey = cacheKeys[1];
   }
   const cache = await caches.open(chosenKey);
-  return cache.addAll(resources);
+  for (const url of resources) {
+    try {
+      await cache.add(url);
+      console.log("Cached:", url);
+    } catch (error) {
+      console.error("Failed to cache:", url, error);
+    }
+  }
+  // cache.addAll(resources);
+  return;
 };
 
 const storeInCache = async (request, response) => {
