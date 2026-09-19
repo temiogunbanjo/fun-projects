@@ -93,6 +93,7 @@ self.addEventListener("install", (event) => {
     addResources([
       `${basePath}/assets/favicon.png`,
       `${basePath}/assets/bread-i8k.png`,
+      `${basePath}/assets/Banana-Stack-PNG.png`,
       `${basePath}/assets/strawberry_PNG2587.png`,
       `${basePath}/assets/land-rover-range-rover-car-png-25.png`,
       `${basePath}/assets/pngimg.com - guava_PNG18.png`,
