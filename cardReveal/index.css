@@ -406,9 +406,9 @@ header #level-indicator #power-meter {
 }
 
 .level-card.current {
-  background-color: purple;
+  background-color: brown;
   color: white;
-  border: 2px solid wheat;
+  border: 1px solid wheat;
 }
 
 .level-card:hover:not(.locked) {
