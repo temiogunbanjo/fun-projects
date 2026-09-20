@@ -1,4 +1,4 @@
-const RANK_LEVEL_COUNT = 22;
+const RANK_LEVEL_COUNT = 18;
 const MAX_MAP_LEVEL = 100;
 const MAX_CARD_COUNT = 24;
 const MAX_METER_VALUE = 100;
