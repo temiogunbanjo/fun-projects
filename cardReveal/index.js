@@ -136,7 +136,7 @@ function updateTimerDisplay() {
 
 function handleTimerTimeout() {
   playSoundEffect(timeUpAudio);
-  resetGameTimer();
+  pauseGameTimer();
 
   const dialog = document.getElementById("win-badge-dialog");
   const text = document.createElement("h3");
