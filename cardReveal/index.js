@@ -23,6 +23,11 @@ let equippedBtn = availablePowerTypes[0];
 let boardTypes = null;
 let mapStarted = false;
 
+let gameTimerInterval = null;
+let timeRemaining = 0;
+let totalTimeForLevel = 0;
+let gameTimerIsRunning = false;
+
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
 const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
@@ -39,6 +44,7 @@ const powerUpAudio = new Audio(
 const winGameAudio = new Audio(
   "./assets/audio/level-up-bonus-sequence-3-186892.mp3",
 );
+const timeUpAudio = new Audio("./assets/audio/scifi-ping-86790.mp3");
 
 function playSoundEffect(audio) {
   if (canPlayEffects) {
@@ -46,12 +52,100 @@ function playSoundEffect(audio) {
   }
 }
 
+function getTimerDurationForLevel() {
+  return Math.min(180, 20 + level * 2);
+}
+
+function initGameTimer() {
+  clearInterval(gameTimerInterval);
+  gameTimerIsRunning = false;
+  totalTimeForLevel = getTimerDurationForLevel();
+  timeRemaining = totalTimeForLevel;
+  updateTimerDisplay();
+}
+
 function startGameTimer() {
-  alert("Timer is on");
+  if (gameTimerIsRunning) return;
+  gameTimerIsRunning = true;
+  updateTimerDisplay();
+
+  gameTimerInterval = window.setInterval(() => {
+    timeRemaining -= 0.1;
+    if (timeRemaining <= 0) {
+      clearInterval(gameTimerInterval);
+      gameTimerIsRunning = false;
+      handleTimerTimeout();
+    } else {
+      updateTimerDisplay();
+    }
+  }, 100);
 }
 
 function pauseGameTimer() {
-  alert("Timer is paused");
+  clearInterval(gameTimerInterval);
+  gameTimerIsRunning = false;
+}
+
+function resetGameTimer() {
+  pauseGameTimer();
+  timeRemaining = 0;
+  totalTimeForLevel = 0;
+  updateTimerDisplay();
+}
+
+function formatTimer(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+}
+
+function updateTimerDisplay() {
+  const timeProgress = document.querySelector(
+    "#timer-count .time-progress > div",
+  );
+  // const clock = document.querySelector("#timer-count .clock");
+
+  if (timeProgress) {
+    const percent =
+      totalTimeForLevel > 0
+        ? (timeRemaining / totalTimeForLevel) * 100
+        : 0;
+    timeProgress.style.width = `${percent}%`;
+
+    if (percent > 50) {
+      timeProgress.style.backgroundColor = "lawngreen";
+    } else if (percent > 25) {
+      timeProgress.style.backgroundColor = "gold";
+    } else {
+      timeProgress.style.backgroundColor = "red";
+    }
+  }
+
+  // if (clock) {
+  //   clock.textContent = formatTimer(timeRemaining);
+  // }
+}
+
+function handleTimerTimeout() {
+  playSoundEffect(timeUpAudio);
+  resetGameTimer();
+
+  const dialog = document.getElementById("win-badge-dialog");
+  const text = document.createElement("h3");
+  text.textContent = "Time's Up!";
+  dialog.appendChild(text);
+
+  delay(900, () => {
+    commentary.style.display = "none";
+    commentary.textContent = "";
+    dialog.setAttribute("open", true);
+
+    delay(1200, () => {
+      window.location.hash = "map";
+      level = highestLevel;
+      generateMap();
+    });
+  });
 }
 
 function showComment(comment, styleClass = "") {
@@ -425,6 +519,7 @@ function resetRoundState() {
   numberOfPairsMatched = 0;
   comboMultiplier = 0;
   meterIsDraining = false;
+  pauseGameTimer();
   updatePowerMeter(0);
 }
 
@@ -436,13 +531,15 @@ function runLevelIntro() {
   const revealDuration = getRevealDuration();
 
   if (isRankingLevel) {
-    showLevelInfo("Boss Level!", () => peekAllCards(revealDuration));
+    showLevelInfo("Boss Level!", () =>
+      peekAllCards(revealDuration, startGameTimer),
+    );
   } else if (cardsUnlocked.length > 0) {
     showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
-      peekAllCards(revealDuration);
+      peekAllCards(revealDuration, startGameTimer);
     });
   } else {
-    peekAllCards(revealDuration);
+    peekAllCards(revealDuration, startGameTimer);
   }
 }
 
@@ -519,7 +616,6 @@ function showCardUnlockedInfo(title, cardsUnlocked, callback) {
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
     callback();
-    startGameTimer();
   });
 
   cardsUnlocked.forEach(([type, typeOption]) => {
@@ -636,6 +732,7 @@ function setGameScene(_level = level) {
 
   updateScoreBoard(gems, points);
   updatePowerMeter(0);
+  initGameTimer();
 }
 
 function proceedToNextLevel() {
@@ -687,6 +784,7 @@ function checkWinStatus() {
   const numberOfPairsAvailable = Math.floor(cardCount / pairCount);
   const hasWon = numberOfPairsMatched >= numberOfPairsAvailable;
   if (hasWon) {
+    pauseGameTimer();
     const dialog = document.getElementById("win-badge-dialog");
     const text = document.createElement("h3");
     text.textContent = "You Won!";
@@ -822,7 +920,7 @@ function disablePowerAction() {
   });
 }
 
-function peekAllCards(duration = 2) {
+function peekAllCards(duration = 2, onComplete = () => {}) {
   const peekBtn = document.querySelector("main #peek-a-boo");
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])",
@@ -850,6 +948,8 @@ function peekAllCards(duration = 2) {
     if (!meterIsDraining) {
       disablePowerAction();
     }
+
+    onComplete();
   });
 }
 
