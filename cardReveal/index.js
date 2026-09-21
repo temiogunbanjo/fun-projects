@@ -140,19 +140,19 @@ function updateTimerDisplay() {
 }
 
 function handleTimerTimeout() {
-  playSoundEffect(timeUpAudio1);
   pauseGameTimer();
-  
+
   const dialog = document.getElementById("win-badge-dialog");
   const text = document.createElement("h3");
   text.textContent = "Game Over!";
   dialog.appendChild(text);
 
+  playSoundEffect(timeUpAudio1);
   delay(500, () => {
     playSoundEffect(timeUpAudio2);
   });
 
-  delay(700, () => {
+  delay(800, () => {
     commentary.style.display = "none";
     commentary.textContent = "";
     dialog.setAttribute("open", true);
