@@ -20,7 +20,6 @@ let meterDrainRate = 0.6;
 let meterIsDraining = false;
 let comboMultiplier = 0;
 let equippedBtn = availablePowerTypes[0];
-let boardTypes = null;
 let mapStarted = false;
 
 let gameTimerInterval = null;
@@ -52,8 +51,19 @@ function playSoundEffect(audio) {
   }
 }
 
+// function getTimerDurationForLevel() {
+//   return Math.min(180, 10 + level * 2);
+// }
+
 function getTimerDurationForLevel() {
-  return Math.min(180, 20 + level * 2);
+  const sets = Math.ceil(cardCount / pairCount);
+
+  const baseTimePerSet = 3;
+  const levelAdjustment = Math.max(0.5, 1 - (level - 1) * 0.04);
+
+  return Math.round(
+    sets * baseTimePerSet * levelAdjustment + 5
+  );
 }
 
 function initGameTimer() {
@@ -107,9 +117,7 @@ function updateTimerDisplay() {
 
   if (timeProgress) {
     const percent =
-      totalTimeForLevel > 0
-        ? (timeRemaining / totalTimeForLevel) * 100
-        : 0;
+      totalTimeForLevel > 0 ? (timeRemaining / totalTimeForLevel) * 100 : 0;
     timeProgress.style.width = `${percent}%`;
 
     if (percent > 50) {
@@ -504,8 +512,7 @@ function populateLevelGrid(container) {
 }
 
 function generateCards() {
-  const types = boardTypes ?? getCardTypes();
-  boardTypes = null;
+  const types = getCardTypes();
   const cardBox = document.getElementById("card-box");
   populateCardGrid(cardBox, types, "card");
   addCardListeners();
@@ -519,12 +526,12 @@ function resetRoundState() {
   numberOfPairsMatched = 0;
   comboMultiplier = 0;
   meterIsDraining = false;
-  pauseGameTimer();
+  resetGameTimer();
   updatePowerMeter(0);
 }
 
 function runLevelIntro() {
-  const isRankingLevel = level % RANK_LEVEL_COUNT === 0;
+  const isRankingLevel = level % (RANK_LEVEL_COUNT * 2) === 0;
   const cardsUnlocked = Object.entries(cardTypes).filter(([, typeOption]) => {
     return typeOption.unlocksAt === level;
   });
@@ -712,7 +719,7 @@ function setGameScene(_level = level) {
   meterIsDraining = false;
   numberOfPairsMatched = 0;
   rank =
-    _level % RANK_LEVEL_COUNT === 0 ? Math.trunc(_level / RANK_LEVEL_COUNT) : 0;
+    _level % (RANK_LEVEL_COUNT * 2) === 0 ? Math.trunc(_level / (RANK_LEVEL_COUNT * 2)) : 0;
   pairCount = Math.min(4, rank + 2);
 
   let repeatSeq = 2;
@@ -763,7 +770,7 @@ function proceedToNextLevel() {
   autoResizeCardBox();
 
   delay(9500, () => {
-    const isRankingLevel = level % RANK_LEVEL_COUNT === 0;
+    const isRankingLevel = level % (RANK_LEVEL_COUNT * 2) === 0;
     const cardsUnlocked = Object.entries(cardTypes).filter(([, typeOption]) => {
       return typeOption.unlocksAt === level;
     });
