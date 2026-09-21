@@ -150,17 +150,12 @@ function handleTimerTimeout() {
   playSoundEffect(timeUpAudio1);
   delay(500, () => {
     playSoundEffect(timeUpAudio2);
-  });
-
-  delay(800, () => {
     commentary.style.display = "none";
     commentary.textContent = "";
     dialog.setAttribute("open", true);
-
-    delay(1200, () => {
-      window.location.hash = "map";
-      level = highestLevel;
-      generateMap();
+  
+    delay(2000, () => {
+      window.location.reload();
     });
   });
 }
