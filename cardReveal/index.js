@@ -275,7 +275,8 @@ function autoResizeCardBox(cardBox) {
   }
 
   const extraColumn = isOverflowingVertically ? 1 : 0;
-  const gridCellCount = Math.ceil(Math.sqrt(cardBox.children.length)) + extraColumn;
+  const gridCellCount =
+    Math.ceil(Math.sqrt(cardBox.children.length)) + extraColumn;
 
   cardBox.style.gridTemplateRows = `repeat(auto-fill, 1fr)`;
   cardBox.style.gridTemplateColumns = `repeat(${
@@ -329,7 +330,7 @@ function populateCardGrid(container, types, idPrefix = "card") {
 function updateMapHeader() {
   const label = document.getElementById("map-level-label");
   if (label) {
-    label.textContent = `Select Level (Max: ${highestLevel})`;
+    label.textContent = `Select Level`;
   }
 }
 
@@ -371,12 +372,11 @@ function populateLevelGrid(container) {
 
     // if (!isBossLevel){
 
-      const levelSpan = document.createElement("span");
-      levelSpan.classList.add("level-number");
-      levelSpan.textContent = i;
-      cardElement.appendChild(levelSpan);
+    const levelSpan = document.createElement("span");
+    levelSpan.classList.add("level-number");
+    levelSpan.textContent = i;
+    cardElement.appendChild(levelSpan);
     // }
-
 
     if (!isUnlocked) {
       const lockIcon = document.createElement("i");
@@ -385,9 +385,16 @@ function populateLevelGrid(container) {
     }
 
     if (isCompleted && isUnlocked) {
-      const starIcon = document.createElement("i");
-      starIcon.classList.add("fa-solid", "fa-star");
-      cardElement.appendChild(starIcon);
+      const starContainer = document.createElement("span");
+      starContainer.classList.add("star-container");
+
+      const starCount = isBossLevel ? 3 : 1;
+      for (let i = 0; i < starCount; i++) {
+        const starIcon = document.createElement("i");
+        starIcon.classList.add("fa-solid", "fa-star");
+        starContainer.appendChild(starIcon);
+      }
+      cardElement.appendChild(starContainer);
     }
 
     container.appendChild(cardElement);
@@ -836,8 +843,9 @@ function handleSoundEffectsToggle() {
 
 function loadSettings() {
   level = Number.parseInt(window.localStorage.getItem("game_level") ?? 1);
-  highestLevel =
-    Number.parseInt(window.localStorage.getItem("game_highest_level") ?? level);
+  highestLevel = Number.parseInt(
+    window.localStorage.getItem("game_highest_level") ?? level,
+  );
   points = Number.parseInt(window.localStorage.getItem("game_points") ?? 0);
   gems = Number.parseInt(window.localStorage.getItem("game_gems") ?? 0);
   canPlayEffects = JSON.parse(

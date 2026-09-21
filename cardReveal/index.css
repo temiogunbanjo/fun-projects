@@ -400,7 +400,7 @@ header #level-indicator #power-meter {
   color: white;
   position: relative;
   min-width: 80px;
-  min-height: 80px;
+  min-height: 110px;
   border-radius: 12px;
   font-size: 22px;
   font-weight: 700;
@@ -448,10 +448,23 @@ header #level-indicator #power-meter {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-.level-card .fa-lock,
-.level-card .fa-star {
+.level-card .fa-lock {
   font-size: 14px;
+}
+
+.level-card .fa-star {
+  font-size: 12px;
+}
+
+.level-card .fa-lock,
+.level-card .star-container {
   position: absolute;
+}
+
+.level-card .star-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
 }
 
 .level-card.boss .level-number {
@@ -461,17 +474,18 @@ header #level-indicator #power-meter {
 }
 
 .level-card.boss .fa-crown {
-  /* top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%); */
   color: gold;
   font-size: 16px;
   text-shadow: 1px 1px 3px rgba(146, 139, 3, 0.5);
 }
 
+.level-card.completed .star-container {
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .level-card.completed .fa-star {
-  bottom: 4px;
-  right: 4px;
   color: gold;
   text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
 }
