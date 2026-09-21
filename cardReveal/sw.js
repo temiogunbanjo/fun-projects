@@ -103,6 +103,7 @@ self.addEventListener("install", (event) => {
       `${basePath}/assets/audio/wistful-1-39105.mp3`,
       `${basePath}/assets/audio/analog-appliance-button-2-185277.mp3`,
       `${basePath}/assets/audio/koiroylers-game-over-voice-355993.mp3`,
+      `${basePath}/assets/audio/floraphonic-violin-lose-5-185126.mp3`,
       `${basePath}/libraries/gsap/minified/gsap.min.js`,
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
       "https://kit.fontawesome.com/f388f70b2b.js",

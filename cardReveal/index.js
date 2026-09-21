@@ -43,7 +43,12 @@ const powerUpAudio = new Audio(
 const winGameAudio = new Audio(
   "./assets/audio/level-up-bonus-sequence-3-186892.mp3",
 );
-const timeUpAudio = new Audio("./assets/audio/koiroylers-game-over-voice-355993.mp3");
+const timeUpAudio2 = new Audio(
+  "./assets/audio/koiroylers-game-over-voice-355993.mp3",
+);
+const timeUpAudio1 = new Audio(
+  "./assets/audio/floraphonic-violin-lose-5-185126.mp3",
+);
 
 function playSoundEffect(audio) {
   if (canPlayEffects) {
@@ -135,15 +140,19 @@ function updateTimerDisplay() {
 }
 
 function handleTimerTimeout() {
-  playSoundEffect(timeUpAudio);
+  playSoundEffect(timeUpAudio1);
   pauseGameTimer();
-
+  
   const dialog = document.getElementById("win-badge-dialog");
   const text = document.createElement("h3");
   text.textContent = "Game Over!";
   dialog.appendChild(text);
 
-  delay(400, () => {
+  delay(500, () => {
+    playSoundEffect(timeUpAudio2);
+  });
+
+  delay(700, () => {
     commentary.style.display = "none";
     commentary.textContent = "";
     dialog.setAttribute("open", true);
