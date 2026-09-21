@@ -43,7 +43,7 @@ const powerUpAudio = new Audio(
 const winGameAudio = new Audio(
   "./assets/audio/level-up-bonus-sequence-3-186892.mp3",
 );
-const timeUpAudio = new Audio("./assets/audio/scifi-ping-86790.mp3");
+const timeUpAudio = new Audio("./assets/audio/koiroylers-game-over-voice-355993.mp3");
 
 function playSoundEffect(audio) {
   if (canPlayEffects) {
@@ -61,9 +61,7 @@ function getTimerDurationForLevel() {
   const baseTimePerSet = 3;
   const levelAdjustment = Math.max(0.5, 1 - (level - 1) * 0.04);
 
-  return Math.round(
-    sets * baseTimePerSet * levelAdjustment + 5
-  );
+  return Math.round(sets * baseTimePerSet * levelAdjustment + 5);
 }
 
 function initGameTimer() {
@@ -72,9 +70,11 @@ function initGameTimer() {
   totalTimeForLevel = getTimerDurationForLevel();
   timeRemaining = totalTimeForLevel;
   updateTimerDisplay();
+  console.log("restarting timer...");
 }
 
 function startGameTimer() {
+  console.log("Starting timer...");
   if (gameTimerIsRunning) return;
   gameTimerIsRunning = true;
   updateTimerDisplay();
@@ -140,10 +140,10 @@ function handleTimerTimeout() {
 
   const dialog = document.getElementById("win-badge-dialog");
   const text = document.createElement("h3");
-  text.textContent = "Time's Up!";
+  text.textContent = "Game Over!";
   dialog.appendChild(text);
 
-  delay(900, () => {
+  delay(400, () => {
     commentary.style.display = "none";
     commentary.textContent = "";
     dialog.setAttribute("open", true);
@@ -719,7 +719,9 @@ function setGameScene(_level = level) {
   meterIsDraining = false;
   numberOfPairsMatched = 0;
   rank =
-    _level % (RANK_LEVEL_COUNT * 2) === 0 ? Math.trunc(_level / (RANK_LEVEL_COUNT * 2)) : 0;
+    _level % (RANK_LEVEL_COUNT * 2) === 0
+      ? Math.trunc(_level / (RANK_LEVEL_COUNT * 2))
+      : 0;
   pairCount = Math.min(4, rank + 2);
 
   let repeatSeq = 2;
@@ -777,12 +779,14 @@ function proceedToNextLevel() {
     const revealDuration = getRevealDuration();
 
     if (isRankingLevel) {
-      showLevelInfo("Boss Level!", () => peekAllCards(revealDuration));
+      showLevelInfo("Boss Level!", () =>
+        peekAllCards(revealDuration, startGameTimer),
+      );
     } else if (cardsUnlocked.length > 0) {
       showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
-        peekAllCards(revealDuration);
+        peekAllCards(revealDuration, startGameTimer);
       });
-    } else peekAllCards(revealDuration);
+    } else peekAllCards(revealDuration, startGameTimer);
   });
 }
 
