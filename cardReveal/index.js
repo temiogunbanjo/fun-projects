@@ -363,16 +363,20 @@ function populateLevelGrid(container) {
     if (isCompleted && isUnlocked) cardElement.classList.add("completed");
     if (isCurrent && isUnlocked) cardElement.classList.add("current");
 
-    const levelSpan = document.createElement("span");
-    levelSpan.classList.add("level-number");
-    levelSpan.textContent = i;
-    cardElement.appendChild(levelSpan);
-
     if (isBossLevel) {
       const bossIcon = document.createElement("i");
       bossIcon.classList.add("fa-solid", "fa-crown");
       cardElement.appendChild(bossIcon);
     }
+
+    // if (!isBossLevel){
+
+      const levelSpan = document.createElement("span");
+      levelSpan.classList.add("level-number");
+      levelSpan.textContent = i;
+      cardElement.appendChild(levelSpan);
+    // }
+
 
     if (!isUnlocked) {
       const lockIcon = document.createElement("i");

@@ -23,9 +23,10 @@ body.l-2 {
 }
 
 body.l-3 {
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.26)),
+  background:
+    radial-gradient(circle, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.26)),
     url("https://img.freepik.com/premium-vector/cartoon-animation-scene-outdoor-scenery-game-wallpaper-background-illustration-design-banner_953932-7907.jpg");
-    background-attachment: fixed;
+  background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
 
@@ -36,7 +37,8 @@ body.l-3 {
 }
 
 body.power-up {
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15),
+  box-shadow:
+    inset 1px 1px 2px rgba(0, 0, 0, 0.15),
     2px 4px 1px rgba(128, 0, 128, 0.777);
 
   background-image: radial-gradient(
@@ -57,7 +59,8 @@ body.power-up {
   border: 4px solid wheat;
   overflow: hidden;
   border-radius: 12px;
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15),
+  box-shadow:
+    inset 1px 1px 2px rgba(0, 0, 0, 0.15),
     2px 4px 1px rgba(128, 0, 128, 0.777);
 }
 
@@ -69,7 +72,9 @@ body.power-up {
   border-top-left-radius: 10px;
   box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.15);
   animation: none;
-  transition: height, background-color 0.3s ease 100ms;
+  transition:
+    height,
+    background-color 0.3s ease 100ms;
 }
 
 #power-meter[data-value="low"] > *:first-child {
@@ -102,8 +107,10 @@ body.power-up {
   text-align: center;
   background-color: wheat;
   border-radius: 12px;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
+  box-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+    1px 4px 1px var(--secondary-color);
   min-height: 200px;
   width: 40%;
 }
@@ -274,7 +281,8 @@ main #commentary > *.power-up {
   letter-spacing: 1px;
   text-transform: capitalize;
   /* transform-origin: center; */
-  animation: rainbow_animation 1.5s linear infinite,
+  animation:
+    rainbow_animation 1.5s linear infinite,
     winTextScale 1000ms ease-in-out 0s 1 normal both;
   /* scaleAndFly 10000ms ease-in 0s 1 normal backwards; */
 }
@@ -331,7 +339,8 @@ header #level-indicator #level-count {
   border-radius: 12px;
   border-bottom-right-radius: 18px;
   border-bottom-left-radius: 18px;
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15),
+  box-shadow:
+    inset 1px 1px 2px rgba(0, 0, 0, 0.15),
     2px 4px 1px var(--secondary-color);
 }
 
@@ -347,8 +356,10 @@ header #level-indicator #level-name {
   background-color: wheat;
   border-radius: 12px;
   min-width: 200px;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
+  box-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+    1px 4px 1px var(--secondary-color);
 }
 
 header #level-indicator #power-meter {
@@ -399,22 +410,35 @@ header #level-indicator #power-meter {
   flex-direction: column;
   gap: 4px;
   border: 2px solid wheat;
-  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 2px 6px 1px var(--secondary-color);
+  box-shadow:
+    inset 1px 2px 4px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+    2px 6px 1px var(--secondary-color);
   transition: all 0.3s ease;
   pointer-events: initial;
 }
 
 .level-card.current {
-  background-color: brown;
+  background-color: rgb(159, 2, 2);
   color: white;
-  border: 1px solid wheat;
+  border-color: wheat;
+}
+
+.level-card.boss {
+  border: 2px solid wheat;
+  box-shadow:
+    inset 1px 2px 4px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+    1px 5px 1px var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .level-card:hover:not(.locked) {
   transform: scale(1.05);
-  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.5),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.3), 1px 4px 1px var(--secondary-color),
+  box-shadow:
+    inset 1px 2px 4px rgba(255, 255, 255, 0.5),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.3),
+    1px 4px 1px var(--secondary-color),
     0 0 15px rgba(255, 255, 255, 0.4);
 }
 
@@ -424,32 +448,25 @@ header #level-indicator #power-meter {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-.level-card .fa-crown,
 .level-card .fa-lock,
 .level-card .fa-star {
   font-size: 14px;
   position: absolute;
 }
 
-.level-card.boss {
-  border-color: gold;
-  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.35),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 0 0 10px rgba(255, 215, 0, 0.6);
-  background-color: var(--secondary-color);
-}
-
 .level-card.boss .level-number {
-  color: gold;
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+  color: wheat;
+  font-size: 20px;
+  text-shadow: 1px 1px 3px rgba(146, 139, 3, 0.5);
 }
 
 .level-card.boss .fa-crown {
-  top: 4px;
+  /* top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%,-50%); */
   color: gold;
   font-size: 16px;
-  text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+  text-shadow: 1px 1px 3px rgba(146, 139, 3, 0.5);
 }
 
 .level-card.completed .fa-star {
@@ -466,9 +483,9 @@ header #level-indicator #power-meter {
 
 .no-scrollbar {
   /* 2. Hide scrollbar for Firefox */
-  scrollbar-width: none; 
+  scrollbar-width: none;
   /* 3. Hide scrollbar for IE and older Edge */
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 }
 
 /* 4. Hide scrollbar for Chrome, Safari, and Opera */
@@ -476,13 +493,13 @@ header #level-indicator #power-meter {
   display: none;
 }
 
-
 @keyframes levelCurrentGlow {
   0% {
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
   }
   100% {
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9),
+    text-shadow:
+      0 0 15px rgba(255, 255, 255, 0.9),
       0 0 30px rgba(255, 255, 255, 0.7);
   }
 }
@@ -492,7 +509,8 @@ header #level-indicator #power-meter {
   background-color: #444;
   border-color: #2a2a2a;
   color: #aaa;
-  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.1),
+  box-shadow:
+    inset 1px 2px 4px rgba(255, 255, 255, 0.1),
     inset -1px -1px 2px rgba(0, 0, 0, 0.4);
   pointer-events: none;
 }
@@ -535,8 +553,8 @@ header #level-indicator #power-meter {
 #card-box .card,
 #level-box .card {
   --image: url("./assets/boy2.png");
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-    var(--image);
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), var(--image);
   background-position: center;
   background-size: cover, min(70px, 80%);
   background-repeat: no-repeat;
@@ -544,8 +562,10 @@ header #level-indicator #power-meter {
   background-color: var(--card-bgcolor);
   position: relative;
   border: none;
-  box-shadow: inset 2px 2px 2px 2px var(--light-glow-shadow),
-    inset -1px -4px 6px rgba(0, 0, 0, 0.25), 1px 2px 3px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    inset 2px 2px 2px 2px var(--light-glow-shadow),
+    inset -1px -4px 6px rgba(0, 0, 0, 0.25),
+    1px 2px 3px rgba(0, 0, 0, 0.25);
   transition-property: background-image, background-blend-mode;
   transition-duration: 0.3s;
   transition-timing-function: ease;
@@ -554,7 +574,8 @@ header #level-indicator #power-meter {
 
 #card-box .card.reveal {
   pointer-events: none;
-  animation: rotateCard 900ms ease 0s 1 normal forwards,
+  animation:
+    rotateCard 900ms ease 0s 1 normal forwards,
     revealCard 600ms linear 0s 1 normal forwards;
 }
 
@@ -616,7 +637,8 @@ header #level-indicator #power-meter {
     text-align: center;
     background-color: wheat;
     border-radius: 12px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35),
+    box-shadow:
+      1px 1px 2px rgba(0, 0, 0, 0.35),
       inset -1px -1px 2px rgba(0, 0, 0, 0.15),
       1px 4px 1px var(--secondary-color);
     min-height: 200px;
