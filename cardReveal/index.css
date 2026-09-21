@@ -325,6 +325,7 @@ header #level-indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 60px;
 }
 
 header #level-indicator #level-count {
@@ -344,6 +345,65 @@ header #level-indicator #level-count {
     2px 4px 1px var(--secondary-color);
 }
 
+aside#timer-count {
+  width: 60vw;
+  max-width: 300px;
+  margin-top: 5px;
+  z-index: +3;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+aside#timer-count .time-progress {
+  width: 100%;
+  background-color: wheat;
+  border: 2px solid wheat;
+  border-bottom-right-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.15),
+    inset 2px 2px 5px rgba(0, 0, 0, 0.15),
+    0px 4px 1px rgba(0, 0, 0, 0.169);
+  margin-left: -3px;
+}
+
+aside#timer-count .clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* padding: 10px 12px; */
+  font-weight: 800;
+  font-size: 18px;
+  width: 35px;
+  height: 35px;
+  flex: none;
+  background-color: wheat;
+  color: var(--secondary-color);
+  border: 2px solid wheat;
+  border-radius: 20px;
+  box-shadow: inset 1px 2px 4px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15), 1px 4px 1px var(--secondary-color);
+  z-index: +4;
+}
+
+aside#timer-count .time-progress > * {
+  padding: 2px 22px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+  width: 50%;
+  height: 15px;
+  background-color: lawngreen;
+  color: green;
+  border-bottom-right-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.15),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.15);
+}
+
 header #level-indicator #level-name {
   display: flex;
   flex-direction: column;
@@ -356,6 +416,7 @@ header #level-indicator #level-name {
   background-color: wheat;
   border-radius: 12px;
   min-width: 200px;
+  z-index: +1;
   box-shadow:
     1px 1px 2px rgba(0, 0, 0, 0.35),
     inset -1px -1px 2px rgba(0, 0, 0, 0.15),
@@ -369,6 +430,7 @@ header #level-indicator #power-meter {
   left: calc(100% - 18px);
   height: calc(100% - var(--height));
   border-bottom-left-radius: 1px;
+  z-index: +2;
 }
 
 #card-box {
@@ -619,6 +681,10 @@ header #level-indicator #power-meter {
     max-width: 300px;
     font-weight: 700;
     font-size: 18px;
+  }
+
+  header #level-indicator {
+    margin-left: 10px;
   }
 
   #card-box,

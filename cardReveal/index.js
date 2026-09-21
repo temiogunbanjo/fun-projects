@@ -46,6 +46,14 @@ function playSoundEffect(audio) {
   }
 }
 
+function startGameTimer() {
+  alert("Timer is on");
+}
+
+function pauseGameTimer() {
+  alert("Timer is paused");
+}
+
 function showComment(comment, styleClass = "") {
   const commentary = document.querySelector("#commentary");
   commentary.style.display = "inline";
@@ -443,6 +451,8 @@ function showLevelInfo(title, callback = () => {}) {
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
 
+  pauseGameTimer();
+
   const about = `The goal of this level is to match each card type in ${
     pairCount > 2 ? `sets of ${pairCount}s` : "pairs"
   } until every set has been matched. There are various card types, and each type appears in multiples of ${pairCount}. To successfully match a set, you must reveal and match all ${pairCount} cards of the same type consecutively. Good luck!`;
@@ -467,6 +477,7 @@ function showLevelInfo(title, callback = () => {}) {
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
     callback();
+    startGameTimer();
   });
 
   wrapper.appendChild(heading);
@@ -481,6 +492,8 @@ function showCardUnlockedInfo(title, cardsUnlocked, callback) {
   const dialog = document.getElementById("win-badge-dialog");
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
+
+  pauseGameTimer();
 
   const wrapper = document.createElement("div");
   const heading = document.createElement("h2");
@@ -506,6 +519,7 @@ function showCardUnlockedInfo(title, cardsUnlocked, callback) {
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
     callback();
+    startGameTimer();
   });
 
   cardsUnlocked.forEach(([type, typeOption]) => {
@@ -527,6 +541,8 @@ function showInGameMenu() {
   const dialog = document.getElementById("win-badge-dialog");
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
+
+  pauseGameTimer();
 
   const wrapper = document.createElement("div");
   const heading = document.createElement("h2");
@@ -562,6 +578,8 @@ function showInGameMenu() {
     dialog.removeAttribute("style");
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
+
+    startGameTimer();
   });
 
   button2.addEventListener("click", () => {

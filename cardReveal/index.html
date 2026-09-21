@@ -76,9 +76,10 @@
       <button
         class="game-style"
         onclick="
-          playSoundEffect(clickButtonAudio);
-          window.location.href = '/store';
+          playSoundEffect(clickButtonAudio)
+          // window.location.href = '/store';
         "
+        disabled
       >
         Visit Store
       </button>
@@ -168,6 +169,13 @@
         </div>
       </header>
 
+      <aside id="timer-count">
+        <div class="clock fa-solid fa-clock"><i class=""></i></div>
+        <div class="time-progress">
+          <div class=""></div>
+        </div>
+      </aside>
+
       <div id="card-box" class="no-scrollbar">
         <button class="card"></button>
       </div>
@@ -202,7 +210,18 @@
           <i class="fa-solid fa-reply"></i>
         </button>
         <span id="map-level-label">Level 1</span>
-        <i></i>
+        <button
+          id="info"
+          class="game-style"
+          style="display: flex; align-items: center"
+          onclick="
+            playSoundEffect(clickButtonAudio)
+            // window.location.hash = 'main_menu';
+          "
+        >
+          <i class="fa-solid fa-user"></i>
+          <span style="font-size: 16px; text-transform: capitalize">Login</span>
+        </button>
       </header>
       <p id="map-hint">Tap any unlocked level to replay it</p>
       <div id="level-box" class="no-scrollbar"></div>
