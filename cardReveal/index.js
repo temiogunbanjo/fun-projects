@@ -535,7 +535,7 @@ function resetRoundState() {
 }
 
 function runLevelIntro() {
-  const isRankingLevel = level % (RANK_LEVEL_COUNT * 2) === 0;
+  const isRankingLevel = level % RANK_LEVEL_COUNT === 0;
   const cardsUnlocked = Object.entries(cardTypes).filter(([, typeOption]) => {
     return typeOption.unlocksAt === level;
   });
@@ -725,9 +725,7 @@ function setGameScene(_level = level) {
   meterIsDraining = false;
   numberOfPairsMatched = 0;
   rank =
-    _level % (RANK_LEVEL_COUNT * 2) === 0
-      ? Math.trunc(_level / (RANK_LEVEL_COUNT * 2))
-      : 0;
+    _level % RANK_LEVEL_COUNT === 0 ? Math.trunc(_level / RANK_LEVEL_COUNT) : 0;
   pairCount = Math.min(4, rank + 2);
 
   let repeatSeq = 2;
@@ -778,7 +776,7 @@ function proceedToNextLevel() {
   autoResizeCardBox();
 
   delay(9500, () => {
-    const isRankingLevel = level % (RANK_LEVEL_COUNT * 2) === 0;
+    const isRankingLevel = level % RANK_LEVEL_COUNT === 0;
     const cardsUnlocked = Object.entries(cardTypes).filter(([, typeOption]) => {
       return typeOption.unlocksAt === level;
     });
