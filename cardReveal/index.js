@@ -153,7 +153,7 @@ function handleTimerTimeout() {
     commentary.style.display = "none";
     commentary.textContent = "";
     dialog.setAttribute("open", true);
-  
+
     delay(2000, () => {
       window.location.reload();
     });
@@ -542,11 +542,13 @@ function runLevelIntro() {
   const revealDuration = getRevealDuration();
 
   if (isRankingLevel) {
-    showLevelInfo("Boss Level!", () =>
-      peekAllCards(revealDuration, startGameTimer),
-    );
+    showLevelInfo("Boss Level!", () => {
+      pauseGameTimer();
+      peekAllCards(revealDuration, startGameTimer);
+    });
   } else if (cardsUnlocked.length > 0) {
     showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
+      pauseGameTimer();
       peekAllCards(revealDuration, startGameTimer);
     });
   } else {
