@@ -12,8 +12,9 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  height: 100vh;
+  /* height: 100vh; */
   gap: 15px;
+  /* background-image: none; */
 }
 
 body.l-1 {
@@ -59,6 +60,11 @@ main {
   border-radius: 12px;
   padding: 24px;
   font-size: 18px;
+  box-shadow:
+    inset 2px 3px 6px rgba(255, 255, 255, 0.35),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.15),
+    4px 6px 2px var(--secondary-color);
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
 }
 
 main p {
@@ -66,14 +72,14 @@ main p {
 }
 
 main h2 {
+  margin-block: 0.5rem;
+}
+
+main :is(ul, ol) {
   margin: 0;
+  padding: 0;
+  padding-left: 1.5rem;
 }
-
-main :is(ul,ol) {
-  margin-top: 0;
-  padding: 1.5rem;
-}
-
 
 @media only screen and (max-width: 768px) {
   body > main {
