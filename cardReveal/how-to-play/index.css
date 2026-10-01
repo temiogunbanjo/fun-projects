@@ -1,0 +1,134 @@
+.game-border {
+  border: 15px ridge rgb(247, 212, 148);
+  border-left-width: 8px;
+  border-right-width: 8px;
+  box-shadow: none !important;
+  border-radius: 100%/10% !important;
+}
+
+body.l-1 {
+  --primary-color: crimson;
+  --secondary-color: purple;
+  --card-bgcolor: #dc143c;
+  --light-glow-shadow: rgba(243, 38, 79, 0.27);
+  --expense-green: 122 39% 49%;
+  --expense-green: 121 38% 79%;
+}
+
+body.l-2 {
+  --card-bgcolor: purple;
+  --primary-color: rgb(100, 0, 80);
+  --secondary-color: rgb(80, 0, 60);
+  --light-glow-shadow: rgba(151, 38, 243, 0.17);
+}
+
+body.l-3 {
+  background:
+    radial-gradient(circle, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.26)),
+    url("https://img.freepik.com/premium-vector/cartoon-animation-scene-outdoor-scenery-game-wallpaper-background-illustration-design-banner_953932-7907.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  --card-bgcolor: chocolate;
+  --secondary-color: saddlebrown;
+  --light-glow-shadow: rgba(151, 38, 243, 0.17);
+  --secondary-color: #9e4c12;
+}
+
+#level-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  /* font-family: "Varela Round", sans-serif; */
+  font-weight: 400;
+  font-size: 20px;
+  color: black;
+  text-align: center;
+  background-color: wheat;
+  border-radius: 12px;
+  box-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.35),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+    1px 4px 1px var(--secondary-color);
+  min-height: 200px;
+  width: 40%;
+}
+
+dialog {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  z-index: +2000;
+}
+
+dialog[open] {
+  display: flex;
+}
+
+dialog h3 {
+  position: relative;
+  font-size: 80px;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: rgb(253, 27, 72);
+  text-align: center;
+  z-index: 199;
+  transform-origin: center;
+  letter-spacing: 3px;
+  -webkit-text-stroke: 3px rgb(255, 255, 255);
+  text-stroke: 3px rgb(255, 255, 255);
+  animation: winTextScale 790ms ease-in-out 0s 2 alternate forwards;
+}
+
+dialog h3::before {
+  content: "You Won!";
+  width: 100%;
+  color: transparent;
+  left: 0;
+  top: 0;
+  position: absolute;
+  -webkit-text-stroke: 1px rgb(255, 255, 255);
+  text-stroke: 1px rgb(255, 255, 255);
+  transform-origin: center;
+  /* transition: all 300ms ease-out; */
+  animation: winGlow 800ms ease-in-out 5ms 1 normal forwards;
+}
+
+body > *:is(main, section, aside) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  gap: 20px;
+  padding: 16px;
+  margin: auto;
+  /* border: 3px solid green; */
+}
+
+section#main_menu {
+  justify-content: center;
+}
+
+section#main_menu > * {
+  min-width: 200px;
+}
+
+main {
+  position: relative;
+}
+
+
+@media only screen and (max-width: 768px) {
+  body > main {
+    padding: 18px;
+    gap: 18px;
+  }
+}

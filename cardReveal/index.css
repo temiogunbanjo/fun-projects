@@ -6,36 +6,6 @@
   border-radius: 100%/10% !important;
 }
 
-body.l-1 {
-  --primary-color: crimson;
-  --secondary-color: purple;
-  --card-bgcolor: #dc143c;
-  --light-glow-shadow: rgba(243, 38, 79, 0.27);
-  --expense-green: 122 39% 49%;
-  --expense-green: 121 38% 79%;
-}
-
-body.l-2 {
-  --card-bgcolor: purple;
-  --primary-color: rgb(100, 0, 80);
-  --secondary-color: rgb(80, 0, 60);
-  --light-glow-shadow: rgba(151, 38, 243, 0.17);
-}
-
-body.l-3 {
-  background:
-    radial-gradient(circle, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.26)),
-    url("https://img.freepik.com/premium-vector/cartoon-animation-scene-outdoor-scenery-game-wallpaper-background-illustration-design-banner_953932-7907.jpg");
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  --card-bgcolor: chocolate;
-  --secondary-color: saddlebrown;
-  --light-glow-shadow: rgba(151, 38, 243, 0.17);
-  --secondary-color: #9e4c12;
-}
-
 body.power-up {
   box-shadow:
     inset 1px 1px 2px rgba(0, 0, 0, 0.15),
@@ -557,18 +527,6 @@ header #level-indicator #power-meter {
 .level-card.current .level-number {
   color: wheat;
   animation: levelCurrentGlow 1.5s ease-in-out 0s infinite alternate;
-}
-
-.no-scrollbar {
-  /* 2. Hide scrollbar for Firefox */
-  scrollbar-width: none;
-  /* 3. Hide scrollbar for IE and older Edge */
-  -ms-overflow-style: none;
-}
-
-/* 4. Hide scrollbar for Chrome, Safari, and Opera */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
 }
 
 @keyframes levelCurrentGlow {
