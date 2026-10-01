@@ -60,6 +60,9 @@ main {
   border-radius: 12px;
   padding: 24px;
   font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  line-height: 1.5;
   box-shadow:
     inset 2px 3px 6px rgba(255, 255, 255, 0.35),
     inset -2px -2px 4px rgba(0, 0, 0, 0.15),

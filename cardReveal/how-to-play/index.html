@@ -185,10 +185,20 @@
       <h2>The goal of the game</h2>
       <p>
         Each level has a board of face-down cards. Your goal is to find and
-        match all the sets before the level ends. The better your memory, the
+        match all the sets before the timer runs out. The better your memory, the
         fewer flips you need.
       </p>
-      <!-- [EDIT] Add: how many cards per level, what counts as a "set" (pairs? triples?), and whether there is a timer or move limit. -->
+      <p>
+        <strong>Cards per level:</strong> Starts at 4 cards (Level 1) and increases
+        up to 18 cards (max). <strong>Set size:</strong> Levels 1–9 use pairs (2 cards
+        per set). Every 10 levels (ranks), the set size increases: Levels 10–19
+        use triples (3 cards), Levels 20–29 use quadruples (4 cards).
+      </p>
+      <p>
+        <strong>Timer:</strong> Each level has a time limit based on the number of
+        sets and current level. The timer counts down in real-time; if it reaches
+        zero, the game ends.
+      </p>
 
       <h2>Step-by-step: how to play</h2>
       <ol class="steps">
@@ -213,19 +223,52 @@
           the next one. Tap any unlocked level to replay it.
         </li>
       </ol>
-      <!-- [EDIT] Correct any step above that does not match the real gameplay, and update the HowTo JSON-LD in <head> to match. -->
 
       <h2>Levels</h2>
       <p>
-        CardVeal starts at Level 1 and gets harder as you progress. [EDIT:
-        describe how difficulty increases, e.g. more cards, less time, new card
-        designs.]
+        CardVeal has 100 levels across 10 ranks. Difficulty increases in three
+        ways:
+      </p>
+      <ul>
+        <li><strong>More cards:</strong> Level 1 starts with 4 cards (2 pairs); the
+          board grows roughly every 2 levels, maxing out at 18 cards.</li>
+        <li><strong>Larger sets:</strong> Every 10 levels (boss levels), the set
+          size increases—pairs → triples → quadruples—so you must match 3 or 4
+          identical cards consecutively.</li>
+        <li><strong>Less time:</strong> The timer shortens as you advance,
+          requiring faster recall.</li>
+        <li><strong>New card designs:</strong> 12 unique card themes unlock at
+          specific levels (bread, strawberry, vehicles, sneakers, gems, fruits,
+          etc.), adding visual variety.</li>
+      </ul>
+      <p>
+        Every 10th level is a <strong>Boss Level</strong> with a special
+        introduction and all cards briefly revealed at the start.
       </p>
 
       <h2>Scoring and winning</h2>
       <p>
-        [EDIT: explain how you win a level, how scoring or stars work, and what
-        happens if you run out of time or moves.]
+        <strong>Win a level:</strong> Match every set on the board before the timer
+        expires. A <em>You Won!</em> screen appears and you automatically advance
+        to the next level.
+      </p>
+      <p>
+        <strong>Points:</strong> Each matched set awards points (base 1 × combo
+        multiplier). Consecutive matches increase your <strong>combo
+        multiplier</strong> (+0.5 per match), boosting subsequent points.
+      </p>
+      <p>
+        <strong>Gems:</strong> Every 2–3 combo milestones grant bonus gems
+        (1–3 gems). Gems and points persist across sessions via localStorage.
+      </p>
+      <p>
+        <strong>Stars on the map:</strong> Completed levels show stars—1 star for
+        normal levels, 3 stars for boss levels.
+      </p>
+      <p>
+        <strong>Time up:</strong> If the timer reaches zero, a Game Over screen
+        appears and the game resets to Level 1 (progress is lost unless you
+        replay from the map).
       </p>
 
       <h2>Tips to improve your memory</h2>
@@ -251,13 +294,15 @@
       <h2>Frequently asked questions</h2>
       <h3>Is CardVeal played in the browser?</h3>
       <p>
-        Yes. CardVeal is an online game, so you can play it in your web browser.
-        [EDIT: confirm mobile and desktop support.]
+        Yes. CardVeal is an online game, so you can play it in your web browser on
+        both desktop and mobile devices. The layout adapts automatically—on mobile
+        the card grid shows 3 columns, on desktop up to 6 columns.
       </p>
       <h3>How do I unlock new levels?</h3>
       <p>
-        Complete the level you are on to unlock the next one. [EDIT: add any
-        extra requirements.]
+        Complete the current level to unlock the next one. Your highest unlocked
+        level is saved automatically. You can also replay any previously unlocked
+        level from the <strong>Map</strong> screen (accessible from the main menu).
       </p>
       <h3>Can I replay a level?</h3>
       <p>Yes. Tap any unlocked level to replay it.</p>
@@ -265,6 +310,13 @@
       <p>
         Open <em>Settings</em> from the menu to turn sound effects and
         background music on or off.
+      </p>
+      <h3>What are power-ups?</h3>
+      <p>
+        The <strong>Peek-a-boo</strong> power-up briefly reveals all face-down
+        cards. It charges as you make matches (shown by the power meter at the
+        top). When full, it triggers <strong>Power Up mode</strong> where the
+        meter drains slowly and you can use Peek-a-boo freely until it empties.
       </p>
 
       <a
