@@ -67,7 +67,23 @@ function getTimerDurationForLevel() {
   const baseTimePerSet = Math.pow(3, pairCount / 2) * currentRank;
   const levelAdjustment = Math.max(0.5, 1 - (rank - 1) * 0.04);
 
-  return Math.round(sets * baseTimePerSet * levelAdjustment + 5);
+  const baseDuration = sets * baseTimePerSet * levelAdjustment;
+
+  if (cardCount < MAX_CARD_COUNT) {
+    return Math.round(baseDuration + 5);
+  }
+
+  // Repeat the ramp across each 10-level rank.
+  const progress = ((level - 1) % RANK_LEVEL_COUNT) / (RANK_LEVEL_COUNT - 1);
+  const wave = Math.sin((progress * Math.PI) / 2);
+
+  const MIN_MULTIPLIER = 0.75;
+  const MAX_MULTIPLIER = 1.25;
+
+  return Math.round(
+    baseDuration * (MIN_MULTIPLIER + (MAX_MULTIPLIER - MIN_MULTIPLIER) * wave) +
+      5,
+  );
 }
 
 function initGameTimer() {
