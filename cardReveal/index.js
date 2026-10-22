@@ -66,34 +66,44 @@ function getTimerDurationForLevel() {
 
   const currentRank = Math.floor((level - 1) / RANK_LEVEL_COUNT) + 1;
   const baseTimePerSet = Math.pow(3, pairCount / 2) * currentRank;
-  const levelAdjustment = Math.max(0.5, 1 - (rank - 1) * 0.04);
 
-  const baseDuration = sets * baseTimePerSet * levelAdjustment;
+  // Preserve the original formula until the card cap is reached.
+  const baseDuration = sets * baseTimePerSet;
 
   if (cardCount < MAX_CARD_COUNT) {
-    return Math.round(baseDuration + 5);
+    const levelAdjustment = Math.max(0.5, 1 - (rank - 1) * 0.04);
+
+    return Math.round(baseDuration * levelAdjustment + 5);
   }
 
-  // Repeat the ramp across each 10-level rank.
-  const progress = ((level - 1) % RANK_LEVEL_COUNT) / (RANK_LEVEL_COUNT - 1);
+  // Stable ascending baseline for each rank cycle.
+  const rankProgress = (currentRank - 1) * RANK_LEVEL_COUNT;
+
+  // 0 at levels 10, 20, 30...; approaches 1 before the next boundary.
+  const progress = (level % RANK_LEVEL_COUNT) / RANK_LEVEL_COUNT;
+
+  // Descending sinusoidal multiplier.
   const wave = Math.sin((progress * Math.PI) / 2);
 
   const MIN_MULTIPLIER = 0.75;
   const MAX_MULTIPLIER = 1.25;
 
-  return Math.round(
-    baseDuration * (MIN_MULTIPLIER + (MAX_MULTIPLIER - MIN_MULTIPLIER) * wave) +
-      5,
-  );
+  // Use a stable baseline so rank resets cannot distort the curve.
+  const stableBase = sets * Math.pow(3, pairCount / 2) * currentRank;
+
+  const timerMultiplier =
+    MAX_MULTIPLIER - (MAX_MULTIPLIER - MIN_MULTIPLIER) * wave;
+
+  return Math.round(stableBase * timerMultiplier + 5);
 }
 
 function initGameTimer() {
   clearInterval(gameTimerInterval);
   gameTimerIsRunning = false;
   totalTimeForLevel = getTimerDurationForLevel();
+  console.log("level:", level, 'Time:', totalTimeForLevel);
   timeRemaining = totalTimeForLevel;
   updateTimerDisplay();
-  console.log("restarting timer...");
 }
 
 function startGameTimer(_resumeBy) {
