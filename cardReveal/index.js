@@ -26,6 +26,7 @@ let gameTimerInterval = null;
 let timeRemaining = 0;
 let totalTimeForLevel = 0;
 let gameTimerIsRunning = false;
+let pausedBy = null;
 
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
 
@@ -95,7 +96,8 @@ function initGameTimer() {
   console.log("restarting timer...");
 }
 
-function startGameTimer() {
+function startGameTimer(_resumeBy) {
+  if (pausedBy && _resumeBy && _resumeBy !== pausedBy) return;
   console.log("Starting timer...");
   if (gameTimerIsRunning) return;
   gameTimerIsRunning = true;
@@ -111,11 +113,14 @@ function startGameTimer() {
       updateTimerDisplay();
     }
   }, 100);
+
+  pausedBy = null;
 }
 
-function pauseGameTimer() {
+function pauseGameTimer(_pausedBy) {
   clearInterval(gameTimerInterval);
   gameTimerIsRunning = false;
+  pausedBy = _pausedBy ?? null;
 }
 
 function resetGameTimer() {
@@ -560,25 +565,25 @@ function runLevelIntro() {
 
   if (isRankingLevel) {
     showLevelInfo("Boss Level!", () => {
-      pauseGameTimer();
-      peekAllCards(revealDuration, startGameTimer);
+      pauseGameTimer("intro");
+      peekAllCards(revealDuration, () => startGameTimer("intro"));
     });
   } else if (cardsUnlocked.length > 0) {
     showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
-      pauseGameTimer();
-      peekAllCards(revealDuration, startGameTimer);
+      pauseGameTimer("unlocked");
+      peekAllCards(revealDuration, () => startGameTimer("unlocked"));
     });
   } else {
-    peekAllCards(revealDuration, startGameTimer);
+    peekAllCards(revealDuration, () => startGameTimer());
   }
 }
 
-function showLevelInfo(title, callback = () => {}) {
+function showLevelInfo(title, callback = () => {}, _pausedBy = null) {
   const dialog = document.getElementById("win-badge-dialog");
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
 
-  pauseGameTimer();
+  pauseGameTimer(_pausedBy);
 
   const about = `The goal of this level is to match each card type in ${
     pairCount > 2 ? `sets of ${pairCount}s` : "pairs"
@@ -604,7 +609,7 @@ function showLevelInfo(title, callback = () => {}) {
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
     callback();
-    startGameTimer();
+    startGameTimer(_pausedBy);
   });
 
   wrapper.appendChild(heading);
@@ -620,7 +625,7 @@ function showCardUnlockedInfo(title, cardsUnlocked, callback) {
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
 
-  pauseGameTimer();
+  pauseGameTimer("unlocked");
 
   const wrapper = document.createElement("div");
   const heading = document.createElement("h2");
@@ -668,7 +673,7 @@ function showInGameMenu() {
   dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
   dialog.innerHTML = "";
 
-  pauseGameTimer();
+  pauseGameTimer("menu");
 
   const wrapper = document.createElement("div");
   const heading = document.createElement("h2");
@@ -705,12 +710,12 @@ function showInGameMenu() {
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
 
-    startGameTimer();
+    startGameTimer("menu");
   });
 
   button2.addEventListener("click", () => {
     playSoundEffect(clickButtonAudio);
-    showLevelInfo();
+    showLevelInfo(undefined, undefined, "menu");
   });
 
   button3.addEventListener("click", () => {
@@ -801,11 +806,11 @@ function proceedToNextLevel() {
 
     if (isRankingLevel) {
       showLevelInfo("Boss Level!", () =>
-        peekAllCards(revealDuration, startGameTimer),
+        peekAllCards(revealDuration, () => startGameTimer("intro")),
       );
     } else if (cardsUnlocked.length > 0) {
       showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
-        peekAllCards(revealDuration, startGameTimer);
+        peekAllCards(revealDuration, () => startGameTimer("unlocked"));
       });
     } else peekAllCards(revealDuration, startGameTimer);
   });
