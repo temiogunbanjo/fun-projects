@@ -98,7 +98,7 @@ function initGameTimer() {
 
 function startGameTimer(_resumeBy) {
   if (pausedBy && _resumeBy && _resumeBy !== pausedBy) return;
-  console.log("Starting timer...");
+  console.log("Starting timer...", _resumeBy);
   if (gameTimerIsRunning) return;
   gameTimerIsRunning = true;
   updateTimerDisplay();
@@ -118,6 +118,7 @@ function startGameTimer(_resumeBy) {
 }
 
 function pauseGameTimer(_pausedBy) {
+  console.log("Paused by", _pausedBy);
   clearInterval(gameTimerInterval);
   gameTimerIsRunning = false;
   pausedBy = _pausedBy ?? null;
@@ -564,14 +565,17 @@ function runLevelIntro() {
   const revealDuration = getRevealDuration();
 
   if (isRankingLevel) {
-    showLevelInfo("Boss Level!", () => {
-      pauseGameTimer("intro");
-      peekAllCards(revealDuration, () => startGameTimer("intro"));
-    });
+    showLevelInfo(
+      "Boss Level!",
+      () => {
+        peekAllCards(revealDuration, () => startGameTimer("peek"));
+      },
+      "intro",
+    );
   } else if (cardsUnlocked.length > 0) {
     showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
       pauseGameTimer("unlocked");
-      peekAllCards(revealDuration, () => startGameTimer("unlocked"));
+      peekAllCards(revealDuration, () => startGameTimer("peek"));
     });
   } else {
     peekAllCards(revealDuration, () => startGameTimer());
@@ -608,8 +612,8 @@ function showLevelInfo(title, callback = () => {}, _pausedBy = null) {
     dialog.removeAttribute("style");
     dialog.removeAttribute("open", true);
     dialog.innerHTML = "";
-    callback();
     startGameTimer(_pausedBy);
+    callback();
   });
 
   wrapper.appendChild(heading);
@@ -916,7 +920,7 @@ function handleCardClick(ev) {
       });
     }
   }
-  console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
+  // console.log(currentMatches, numberOfPairsMatched, comboMultiplier);
 }
 
 function handleLevelMapClick(ev) {
@@ -962,7 +966,7 @@ function peekAllCards(duration = 2, onComplete = () => {}) {
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])",
   );
-
+  if (!pausedBy) pauseGameTimer("peek");
   playSoundEffect(peekCardAudio);
 
   for (const card of unopenedCards) {
@@ -1016,7 +1020,9 @@ function loadSettings() {
 const peekABooEventHandler = (ev) => {
   playSoundEffect(clickButtonAudio);
   const duration = getRevealDuration();
-  peekAllCards(duration);
+  peekAllCards(duration, () => {
+    startGameTimer("peek");
+  });
 };
 
 function setupListeners() {
