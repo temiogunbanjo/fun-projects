@@ -63,8 +63,9 @@ function playSoundEffect(audio) {
 function getTimerDurationForLevel() {
   const sets = Math.ceil(cardCount / pairCount);
 
-  const baseTimePerSet = Math.pow(3, (pairCount / 2)) * rank;
-  const levelAdjustment = Math.max(0.5, 1 - (level - 1) * 0.04);
+  // rank = level % 10 === 0 ? Math.trunc(level / 10) : 0;
+  const baseTimePerSet = Math.pow(3, pairCount / 2) * rank;
+  const levelAdjustment = Math.max(0.5, 1 - (rank - 1) * 0.04);
 
   return Math.round(sets * baseTimePerSet * levelAdjustment + 5);
 }
