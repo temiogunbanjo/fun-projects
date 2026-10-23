@@ -395,6 +395,15 @@ function proceedToNextLevel() {
   });
 }
 
+function restartCurrentLevel() {
+  resetRoundState();
+  generateCards();
+  autoResizeCardBox(document.getElementById("card-box"));
+  window.location.hash = "play";
+  runLevelIntro();
+  gameTimer.init();
+}
+
 function checkWinStatus() {
   const commentary = document.querySelector("#commentary");
   const numberOfPairsAvailable = Math.floor(cardCount / pairCount);
@@ -609,6 +618,7 @@ function setupListeners() {
   };
   const startButton = document.querySelector("#main_menu button:first-child");
   if (level > 1 && startButton) startButton.textContent = "Continue Game";
+
   bindListeners({
     onStart: () => {
       playSoundEffect(clickButtonAudio);
@@ -744,10 +754,12 @@ const gameTimer = createGameTimer({
   getDuration: () => getTimerDurationForLevel(),
   onTimeout: handleTimerTimeout,
 });
+
 const ui = createUI({
   getPairCount: () => pairCount,
   timer: gameTimer,
   playSound: () => playSoundEffect(clickButtonAudio),
+  restartLevel: restartCurrentLevel
 });
 const { showComment, showLevelInfo, showCardUnlockedInfo, showInGameMenu } = ui;
 

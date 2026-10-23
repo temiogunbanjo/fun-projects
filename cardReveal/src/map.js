@@ -9,7 +9,11 @@ export function populateLevelGrid(container, { level, highestLevel }) {
     const card = document.createElement("button");
     card.className = "level-card";
     card.dataset.level = number;
-    if (!unlocked) { card.classList.add("locked"); card.disabled = true; }
+    
+    if (!unlocked) {
+      card.classList.add("locked");
+      card.disabled = true;
+    }
     if (boss) card.classList.add("boss");
     if (completed) card.classList.add("completed");
     if (number === level && unlocked) card.classList.add("current");

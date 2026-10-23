@@ -25,7 +25,7 @@ function closeDialog(dialog) {
   dialog.innerHTML = "";
 }
 
-export function createUI({ getPairCount, timer, playSound }) {
+export function createUI({ getPairCount, timer, playSound, restartLevel }) {
 
   function showLevelInfo(title, callback = () => {}, pausedBy = null) {
     const dialog = document.getElementById("win-badge-dialog");
@@ -88,11 +88,13 @@ export function createUI({ getPairCount, timer, playSound }) {
     const buttonWrapper = document.createElement("div");
     const resume = document.createElement("button");
     const info = document.createElement("button");
+    const restart = document.createElement("button");
     const quit = document.createElement("button");
-    [resume, info, quit].forEach((button) => button.classList.add("game-style"));
+    [resume, restart, info, quit].forEach((button) => button.classList.add("game-style"));
     quit.classList.add("variant-1");
     heading.textContent = "Game Menu";
     resume.textContent = "Resume game";
+    restart.textContent = "Restart level";
     info.textContent = "Level Info";
     quit.textContent = "Back to Main menu";
     wrapper.id = "level-info";
@@ -103,8 +105,9 @@ export function createUI({ getPairCount, timer, playSound }) {
     buttonWrapper.style.cssText = "flex-direction: column; align-items: stretch; gap: 18px";
     resume.addEventListener("click", () => { playSound(); closeDialog(dialog); timer.start("menu"); });
     info.addEventListener("click", () => { playSound(); showLevelInfo(undefined, undefined, "menu"); });
+    restart.addEventListener("click", () => { playSound(); closeDialog(dialog); restartLevel(); });
     quit.addEventListener("click", () => { playSound(); window.location.reload(); });
-    buttonWrapper.append(resume, info, quit);
+    buttonWrapper.append(resume, restart, info, quit);
     wrapper.append(heading, buttonWrapper);
     dialog.appendChild(wrapper);
     dialog.setAttribute("open", true);
