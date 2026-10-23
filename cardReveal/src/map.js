@@ -1,4 +1,4 @@
-import { MAX_MAP_LEVEL, RANK_LEVEL_COUNT } from "./config.js";
+import { MAX_MAP_LEVEL, RANK_LEVEL_COUNT } from "./minified/config.min.js";
 
 export function populateLevelGrid(container, { level, highestLevel }) {
   container.innerHTML = "";

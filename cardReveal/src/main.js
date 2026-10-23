@@ -1,10 +1,26 @@
-import { RANK_LEVEL_COUNT, MAX_CARD_COUNT, MAX_METER_VALUE, MIN_METER_VALUE, cardTypes, powerActionTypes, availablePowerTypes } from "./config.js";
-import { delay, formatAsTime, convertToStandardFormat, getDirectionVector } from "./utils.js";
-import sounds, { playSoundEffect, setSoundEffectsEnabled } from "./audio.js";
-import { createGameTimer } from "./timer.js";
+import {
+  RANK_LEVEL_COUNT,
+  MAX_CARD_COUNT,
+  MAX_METER_VALUE,
+  MIN_METER_VALUE,
+  cardTypes,
+  powerActionTypes,
+  availablePowerTypes,
+} from "./minified/config.min.js";
+import {
+  delay,
+  formatAsTime,
+  convertToStandardFormat,
+  getDirectionVector,
+} from "./minified/utils.min.js";
+import sounds, {
+  playSoundEffect,
+  setSoundEffectsEnabled,
+} from "./minified/audio.min.js";
+import { createGameTimer } from "./minified/timer.min.js";
+import { setupListeners as bindListeners } from "./minified/listeners.min.js";
 import { getCardTypes, populateCardGrid, areCardsMatching } from "./cards.js";
 import { generateMap as renderMap } from "./map.js";
-import { setupListeners as bindListeners } from "./listeners.js";
 import { createUI } from "./ui.js";
 
 let level = 1;
@@ -594,14 +610,33 @@ function setupListeners() {
   const startButton = document.querySelector("#main_menu button:first-child");
   if (level > 1 && startButton) startButton.textContent = "Continue Game";
   bindListeners({
-    onStart: () => { playSoundEffect(clickButtonAudio); window.location.hash = "map"; generateMap(); },
-    onQuit: () => { playSoundEffect(clickButtonAudio); resetGame(); },
-    onInfo: () => { playSoundEffect(clickButtonAudio); showLevelInfo(); },
+    onStart: () => {
+      playSoundEffect(clickButtonAudio);
+      window.location.hash = "map";
+      generateMap();
+    },
+    onQuit: () => {
+      playSoundEffect(clickButtonAudio);
+      resetGame();
+    },
+    onInfo: () => {
+      playSoundEffect(clickButtonAudio);
+      showLevelInfo();
+    },
     onPower: peekABooEventHandler,
     onSoundToggle: handleSoundEffectsToggle,
-    onMenu: () => { playSoundEffect(clickButtonAudio); showInGameMenu(); },
-    onCardClick: (event) => { if (event.target.closest(".card")) handleCardClick({ target: event.target.closest(".card") }); },
-    onMapClick: (event) => { const card = event.target.closest(".level-card"); if (card) handleLevelMapClick({ currentTarget: card }); },
+    onMenu: () => {
+      playSoundEffect(clickButtonAudio);
+      showInGameMenu();
+    },
+    onCardClick: (event) => {
+      if (event.target.closest(".card"))
+        handleCardClick({ target: event.target.closest(".card") });
+    },
+    onMapClick: (event) => {
+      const card = event.target.closest(".level-card");
+      if (card) handleLevelMapClick({ currentTarget: card });
+    },
     resize,
   });
 }

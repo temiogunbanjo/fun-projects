@@ -1,5 +1,5 @@
-import { cardTypes } from "./config.js";
-import { randomizeArray, repeatArray } from "./utils.js";
+import { cardTypes } from "./minified/config.min.js";
+import { randomizeArray, repeatArray } from "./minified/utils.min.js";
 
 export function getCardTypes(cardCount, pairCount, level) {
   const numberOfPairsNeeded = Math.floor(cardCount / pairCount);

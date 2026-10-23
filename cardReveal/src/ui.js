@@ -1,30 +1,31 @@
-import { delay } from "./utils.js";
+import { delay } from "./minified/utils.min.js";
+
+function showComment(comment, styleClass = "") {
+  const commentary = document.querySelector("#commentary");
+  commentary.style.display = "inline";
+  const text = document.createElement("span");
+  text.id = `comment-${Math.random().toString().slice(2)}`;
+  if (styleClass) text.classList.add(styleClass);
+  text.textContent = comment;
+  commentary.appendChild(text);
+  window.gsap.fromTo(text, {
+    duration: 1, opacity: 0.6, xPercent: styleClass === "power-up" ? 0 : -50, yPercent: -50,
+  }, {
+    duration: 1, top: "-40vh", opacity: 0, xPercent: styleClass === "power-up" ? 0 : -50, yPercent: -50,
+    onComplete: () => delay(styleClass === "power-up" ? 900 : 0, () => {
+      commentary.style.display = "none";
+      text.remove();
+    }),
+  });
+}
+
+function closeDialog(dialog) {
+  dialog.removeAttribute("style");
+  dialog.removeAttribute("open");
+  dialog.innerHTML = "";
+}
 
 export function createUI({ getPairCount, timer, playSound }) {
-  function showComment(comment, styleClass = "") {
-    const commentary = document.querySelector("#commentary");
-    commentary.style.display = "inline";
-    const text = document.createElement("span");
-    text.id = `comment-${Math.random().toString().slice(2)}`;
-    if (styleClass) text.classList.add(styleClass);
-    text.textContent = comment;
-    commentary.appendChild(text);
-    window.gsap.fromTo(text, {
-      duration: 1, opacity: 0.6, xPercent: styleClass === "power-up" ? 0 : -50, yPercent: -50,
-    }, {
-      duration: 1, top: "-40vh", opacity: 0, xPercent: styleClass === "power-up" ? 0 : -50, yPercent: -50,
-      onComplete: () => delay(styleClass === "power-up" ? 900 : 0, () => {
-        commentary.style.display = "none";
-        text.remove();
-      }),
-    });
-  }
-
-  function closeDialog(dialog) {
-    dialog.removeAttribute("style");
-    dialog.removeAttribute("open");
-    dialog.innerHTML = "";
-  }
 
   function showLevelInfo(title, callback = () => {}, pausedBy = null) {
     const dialog = document.getElementById("win-badge-dialog");
