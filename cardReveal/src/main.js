@@ -396,12 +396,15 @@ function proceedToNextLevel() {
 }
 
 function restartCurrentLevel() {
+  showSplashScreen("play", false, true);
   resetRoundState();
   generateCards();
   autoResizeCardBox(document.getElementById("card-box"));
   window.location.hash = "play";
-  runLevelIntro();
-  gameTimer.init();
+  delay(3500, () => {
+    runLevelIntro();
+    gameTimer.init();
+  });
 }
 
 function checkWinStatus() {
@@ -651,7 +654,11 @@ function setupListeners() {
   });
 }
 
-function showSplashScreen(redirectTo = `main_menu`, animate = false) {
+function showSplashScreen(
+  redirectTo = `main_menu`,
+  animate = false,
+  fastLoad = false,
+) {
   const splashScreen = document.getElementById("splash");
   splashScreen.style.display = "flex";
   window.location.hash = redirectTo;
@@ -706,7 +713,7 @@ function showSplashScreen(redirectTo = `main_menu`, animate = false) {
 
   setupListeners();
 
-  delay(9700, () => {
+  delay(fastLoad ? 3350 : 9700, () => {
     document.querySelector("main").classList.toggle("not-started");
     splashScreen.style.display = "none";
   });
@@ -759,7 +766,7 @@ const ui = createUI({
   getPairCount: () => pairCount,
   timer: gameTimer,
   playSound: () => playSoundEffect(clickButtonAudio),
-  restartLevel: restartCurrentLevel
+  restartLevel: restartCurrentLevel,
 });
 const { showComment, showLevelInfo, showCardUnlockedInfo, showInGameMenu } = ui;
 
