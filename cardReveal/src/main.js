@@ -1,8 +1,12 @@
-const RANK_LEVEL_COUNT = 10;
-const MAX_MAP_LEVEL = 100;
-const MAX_CARD_COUNT = 18;
-const MAX_METER_VALUE = 100;
-const MIN_METER_VALUE = 0;
+import { RANK_LEVEL_COUNT, MAX_CARD_COUNT, MAX_METER_VALUE, MIN_METER_VALUE, cardTypes, powerActionTypes, availablePowerTypes } from "./config.js";
+import { delay, formatAsTime, convertToStandardFormat, getDirectionVector } from "./utils.js";
+import sounds, { playSoundEffect, setSoundEffectsEnabled } from "./audio.js";
+import { createGameTimer } from "./timer.js";
+import { getCardTypes, populateCardGrid, areCardsMatching } from "./cards.js";
+import { generateMap as renderMap } from "./map.js";
+import { setupListeners as bindListeners } from "./listeners.js";
+import { createUI } from "./ui.js";
+
 let level = 1;
 let highestLevel = 1;
 let rank = 0;
@@ -22,44 +26,16 @@ let comboMultiplier = 0;
 let equippedBtn = availablePowerTypes[0];
 let mapStarted = false;
 
-let gameTimerInterval = null;
-let timeRemaining = 0;
-let totalTimeForLevel = 0;
-let gameTimerIsRunning = false;
-let pausedBy = null;
-
 const screenBreakpoint = window.matchMedia("(max-width: 600px)");
-
-const peekCardAudio = new Audio("./assets/audio/wistful-1-39105.mp3");
-const clickCardAudio = new Audio("./assets/audio/swish-sound-94707.mp3");
-const clickButtonAudio = new Audio(
-  "./assets/audio/analog-appliance-button-2-185277.mp3",
-);
-const closeCardAudio = new Audio("./assets/audio/funny-swish-101878.mp3");
-// const matchCardAudio = new Audio("./assets/audio/collect-points-190037.mp3");
-const matchCardAudio = new Audio("./assets/audio/marimba-bloop-2-188149.mp3");
-const powerUpAudio = new Audio(
-  "./assets/audio/ui-beep-menu-positive-228336.mp3",
-);
-const winGameAudio = new Audio(
-  "./assets/audio/level-up-bonus-sequence-3-186892.mp3",
-);
-const timeUpAudio2 = new Audio(
-  "./assets/audio/koiroylers-game-over-voice-355993.mp3",
-);
-const timeUpAudio1 = new Audio(
-  "./assets/audio/floraphonic-violin-lose-5-185126.mp3",
-);
-
-function playSoundEffect(audio) {
-  if (canPlayEffects) {
-    audio.play();
-  }
-}
-
-// function getTimerDurationForLevel() {
-//   return Math.min(180, 10 + level * 2);
-// }
+const peekCardAudio = sounds.peekCard;
+const clickCardAudio = sounds.clickCard;
+const clickButtonAudio = sounds.clickButton;
+const closeCardAudio = sounds.closeCard;
+const matchCardAudio = sounds.matchCard;
+const powerUpAudio = sounds.powerUp;
+const winGameAudio = sounds.winGame;
+const timeUpAudio2 = sounds.timeUpVoice;
+const timeUpAudio1 = sounds.timeUp;
 
 function getTimerDurationForLevel() {
   const sets = Math.ceil(cardCount / pairCount);
@@ -77,8 +53,6 @@ function getTimerDurationForLevel() {
   }
 
   // Stable ascending baseline for each rank cycle.
-  const rankProgress = (currentRank - 1) * RANK_LEVEL_COUNT;
-
   // 0 at levels 10, 20, 30...; approaches 1 before the next boundary.
   const progress = (level % RANK_LEVEL_COUNT) / RANK_LEVEL_COUNT;
 
@@ -97,84 +71,10 @@ function getTimerDurationForLevel() {
   return Math.round(stableBase * timerMultiplier + 5);
 }
 
-function initGameTimer() {
-  clearInterval(gameTimerInterval);
-  gameTimerIsRunning = false;
-  totalTimeForLevel = getTimerDurationForLevel();
-  console.log("level:", level, 'Time:', totalTimeForLevel);
-  timeRemaining = totalTimeForLevel;
-  updateTimerDisplay();
-}
-
-function startGameTimer(_resumeBy) {
-  if (pausedBy && _resumeBy && _resumeBy !== pausedBy) return;
-  console.log("Starting timer...", _resumeBy);
-  if (gameTimerIsRunning) return;
-  gameTimerIsRunning = true;
-  updateTimerDisplay();
-
-  gameTimerInterval = window.setInterval(() => {
-    timeRemaining -= 0.1;
-    if (timeRemaining <= 0) {
-      clearInterval(gameTimerInterval);
-      gameTimerIsRunning = false;
-      handleTimerTimeout();
-    } else {
-      updateTimerDisplay();
-    }
-  }, 100);
-
-  pausedBy = null;
-}
-
-function pauseGameTimer(_pausedBy) {
-  console.log("Paused by", _pausedBy);
-  clearInterval(gameTimerInterval);
-  gameTimerIsRunning = false;
-  pausedBy = _pausedBy ?? null;
-}
-
-function resetGameTimer() {
-  pauseGameTimer();
-  timeRemaining = 0;
-  totalTimeForLevel = 0;
-  updateTimerDisplay();
-}
-
-function formatTimer(seconds) {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-}
-
-function updateTimerDisplay() {
-  const timeProgress = document.querySelector(
-    "#timer-count .time-progress > div",
-  );
-  // const clock = document.querySelector("#timer-count .clock");
-
-  if (timeProgress) {
-    const percent =
-      totalTimeForLevel > 0 ? (timeRemaining / totalTimeForLevel) * 100 : 0;
-    timeProgress.style.width = `${percent}%`;
-
-    if (percent > 50) {
-      timeProgress.style.backgroundColor = "lawngreen";
-    } else if (percent > 25) {
-      timeProgress.style.backgroundColor = "gold";
-    } else {
-      timeProgress.style.backgroundColor = "red";
-    }
-  }
-
-  // if (clock) {
-  //   clock.textContent = formatTimer(timeRemaining);
-  // }
-}
-
 function handleTimerTimeout() {
-  pauseGameTimer();
+  gameTimer.pause();
 
+  const commentary = document.getElementById("commentary");
   const dialog = document.getElementById("win-badge-dialog");
   const text = document.createElement("h3");
   text.textContent = "Game Over!";
@@ -191,80 +91,6 @@ function handleTimerTimeout() {
       window.location.reload();
     });
   });
-}
-
-function showComment(comment, styleClass = "") {
-  const commentary = document.querySelector("#commentary");
-  commentary.style.display = "inline";
-
-  const id = `comment-${Math.random().toString().slice(2)}`;
-  const text = document.createElement("span");
-  text.setAttribute("id", id);
-  if (styleClass) text.classList.add(styleClass);
-  text.textContent = comment;
-  commentary.appendChild(text);
-
-  switch (true) {
-    case styleClass === "power-up":
-      gsap.fromTo(
-        text,
-        {
-          duration: 1,
-          opacity: 0.6,
-          xPercent: 0,
-          yPercent: -50,
-        },
-        {
-          duration: 1,
-          top: "-40vh",
-          opacity: 0,
-          xPercent: 0,
-          yPercent: -50,
-          // arrow functions are handy for concise callbacks
-          onComplete: () => {
-            delay(0.9 * 1000, () => {
-              try {
-                // hide commentary
-                if (commentary) commentary.style.display = "none";
-                text?.remove();
-              } catch (error) {
-                console.log(error);
-              }
-            });
-          },
-        },
-      );
-      break;
-
-    default:
-      gsap.fromTo(
-        text,
-        {
-          duration: 1,
-          opacity: 0.6,
-          xPercent: -50,
-          yPercent: -50,
-        },
-        {
-          duration: 1,
-          top: "-40vh",
-          opacity: 0,
-          xPercent: -50,
-          yPercent: -50,
-          // arrow functions are handy for concise callbacks
-          onComplete: () => {
-            try {
-              // hide commentary
-              if (commentary) commentary.style.display = "none";
-              text?.remove();
-            } catch (error) {
-              console.log(error);
-            }
-          },
-        },
-      );
-      break;
-  }
 }
 
 function calculateMeterIncrementAndDecrement() {
@@ -375,38 +201,6 @@ function getRevealDuration() {
   return duration;
 }
 
-function getCardTypes() {
-  const numberOfPairsNeeded = Math.floor(cardCount / pairCount);
-  let availableTypes = randomizeArray(
-    Object.entries(cardTypes)
-      .filter(([type, typeOption]) => {
-        return typeOption.unlocksAt <= level;
-      })
-      .map(([type]) => {
-        return type;
-      }),
-  );
-
-  let tSliced = availableTypes;
-
-  if (availableTypes.length >= numberOfPairsNeeded) {
-    tSliced = availableTypes.slice(0, numberOfPairsNeeded);
-  } else {
-    let remainingCount = numberOfPairsNeeded - availableTypes.length;
-    let nextIndex = 0;
-    let breakCount = 0;
-
-    while (remainingCount-- > 0 && breakCount < 100) {
-      tSliced.push(availableTypes[nextIndex]);
-      nextIndex = nextIndex + 1 >= availableTypes.length ? 0 : nextIndex + 1;
-      breakCount += 1;
-    }
-  }
-
-  tSliced = randomizeArray(repeatArray(tSliced, pairCount));
-  return tSliced;
-}
-
 function autoResizeCardBox(cardBox) {
   cardBox = cardBox ?? document.getElementById("card-box");
   const isOverflowingVertically = cardBox.clientHeight < cardBox.scrollHeight;
@@ -454,105 +248,16 @@ function autoScroll() {
   }, 1000);
 }
 
-function populateCardGrid(container, types, idPrefix = "card") {
-  container.innerHTML = "";
-
-  for (let i = 0; i < types.length; i += 1) {
-    const type = types[i];
-    const typeOption = cardTypes[type];
-    const cardElement = document.createElement("button");
-    cardElement.setAttribute("class", "card");
-    cardElement.setAttribute("id", `${idPrefix}-${i}`);
-    cardElement.dataset.id = `card-${type}`;
-    cardElement.dataset.opened = false;
-    cardElement.setAttribute(
-      "style",
-      `--reveal-image: url('${typeOption.image}')`,
-    );
-
-    container.appendChild(cardElement);
-  }
-}
-
-function updateMapHeader() {
-  const label = document.getElementById("map-level-label");
-  if (label) {
-    label.textContent = `Select Level`;
-  }
-}
-
 function generateMap() {
   mapStarted = false;
-  const levelBox = document.getElementById("level-box");
-  populateLevelGrid(levelBox);
-  updateMapHeader();
-  addMapListeners();
-  autoResizeCardBox(levelBox);
-}
-
-function populateLevelGrid(container) {
-  container.innerHTML = "";
-
-  for (let i = 1; i <= MAX_MAP_LEVEL; i++) {
-    const isUnlocked = i <= highestLevel;
-    const isBossLevel = i % RANK_LEVEL_COUNT === 0;
-    const isCompleted = i < level;
-    const isCurrent = i === level;
-
-    const cardElement = document.createElement("button");
-    cardElement.setAttribute("class", "level-card");
-    cardElement.dataset.level = i;
-
-    if (!isUnlocked) {
-      cardElement.classList.add("locked");
-      cardElement.setAttribute("disabled", true);
-    }
-    if (isBossLevel) cardElement.classList.add("boss");
-    if (isCompleted && isUnlocked) cardElement.classList.add("completed");
-    if (isCurrent && isUnlocked) cardElement.classList.add("current");
-
-    if (isBossLevel) {
-      const bossIcon = document.createElement("i");
-      bossIcon.classList.add("fa-solid", "fa-crown");
-      cardElement.appendChild(bossIcon);
-    }
-
-    // if (!isBossLevel){
-
-    const levelSpan = document.createElement("span");
-    levelSpan.classList.add("level-number");
-    levelSpan.textContent = i;
-    cardElement.appendChild(levelSpan);
-    // }
-
-    if (!isUnlocked) {
-      const lockIcon = document.createElement("i");
-      lockIcon.classList.add("fa-solid", "fa-lock");
-      cardElement.appendChild(lockIcon);
-    }
-
-    if (isCompleted && isUnlocked) {
-      const starContainer = document.createElement("span");
-      starContainer.classList.add("star-container");
-
-      const starCount = isBossLevel ? 3 : 1;
-      for (let i = 0; i < starCount; i++) {
-        const starIcon = document.createElement("i");
-        starIcon.classList.add("fa-solid", "fa-star");
-        starContainer.appendChild(starIcon);
-      }
-      cardElement.appendChild(starContainer);
-    }
-
-    container.appendChild(cardElement);
-  }
+  renderMap(document.getElementById("level-box"), { level, highestLevel });
+  autoResizeCardBox(document.getElementById("level-box"));
 }
 
 function generateCards() {
-  const types = getCardTypes();
+  const types = getCardTypes(cardCount, pairCount, level);
   const cardBox = document.getElementById("card-box");
   populateCardGrid(cardBox, types, "card");
-  addCardListeners();
   autoResizeCardBox();
 }
 
@@ -563,7 +268,7 @@ function resetRoundState() {
   numberOfPairsMatched = 0;
   comboMultiplier = 0;
   meterIsDraining = false;
-  resetGameTimer();
+  gameTimer.reset();
   updatePowerMeter(0);
 }
 
@@ -578,174 +283,18 @@ function runLevelIntro() {
     showLevelInfo(
       "Boss Level!",
       () => {
-        peekAllCards(revealDuration, () => startGameTimer("peek"));
+        peekAllCards(revealDuration, () => gameTimer.start("peek"));
       },
       "intro",
     );
   } else if (cardsUnlocked.length > 0) {
     showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
-      pauseGameTimer("unlocked");
-      peekAllCards(revealDuration, () => startGameTimer("peek"));
+      gameTimer.pause("unlocked");
+      peekAllCards(revealDuration, () => gameTimer.start("peek"));
     });
   } else {
-    peekAllCards(revealDuration, () => startGameTimer());
+    peekAllCards(revealDuration, () => gameTimer.start());
   }
-}
-
-function showLevelInfo(title, callback = () => {}, _pausedBy = null) {
-  const dialog = document.getElementById("win-badge-dialog");
-  dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-  dialog.innerHTML = "";
-
-  pauseGameTimer(_pausedBy);
-
-  const about = `The goal of this level is to match each card type in ${
-    pairCount > 2 ? `sets of ${pairCount}s` : "pairs"
-  } until every set has been matched. There are various card types, and each type appears in multiples of ${pairCount}. To successfully match a set, you must reveal and match all ${pairCount} cards of the same type consecutively. Good luck!`;
-
-  const wrapper = document.createElement("div");
-  const heading = document.createElement("h2");
-  const text = document.createElement("p");
-  const button = document.createElement("button");
-
-  button.classList.add("game-style");
-
-  heading.textContent = title ?? "About Level";
-  text.textContent = about;
-  button.textContent = "Close";
-
-  wrapper.setAttribute("id", "level-info");
-  heading.style.margin = 0;
-
-  button.addEventListener("click", () => {
-    playSoundEffect(clickButtonAudio);
-    dialog.removeAttribute("style");
-    dialog.removeAttribute("open", true);
-    dialog.innerHTML = "";
-    startGameTimer(_pausedBy);
-    callback();
-  });
-
-  wrapper.appendChild(heading);
-  wrapper.appendChild(text);
-  wrapper.appendChild(button);
-
-  dialog.appendChild(wrapper);
-  dialog.setAttribute("open", true);
-}
-
-function showCardUnlockedInfo(title, cardsUnlocked, callback) {
-  const dialog = document.getElementById("win-badge-dialog");
-  dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-  dialog.innerHTML = "";
-
-  pauseGameTimer("unlocked");
-
-  const wrapper = document.createElement("div");
-  const heading = document.createElement("h2");
-  const cardBox = document.createElement("div");
-  const button = document.createElement("button");
-
-  button.classList.add("game-style");
-  cardBox.classList.add("center");
-
-  heading.textContent = title ?? "New Cards Unlocked";
-  button.textContent = "Continue";
-
-  wrapper.setAttribute("id", "level-info");
-
-  heading.style.margin = 0;
-  cardBox.style.gap = "10px";
-  cardBox.style.margin = "1rem 0";
-  cardBox.style.flexWrap = "wrap";
-
-  button.addEventListener("click", () => {
-    playSoundEffect(clickButtonAudio);
-    dialog.removeAttribute("style");
-    dialog.removeAttribute("open", true);
-    dialog.innerHTML = "";
-    callback();
-  });
-
-  cardsUnlocked.forEach(([type, typeOption]) => {
-    const card = document.createElement("div");
-    card.classList.add("card");
-    card.setAttribute("style", `--image: url('${typeOption.image}');`);
-    cardBox.appendChild(card);
-  });
-
-  wrapper.appendChild(heading);
-  wrapper.appendChild(cardBox);
-  wrapper.appendChild(button);
-  dialog.appendChild(wrapper);
-
-  dialog.setAttribute("open", true);
-}
-
-function showInGameMenu() {
-  const dialog = document.getElementById("win-badge-dialog");
-  dialog.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-  dialog.innerHTML = "";
-
-  pauseGameTimer("menu");
-
-  const wrapper = document.createElement("div");
-  const heading = document.createElement("h2");
-  const buttonWrapper = document.createElement("div");
-  const button1 = document.createElement("button");
-  const button2 = document.createElement("button");
-  const button3 = document.createElement("button");
-
-  button1.classList.add("game-style");
-  button2.classList.add("game-style");
-  button3.classList.add("game-style", "variant-1");
-
-  heading.textContent = "Game Menu";
-  button2.textContent = "Level Info";
-  button1.textContent = "Resume game";
-  button3.textContent = "Back to Main menu";
-
-  wrapper.setAttribute("id", "level-info");
-  wrapper.style.minHeight = "300px";
-  wrapper.style.gap = "20px";
-  wrapper.style.paddingBottom = "40px";
-  wrapper.classList.add("game-border");
-
-  heading.style.margin = 0;
-
-  buttonWrapper.classList.add("center");
-  buttonWrapper.style.flexDirection = "column";
-  buttonWrapper.style.alignItems = "stretch";
-  buttonWrapper.style.gap = "18px";
-
-  button1.addEventListener("click", () => {
-    playSoundEffect(clickButtonAudio);
-    dialog.removeAttribute("style");
-    dialog.removeAttribute("open", true);
-    dialog.innerHTML = "";
-
-    startGameTimer("menu");
-  });
-
-  button2.addEventListener("click", () => {
-    playSoundEffect(clickButtonAudio);
-    showLevelInfo(undefined, undefined, "menu");
-  });
-
-  button3.addEventListener("click", () => {
-    playSoundEffect(clickButtonAudio);
-    window.location.reload();
-  });
-
-  buttonWrapper.appendChild(button1);
-  buttonWrapper.appendChild(button2);
-  buttonWrapper.appendChild(button3);
-
-  wrapper.appendChild(heading);
-  wrapper.appendChild(buttonWrapper);
-
-  dialog.appendChild(wrapper);
-  dialog.setAttribute("open", true);
 }
 
 function setGameScene(_level = level) {
@@ -781,7 +330,7 @@ function setGameScene(_level = level) {
 
   updateScoreBoard(gems, points);
   updatePowerMeter(0);
-  initGameTimer();
+  gameTimer.init();
 }
 
 function proceedToNextLevel() {
@@ -820,13 +369,13 @@ function proceedToNextLevel() {
 
     if (isRankingLevel) {
       showLevelInfo("Boss Level!", () =>
-        peekAllCards(revealDuration, () => startGameTimer("intro")),
+        peekAllCards(revealDuration, () => gameTimer.start("intro")),
       );
     } else if (cardsUnlocked.length > 0) {
       showCardUnlockedInfo("New Cards Unlocked!", cardsUnlocked, () => {
-        peekAllCards(revealDuration, () => startGameTimer("unlocked"));
+        peekAllCards(revealDuration, () => gameTimer.start("unlocked"));
       });
-    } else peekAllCards(revealDuration, startGameTimer);
+    } else peekAllCards(revealDuration, () => gameTimer.start());
   });
 }
 
@@ -835,7 +384,7 @@ function checkWinStatus() {
   const numberOfPairsAvailable = Math.floor(cardCount / pairCount);
   const hasWon = numberOfPairsMatched >= numberOfPairsAvailable;
   if (hasWon) {
-    pauseGameTimer();
+    gameTimer.pause();
     const dialog = document.getElementById("win-badge-dialog");
     const text = document.createElement("h3");
     text.textContent = "You Won!";
@@ -884,9 +433,7 @@ function handleCardClick(ev) {
         document.getElementById(cardInfo.id),
       );
 
-      const didCardsMatch =
-        removeRepeatingItems(selectedCards.map((cardInfo) => cardInfo.category))
-          .length === 1;
+      const didCardsMatch = areCardsMatching(selectedCards);
 
       if (didCardsMatch) {
         delay(delayForAnimation - 500, () => {
@@ -976,7 +523,7 @@ function peekAllCards(duration = 2, onComplete = () => {}) {
   const unopenedCards = document.querySelectorAll(
     "#card-box > .card:not([data-opened='true'])",
   );
-  if (!pausedBy) pauseGameTimer("peek");
+  if (!gameTimer.isPaused()) gameTimer.pause("peek");
   playSoundEffect(peekCardAudio);
 
   for (const card of unopenedCards) {
@@ -1020,6 +567,7 @@ function loadSettings() {
   canPlayEffects = JSON.parse(
     window.localStorage.getItem("sound_effect_is_on") ?? "true",
   );
+  setSoundEffectsEnabled(canPlayEffects);
   // const audio = document.getElementById("bg-audio");
   // audio.muted = isMusicOn;
   // audio.paused = isMusicOn;
@@ -1031,76 +579,32 @@ const peekABooEventHandler = (ev) => {
   playSoundEffect(clickButtonAudio);
   const duration = getRevealDuration();
   peekAllCards(duration, () => {
-    startGameTimer("peek");
+    gameTimer.start("peek");
   });
 };
 
+let listenersInitialized = false;
 function setupListeners() {
-  const startGameButton = document.querySelector(
-    "#main_menu button:first-child",
-  );
-  const equippedBtnId = powerActionTypes[equippedBtn].id;
-  const infoBtn = document.querySelector("main #info");
-  const equippedPowerBtn = document.querySelector(`main #${equippedBtnId}`);
-  const quitGameButton = document.querySelector("#main_menu button:last-child");
-
-  if (level > 1) {
-    startGameButton.textContent = "Continue Game";
-  }
-
-  window.addEventListener("resize", function () {
+  if (listenersInitialized) return;
+  listenersInitialized = true;
+  const resize = () => {
     autoResizeCardBox(document.getElementById("card-box"));
     autoResizeCardBox(document.getElementById("level-box"));
+  };
+  const startButton = document.querySelector("#main_menu button:first-child");
+  if (level > 1 && startButton) startButton.textContent = "Continue Game";
+  bindListeners({
+    onStart: () => { playSoundEffect(clickButtonAudio); window.location.hash = "map"; generateMap(); },
+    onQuit: () => { playSoundEffect(clickButtonAudio); resetGame(); },
+    onInfo: () => { playSoundEffect(clickButtonAudio); showLevelInfo(); },
+    onPower: peekABooEventHandler,
+    onSoundToggle: handleSoundEffectsToggle,
+    onMenu: () => { playSoundEffect(clickButtonAudio); showInGameMenu(); },
+    onCardClick: (event) => { if (event.target.closest(".card")) handleCardClick({ target: event.target.closest(".card") }); },
+    onMapClick: (event) => { const card = event.target.closest(".level-card"); if (card) handleLevelMapClick({ currentTarget: card }); },
+    resize,
   });
-
-  screenBreakpoint.addEventListener("change", function () {
-    autoResizeCardBox(document.getElementById("card-box"));
-    autoResizeCardBox(document.getElementById("level-box"));
-  });
-
-  console.log("Equipping power ups...");
-  equippedPowerBtn.addEventListener("click", peekABooEventHandler);
-  // Hide non-equipped buttons
-  document.querySelectorAll("main button.equipped-power-btn").forEach((btn) => {
-    if (btn.getAttribute("id") !== equippedBtnId) {
-      btn.style.display = "none";
-    }
-  });
-
-  infoBtn.addEventListener("click", (ev) => {
-    playSoundEffect(clickButtonAudio);
-    showLevelInfo();
-  });
-
-  startGameButton.addEventListener("click", (ev) => {
-    playSoundEffect(clickButtonAudio);
-    window.location.hash = "map";
-    generateMap();
-  });
-
-  quitGameButton.addEventListener("click", (ev) => {
-    playSoundEffect(clickButtonAudio);
-    resetGame();
-  });
-
-  // addCardListeners()
 }
-
-const addCardListeners = () => {
-  const cardBox = document.getElementById("card-box");
-  console.log("Adding card listeners...");
-  for (const card of cardBox.children) {
-    card.addEventListener("click", handleCardClick);
-  }
-};
-
-const addMapListeners = () => {
-  const levelBox = document.getElementById("level-box");
-  console.log("Adding level map listeners...");
-  for (const levelCard of levelBox.children) {
-    levelCard.addEventListener("click", handleLevelMapClick);
-  }
-};
 
 function showSplashScreen(redirectTo = `main_menu`, animate = false) {
   const splashScreen = document.getElementById("splash");
@@ -1111,7 +615,7 @@ function showSplashScreen(redirectTo = `main_menu`, animate = false) {
   const middleCard = "#splash #logo-container .logo-card.middle";
   const rightCard = "#splash #logo-container .logo-card.right";
 
-  let tl = gsap.timeline();
+  let tl = window.gsap.timeline();
   tl.from([middleCard, rightCard, leftCard], {
     opacity: 0,
     rotation: 0,
@@ -1200,5 +704,22 @@ function startGame(ev) {
   registerServiceWorker();
   showSplashScreen(undefined, true);
 }
+
+const gameTimer = createGameTimer({
+  getDuration: () => getTimerDurationForLevel(),
+  onTimeout: handleTimerTimeout,
+});
+const ui = createUI({
+  getPairCount: () => pairCount,
+  timer: gameTimer,
+  playSound: () => playSoundEffect(clickButtonAudio),
+});
+const { showComment, showLevelInfo, showCardUnlockedInfo, showInGameMenu } = ui;
+
+// The existing inline controls in index.html use these compatibility hooks.
+window.playSoundEffect = playSoundEffect;
+window.clickButtonAudio = clickButtonAudio;
+window.showInGameMenu = showInGameMenu;
+window.handleSoundEffectsToggle = handleSoundEffectsToggle;
 
 document.addEventListener("DOMContentLoaded", startGame);

@@ -1,0 +1,23 @@
+const sounds = {
+  peekCard: new Audio("./assets/audio/wistful-1-39105.mp3"),
+  clickCard: new Audio("./assets/audio/swish-sound-94707.mp3"),
+  clickButton: new Audio("./assets/audio/analog-appliance-button-2-185277.mp3"),
+  closeCard: new Audio("./assets/audio/funny-swish-101878.mp3"),
+  matchCard: new Audio("./assets/audio/marimba-bloop-2-188149.mp3"),
+  powerUp: new Audio("./assets/audio/ui-beep-menu-positive-228336.mp3"),
+  winGame: new Audio("./assets/audio/level-up-bonus-sequence-3-186892.mp3"),
+  timeUpVoice: new Audio("./assets/audio/koiroylers-game-over-voice-355993.mp3"),
+  timeUp: new Audio("./assets/audio/floraphonic-violin-lose-5-185126.mp3"),
+};
+
+let effectsEnabled = true;
+
+export function playSoundEffect(audio) {
+  if (effectsEnabled) audio?.play()?.catch(() => {});
+}
+
+export function setSoundEffectsEnabled(enabled) {
+  effectsEnabled = enabled;
+}
+
+export default sounds;

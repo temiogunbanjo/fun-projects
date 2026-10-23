@@ -124,10 +124,8 @@
       src="https://kit.fontawesome.com/f388f70b2b.js"
       crossorigin="anonymous"
     ></script>
-    <script src="constants.js"></script>
     <script src="tutorials.js"></script>
-    <script src="utils.js"></script>
-    <script src="index.js"></script>
+    <script type="module" src="./src/main.js"></script>
   </head>
 
   <body class="l-1">
@@ -224,7 +222,7 @@
             ></i>
           </button>
 
-          <button id="blast-card" class="game-style equipped-power-btn">
+          <!-- <button id="blast-card" class="game-style equipped-power-btn">
             <i
               class="fa-solid fa-bomb fa-beat"
               style="
@@ -233,7 +231,7 @@
                 --fa-beat-scale: 1.4;
               "
             ></i>
-          </button>
+          </button> -->
 
           <button id="info" class="game-style show-on-pc">
             <i class="fa-solid fa-info"></i>
@@ -348,7 +346,7 @@
 
       <button
         class="game-style center"
-        onclick="handleSoundEffectsToggle()"
+        data-action="sound-toggle"
         style="flex-direction: row; gap: 10px"
       >
         <i class="fa-solid fa-volume-high"></i>
